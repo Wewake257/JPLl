@@ -1,0 +1,32 @@
+﻿Manager Personnel No.,Manager Name,Job Description,Band,Reports To (Manager Name),L2 Manager,Direct Reports
+418001,Mr. Jyotindra Thacker,Head Business,President,Mr. Manoj Modi,Malik,**20**
+10005916,Mr. Prashant Ayare,Team Lead Software Development,General Manager,Mr. Hardik Dave,Mr. Arindam Banerjee,**6**
+10068835,Ms. Sakshi Pandita,Software Development Engineer III,Manager,Mr. Hardik Dave,Mr. Arindam Banerjee,1
+10072499,Ms. Shailvi Desai,Software Development Engineer III,Manager,Mr. Hardik Dave,Mr. Arindam Banerjee,2
+10071903,Ms. Srishti Rathi,Software Development Engineer III,Manager,Mr. Hardik Dave,Mr. Arindam Banerjee,1
+10053516,Mr. Nitin Sharma,Senior Manager Software Development,Sr.Manager,Mr. Prashant Ayare,Mr. Hardik Dave,2
+55067523,Mr. Prathamesh Sinkar,Senior Manager Software Development,Sr.Manager,Mr. Prashant Ayare,Mr. Hardik Dave,**7**
+55067522,Mr. Ravi Sharma,Senior Manager Software Development,Sr.Manager,Mr. Prashant Ayare,Mr. Hardik Dave,1
+10070185,Ms. Dipali Hande,Senior Manager Software Development,Sr.Manager,Mr. Prashant Ayare,Mr. Hardik Dave,2
+55066442,Ms. Usha Gupta,Senior Manager Software Development,Sr.Manager,Mr. Prashant Ayare,Mr. Hardik Dave,1
+50011635,Ms. Kiran Narvekar,Senior Product Management,Sr.Manager,Mr. Saket Gadkari,Mr. Jyotindra Thacker,**4**
+67546439,Ms. Shreya Sahu,State Executive P\&C,Deputy Manager,Mr. Saket Gadkari,Mr. Jyotindra Thacker,**3**
+50007755,Mr. Amitesh Srivastava,Engineer SRE,Manager,Mr. Vikramsingh V Mohite,Mr. Jyotindra Thacker,1
+50007091,Mr. Maneesh George,Lead SRE,DGM,Mr. Vikramsingh V Mohite,Mr. Jyotindra Thacker,2
+55005504,Mr. Rohit Rajkumar Garg,Data Engineer,Manager,Mr. Vikramsingh V Mohite,Mr. Jyotindra Thacker,2
+39214,Mr. Shashikant R Kadam,Head SRE,Asst. Vice President,Mr. Vikramsingh V Mohite,Mr. Jyotindra Thacker,**4**
+55022522,Mr. Vikrant Kamble,Engineer SRE,Manager,Mr. Vikramsingh V Mohite,Mr. Jyotindra Thacker,1
+55028813,Mr. Dinesh Pote,Software Development Engineer III,Manager,Mr. Vivin Chandran,Mr. Jyotindra Thacker,**6**
+55027743,Mr. Kiran Shinde,Software Development Engineer II,Deputy Manager,Mr. Vivin Chandran,Mr. Jyotindra Thacker,**9**
+10072030,Mr. Nitin Sharma,Software Development Engineer III,Manager,Mr. Vivin Chandran,Mr. Jyotindra Thacker,**5**
+55014690,Ms. Pranali Salvi,Junior QA Engineer,Deputy Manager,Mr. Vivin Chandran,Mr. Jyotindra Thacker,1
+55028978,Mr. Anish Pillai,Junior Product Manager,Deputy Manager,Mr. Jyotindra Thacker,Mr. Manoj Modi,**3**
+10068783,Mr. Ashutosh Kumar,Team Lead Software Development,General Manager,Mr. Jyotindra Thacker,Mr. Manoj Modi,**3**
+55000019,Mr. Jitendra Bhatia,Head Architecture,Asst. Vice President,Mr. Jyotindra Thacker,Mr. Manoj Modi,**7**
+10070768,Mr. Pawan Jadhav,Lead Product Management,DGM,Mr. Jyotindra Thacker,Mr. Manoj Modi,**7**
+10009823,Mr. Saket Gadkari,Lead Business Development,DGM,Mr. Jyotindra Thacker,Mr. Manoj Modi,**9**
+21114,Mr. Satish A Pawase,Head Procurement,Sr.Vice President,Mr. Jyotindra Thacker,Mr. Manoj Modi,**5**
+55000138,Mr. Sharang Sharma,Head Product Management,Asst. Vice President,Mr. Jyotindra Thacker,Mr. Manoj Modi,1
+33214,Mr. Vikramsingh V Mohite,Chief Software Development,Vice President,Mr. Jyotindra Thacker,Mr. Manoj Modi,**6**
+55021146,Mr. Vivin Chandran,Team Lead Software Development,General Manager,Mr. Jyotindra Thacker,Mr. Manoj Modi,**5**
+55043177,Mr. Vishal Chauhan,Software Development Engineer II,Deputy Manager,Mr. Nitin Sharma,Mr. Vivin Chandran,**8**

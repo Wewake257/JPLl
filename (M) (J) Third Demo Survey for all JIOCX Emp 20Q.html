@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JioCX Survey – Content for Microsoft Forms</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f2f6fc;
+            padding: 30px 20px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+            padding: 40px 50px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b2a44;
+            border-bottom: 3px solid #e6edf6;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .subhead {
+            font-size: 15px;
+            color: #3e5778;
+            background: #f7faff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-left: 4px solid #1a6dd4;
+            margin-bottom: 24px;
+        }
+        .section {
+            margin: 30px 0 20px 0;
+        }
+        .section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0b2a44;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2px solid #eef4fa;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        .section h2 .level-tag {
+            font-size: 13px;
+            font-weight: 600;
+            background: #dbeafe;
+            color: #1a56db;
+            padding: 2px 14px;
+            border-radius: 40px;
+        }
+        .section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a4a6a;
+            margin: 20px 0 8px 0;
+        }
+        .question-block {
+            background: #fafcff;
+            border: 1px solid #e9eff5;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+        .question-block .q-text {
+            font-weight: 500;
+            font-size: 15px;
+            color: #0b2a44;
+            margin-bottom: 6px;
+        }
+        .question-block .q-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            font-size: 14px;
+            color: #1f3650;
+            margin-top: 4px;
+        }
+        .question-block .q-options .opt {
+            background: #f0f5fc;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+        .question-block .q-options .opt-label {
+            font-weight: 600;
+            color: #1a56db;
+            margin-right: 2px;
+        }
+        .question-block .q-meta {
+            font-size: 12px;
+            color: #6f8aa8;
+            margin-top: 4px;
+        }
+        .question-block .q-meta .tag {
+            background: #eef4fa;
+            padding: 1px 10px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-right: 6px;
+            font-size: 11px;
+        }
+        .copy-btn {
+            background: #0b2a44;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 6px 0 10px 0;
+        }
+        .copy-btn:hover {
+            background: #1a4a6a;
+            transform: scale(1.02);
+        }
+        .copy-btn.green {
+            background: #1a7a4a;
+        }
+        .copy-btn.green:hover {
+            background: #0f5f3a;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b2a44;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.3s ease;
+            z-index: 999;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .note {
+            background: #fff8e7;
+            border: 1px solid #f0d080;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #7a5a20;
+            margin: 16px 0;
+        }
+        .level-toggle {
+            display: inline-block;
+            margin: 8px 4px 12px 0;
+            background: #eef4fa;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a4a6a;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .level-toggle.active {
+            background: #1a56db;
+            color: #fff;
+        }
+        .level-toggle:hover {
+            background: #cbd5e1;
+        }
+        .level-content {
+            display: none;
+        }
+        .level-content.show {
+            display: block;
+        }
+        @media (max-width: 700px) {
+            .container { padding: 20px 16px; }
+            .question-block { padding: 10px 12px; }
+            .q-options { gap: 4px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📋 JioCX Workplace Effectiveness Survey 2026</h1>
+    <div class="subhead">
+        <strong>Content for Microsoft Forms</strong> – This page contains all questions, options, and sections exactly as they appear in the survey.
+        Use the “Copy” buttons to copy question text and options for pasting into MS Forms.
+    </div>
+
+    <div class="note">
+        💡 <strong>Tip:</strong> The survey is <strong>level‑adapted</strong> – Junior, Manager, and Leader versions have different questions.
+        Use Microsoft Forms branching to show the correct section based on the respondent’s job level.
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- DEMOGRAPHICS (Section E) – common for all levels           -->
+    <!-- ========================================================== -->
+    <div class="section">
+        <h2>📌 Demographics (Section E) <span style="font-size:14px;font-weight:400;color:#3e5778;">– Common for all levels</span></h2>
+        <div class="question-block">
+            <div class="q-text"><strong>1. Full Name</strong> (text input)</div>
+            <div class="q-meta"><span class="tag">Required</span> Free text</div>
+        </div>
+        <div class="question-block">
+            <div class="q-text"><strong>2. Employee ID</strong> (text input)</div>
+            <div class="q-meta"><span class="tag">Required</span> Free text</div>
+        </div>
+        <div class="question-block">
+            <div class="q-text"><strong>3. Job Level</strong> (dropdown)</div>
+            <div class="q-options">
+                <span class="opt">Junior / Executive</span>
+                <span class="opt">Manager / Team Lead</span>
+                <span class="opt">Leader / VP+</span>
+            </div>
+            <div class="q-meta"><span class="tag">Required</span> Used for branching</div>
+        </div>
+        <div class="question-block">
+            <div class="q-text"><strong>4. Average Weekly Work Hours</strong> (dropdown)</div>
+            <div class="q-options">
+                <span class="opt">Less than 40</span>
+                <span class="opt">40–45</span>
+                <span class="opt">46–50</span>
+                <span class="opt">51–55</span>
+                <span class="opt">More than 55</span>
+            </div>
+        </div>
+        <div class="question-block">
+            <div class="q-text"><strong>5. Number of Direct Reports</strong> (dropdown)</div>
+            <div class="q-options">
+                <span class="opt">0 (Individual Contributor)</span>
+                <span class="opt">1–3</span>
+                <span class="opt">4–7</span>
+                <span class="opt">8–12</span>
+                <span class="opt">More than 12</span>
+            </div>
+        </div>
+        <div class="question-block">
+            <div class="q-text"><strong>6. Cross‑Functional Project Involvement</strong> (dropdown)</div>
+            <div class="q-options">
+                <span class="opt">Rarely (less than 20% of my time)</span>
+                <span class="opt">Sometimes (20–40%)</span>
+                <span class="opt">Often (40–60%)</span>
+                <span class="opt">Very often (more than 60%)</span>
+            </div>
+        </div>
+        <button class="copy-btn green" onclick="copySection('demo')">📋 Copy Demographics</button>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SECTION A – LIKERT (20 items) – Level-adapted              -->
+    <!-- ========================================================== -->
+    <div class="section">
+        <h2>📊 Section A – Work Style Profile <span style="font-size:14px;font-weight:400;color:#3e5778;">(20 Likert items, level‑adapted)</span></h2>
+        <p style="color:#3e5778; margin-bottom:12px;">
+            For each statement, select <strong>1 = Strongly Disagree</strong> to <strong>5 = Strongly Agree</strong>.
+            Items marked <span class="tag" style="background:#fde8ea;color:#8a2a2a;">R</span> are reverse‑scored.
+            Two attention checks are embedded (AC1 and AC2).
+        </p>
+
+        <div style="margin-bottom:12px;">
+            <button class="level-toggle active" data-level="junior" onclick="showLevel('junior')">Junior / Executive</button>
+            <button class="level-toggle" data-level="manager" onclick="showLevel('manager')">Manager / Team Lead</button>
+            <button class="level-toggle" data-level="leader" onclick="showLevel('leader')">Leader / VP+</button>
+        </div>
+
+        <!-- Junior level -->
+        <div id="level-junior" class="level-content show">
+            <h3>Junior / Executive</h3>
+            <div id="junior-items"></div>
+            <button class="copy-btn green" onclick="copySection('junior')">📋 Copy Junior Likert</button>
+        </div>
+
+        <!-- Manager level -->
+        <div id="level-manager" class="level-content">
+            <h3>Manager / Team Lead</h3>
+            <div id="manager-items"></div>
+            <button class="copy-btn green" onclick="copySection('manager')">📋 Copy Manager Likert</button>
+        </div>
+
+        <!-- Leader level -->
+        <div id="level-leader" class="level-content">
+            <h3>Leader / VP+</h3>
+            <div id="leader-items"></div>
+            <button class="copy-btn green" onclick="copySection('leader')">📋 Copy Leader Likert</button>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SECTION B – RANKING (10 competencies) – common             -->
+    <!-- ========================================================== -->
+    <div class="section">
+        <h2>🏆 Section B – Theory of Success <span style="font-size:14px;font-weight:400;color:#3e5778;">(Ranking 10 competencies)</span></h2>
+        <p style="color:#3e5778; margin-bottom:12px;">
+            <strong>Rank these 10 competencies from 1 (MOST critical) to 10 (LEAST critical) for success in your role.</strong>
+            Each rank must be used exactly once. Then select exactly 3 competencies as your Top 3 priorities.
+        </p>
+        <div id="b-items"></div>
+        <button class="copy-btn green" onclick="copySection('b')">📋 Copy Section B</button>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SECTION C – SCENARIOS (3 per level) – Level-adapted       -->
+    <!-- ========================================================== -->
+    <div class="section">
+        <h2>🧩 Section C – Behavioral Scenarios <span style="font-size:14px;font-weight:400;color:#3e5778;">(3 scenarios per level)</span></h2>
+        <p style="color:#3e5778; margin-bottom:12px;">
+            For each scenario, rank the options from <strong>1 = MOST effective</strong> to <strong>4 = LEAST effective</strong>.
+            Each rank (1–4) must be used exactly once per scenario.
+        </p>
+
+        <div style="margin-bottom:12px;">
+            <button class="level-toggle active" data-level="c-junior" onclick="showLevelC('junior')">Junior Scenarios</button>
+            <button class="level-toggle" data-level="c-manager" onclick="showLevelC('manager')">Manager Scenarios</button>
+            <button class="level-toggle" data-level="c-leader" onclick="showLevelC('leader')">Leader Scenarios</button>
+        </div>
+
+        <div id="c-junior" class="level-content show"><div id="c-junior-items"></div><button class="copy-btn green" onclick="copySection('c-junior')">📋 Copy Junior Scenarios</button></div>
+        <div id="c-manager" class="level-content"><div id="c-manager-items"></div><button class="copy-btn green" onclick="copySection('c-manager')">📋 Copy Manager Scenarios</button></div>
+        <div id="c-leader" class="level-content"><div id="c-leader-items"></div><button class="copy-btn green" onclick="copySection('c-leader')">📋 Copy Leader Scenarios</button></div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SECTION D – OPEN ENDED (5 questions) – common             -->
+    <!-- ========================================================== -->
+    <div class="section">
+        <h2>✍️ Section D – Personal Reflections <span style="font-size:14px;font-weight:400;color:#3e5778;">(5 open‑ended)</span></h2>
+        <p style="color:#3e5778; margin-bottom:12px;">
+            Answer each question with <strong>at least 50 words</strong> (or 40 for D3–D5). Be specific about <strong>what YOU did</strong>.
+        </p>
+        <div id="d-items"></div>
+        <button class="copy-btn green" onclick="copySection('d')">📋 Copy Section D</button>
+    </div>
+
+    <div class="note" style="margin-top:30px;">
+        ✅ <strong>All content is ready for Microsoft Forms.</strong> Use branching to show the correct level‑adapted sections (A and C) based on the job level selected in Demographics.
+    </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // ================================================================
+    // DATA – EXACTLY AS IN THE SURVEY
+    // ================================================================
+
+    // ---- JUNIOR LIKERT ITEMS (20) ----
+    const juniorItems = [
+        { id: 'A01', comp: 'EE', rev: false, text: 'I deliver accurate, high-quality work consistently, even under tight deadlines.' },
+        { id: 'A02', comp: 'EE', rev: true, text: 'I often need extra time to complete tasks to the standard expected of me.' },
+        { id: 'A03', comp: 'ST', rev: false, text: 'I connect my day-to-day priorities to the broader goals of the organization.' },
+        { id: 'A04', comp: 'ST', rev: true, text: 'I focus on completing my immediate tasks without thinking about how they fit the bigger picture.' },
+        { id: 'A05', comp: 'LA', rev: false, text: 'I actively seek feedback and use it to meaningfully change how I work.' },
+        { id: 'A06', comp: 'LA', rev: true, text: 'I tend to rely on approaches that have worked before, even when circumstances change.' },
+        { id: 'A07', comp: 'CI', rev: false, text: 'I build productive working relationships with people outside my immediate team.' },
+        { id: 'A08', comp: 'CI', rev: true, text: 'I prefer to work within my own team rather than involving people from other parts of the organization.' },
+        { id: 'A09', comp: 'PS', rev: false, text: 'When I face a complex problem, I take time to understand the root cause before deciding on a solution.' },
+        { id: 'A10', comp: 'PS', rev: true, text: 'When a problem comes up, I typically go with the first solution that seems reasonable.' },
+        { id: 'A11', comp: 'DI', rev: false, text: 'I regularly take on responsibilities or initiatives beyond what is formally required of my role.' },
+        { id: 'A12', comp: 'DI', rev: true, text: 'I prefer to wait for clear direction before taking action on new or unclear tasks.' },
+        { id: 'A13', comp: 'PL', rev: false, text: 'I invest time in helping others around me grow and develop their skills.' },
+        { id: 'A14', comp: 'PL', rev: true, text: 'I find it uncomfortable to give direct feedback to others, even when it would clearly help them improve.' },
+        { id: 'A15', comp: 'CM', rev: false, text: 'I adapt my communication style depending on who I am speaking to — senior leaders, peers, or junior colleagues.' },
+        { id: 'A16', comp: 'CM', rev: true, text: 'I often have to re-explain my messages because people misunderstand what I meant.' },
+        { id: 'A17', comp: 'RE', rev: false, text: 'I maintain my focus and effectiveness even when I am under significant pressure.' },
+        { id: 'A18', comp: 'RE', rev: true, text: 'When things go wrong, I find it difficult to quickly refocus and move forward productively.' },
+        { id: 'A19', comp: 'CO', rev: false, text: 'I proactively seek to understand what my stakeholders actually need, beyond just what they explicitly ask for.' },
+        { id: 'A20', comp: 'CO', rev: true, text: 'I focus on completing tasks as assigned, even if I suspect the stakeholder\'s real need may be different.' }
+    ];
+
+    // ---- MANAGER LIKERT ITEMS (20) ----
+    const managerItems = [
+        { id: 'A01', comp: 'EE', rev: false, text: 'My team consistently delivers accurate, high-quality output, even under tight deadlines.' },
+        { id: 'A02', comp: 'EE', rev: true, text: 'My team frequently requires additional time or rework to meet expected quality standards.' },
+        { id: 'A03', comp: 'ST', rev: false, text: 'I help my team understand how their work connects to the broader goals of the organization.' },
+        { id: 'A04', comp: 'ST', rev: true, text: 'I focus on short-term team output without regularly considering longer-term strategic implications.' },
+        { id: 'A05', comp: 'LA', rev: false, text: 'I actively seek feedback on my leadership and use it to meaningfully change how I manage my team.' },
+        { id: 'A06', comp: 'LA', rev: true, text: 'I tend to apply familiar management approaches even when the team\'s situation calls for a different style.' },
+        { id: 'A07', comp: 'CI', rev: false, text: 'I actively build cross-functional partnerships and use them to drive outcomes that benefit my team and the organization.' },
+        { id: 'A08', comp: 'CI', rev: true, text: 'I focus on my own team\'s goals and rarely invest in building relationships across other functions.' },
+        { id: 'A09', comp: 'PS', rev: false, text: 'When my team encounters a complex problem, I guide them to diagnose the root cause before jumping to solutions.' },
+        { id: 'A10', comp: 'PS', rev: true, text: 'I often implement the most immediately obvious solution to team problems rather than exploring multiple alternatives.' },
+        { id: 'A11', comp: 'DI', rev: false, text: 'I proactively identify opportunities to improve team performance beyond what my role formally requires.' },
+        { id: 'A12', comp: 'DI', rev: true, text: 'I tend to wait for guidance from senior leadership before initiating significant changes in my team\'s approach.' },
+        { id: 'A13', comp: 'PL', rev: false, text: 'I actively invest time in developing the skills and careers of my direct reports.' },
+        { id: 'A14', comp: 'PL', rev: true, text: 'I find it difficult to give candid, critical feedback to my team members, even when it is clearly necessary.' },
+        { id: 'A15', comp: 'CM', rev: false, text: 'I adapt my communication style to suit different audiences — from senior leadership presentations to 1:1s with team members.' },
+        { id: 'A16', comp: 'CM', rev: true, text: 'My team members frequently ask for clarification after I communicate decisions or directions.' },
+        { id: 'A17', comp: 'RE', rev: false, text: 'I maintain my leadership effectiveness and team focus even during periods of high pressure or organizational uncertainty.' },
+        { id: 'A18', comp: 'RE', rev: true, text: 'When significant setbacks occur, I find it difficult to re-energize my team and redirect focus toward the path forward.' },
+        { id: 'A19', comp: 'CO', rev: false, text: 'I regularly help my team look beyond stated requirements to understand the underlying needs of our stakeholders.' },
+        { id: 'A20', comp: 'CO', rev: true, text: 'My team focuses on delivering what was requested rather than probing whether it truly addresses the stakeholder\'s underlying need.' }
+    ];
+
+    // ---- LEADER LIKERT ITEMS (20) ----
+    const leaderItems = [
+        { id: 'A01', comp: 'EE', rev: false, text: 'I create systems and standards that ensure consistent delivery of high-quality outcomes across the organization.' },
+        { id: 'A02', comp: 'EE', rev: true, text: 'Delivery timelines and quality standards in my area often slip without direct intervention from me.' },
+        { id: 'A03', comp: 'ST', rev: false, text: 'I consistently anchor major decisions to the long-term strategic direction of the organization.' },
+        { id: 'A04', comp: 'ST', rev: true, text: 'I tend to react to immediate priorities rather than proactively shaping the organization\'s strategic direction.' },
+        { id: 'A05', comp: 'LA', rev: false, text: 'I continuously seek external perspectives and use them to evolve my leadership approach and organizational strategy.' },
+        { id: 'A06', comp: 'LA', rev: true, text: 'I find it difficult to change established organizational approaches, even when the environment clearly requires it.' },
+        { id: 'A07', comp: 'CI', rev: false, text: 'I build enterprise-wide relationships and leverage them to align diverse stakeholders toward shared organizational goals.' },
+        { id: 'A08', comp: 'CI', rev: true, text: 'I rely primarily on formal authority rather than influence and relationship-building to drive organizational alignment.' },
+        { id: 'A09', comp: 'PS', rev: false, text: 'I approach complex organizational challenges by structuring problems systematically and evaluating multiple strategic options before deciding.' },
+        { id: 'A10', comp: 'PS', rev: true, text: 'I make major organizational decisions quickly based on past experience rather than systematic analysis of alternatives.' },
+        { id: 'A11', comp: 'DI', rev: false, text: 'I consistently drive initiatives that go beyond my defined mandate to advance the organization\'s capabilities.' },
+        { id: 'A12', comp: 'DI', rev: true, text: 'I wait for clear signals from senior leadership before launching major organizational initiatives.' },
+        { id: 'A13', comp: 'PL', rev: false, text: 'I make building organizational capability and developing future leaders a top personal priority.' },
+        { id: 'A14', comp: 'PL', rev: true, text: 'I avoid difficult performance conversations with senior leaders, even when the situation clearly requires them.' },
+        { id: 'A15', comp: 'CM', rev: false, text: 'I craft communications that resonate differently across the organization — from board-level narratives to frontline team messaging.' },
+        { id: 'A16', comp: 'CM', rev: true, text: 'Organizational communications I lead often need to be repeated or reframed because they are misunderstood across levels.' },
+        { id: 'A17', comp: 'RE', rev: false, text: 'I remain composed, decisive, and focused on long-term priorities during periods of major organizational stress or crisis.' },
+        { id: 'A18', comp: 'RE', rev: true, text: 'Major organizational setbacks significantly disrupt my ability to maintain strategic direction and leadership presence.' },
+        { id: 'A19', comp: 'CO', rev: false, text: 'I lead the organization to continuously anticipate and address stakeholder needs before they are explicitly articulated.' },
+        { id: 'A20', comp: 'CO', rev: true, text: 'I focus on delivering against formally agreed targets rather than proactively questioning whether they reflect stakeholders\' true needs.' }
+    ];
+
+    // ---- SECTION B – COMPETENCIES (same for all) ----
+    const bItems = [
+        { id: 'EE', name: 'Execution Excellence', desc: 'Consistently delivering high-quality work on time and taking personal ownership of results' },
+        { id: 'ST', name: 'Strategic Thinking', desc: 'Connecting day-to-day work to the long-term direction of the organization' },
+        { id: 'LA', name: 'Learning Agility', desc: 'Rapidly acquiring new skills and adapting effectively when circumstances change' },
+        { id: 'CI', name: 'Collaboration & Influence', desc: 'Building strong cross-functional partnerships and influencing decisions beyond formal authority' },
+        { id: 'PS', name: 'Problem Solving', desc: 'Structuring complex challenges systematically and using evidence to reach well-reasoned decisions' },
+        { id: 'DI', name: 'Drive & Initiative', desc: 'Self-starting, setting high personal standards, and going beyond what is formally required' },
+        { id: 'PL', name: 'People Leadership', desc: 'Developing others, giving direct feedback, and enabling team performance' },
+        { id: 'CM', name: 'Communication', desc: 'Expressing ideas with clarity and adapting messaging to different audiences' },
+        { id: 'RE', name: 'Resilience', desc: 'Maintaining composure and performance under sustained pressure and setbacks' },
+        { id: 'CO', name: 'Stakeholder Orientation', desc: 'Understanding underlying needs and delivering reliably for those you serve' }
+    ];
+
+    // ---- SECTION C – SCENARIOS (per level) ----
+    const scenarios = {
+        junior: [
+            {
+                title: 'Scenario 1: Report Error',
+                text: 'You are finalizing a report due tomorrow morning and discover a significant data error affecting the entire analysis. It is 6 PM and your manager has left for the day.',
+                options: [
+                    'Correct only the sections you are confident about and submit the report on time.',
+                    'Contact your manager immediately to explain the issue and align on the best path forward.',
+                    'Submit the report as-is tonight and plan to address the error in the next version.',
+                    'Stay as long as needed, fix the full report, and notify your manager with a clear summary of what changed.'
+                ]
+            },
+            {
+                title: 'Scenario 2: Colleague in Need',
+                text: 'A close colleague is behind on a major deliverable due tomorrow and asks for your help. You also have your own deadlines that are tight but manageable.',
+                options: [
+                    'Help your colleague fully — team success matters more than individual output right now.',
+                    'Complete your own work first, then help your colleague with whatever time is left.',
+                    'Help with the most critical parts of your colleague\'s work and adjust the scope of your own deliverable to compensate.',
+                    'Suggest your colleague escalate to your manager to get additional support.'
+                ]
+            },
+            {
+                title: 'Scenario 3: Feedback Disagreement',
+                text: 'Your manager gives you feedback that you work too independently and do not communicate proactively enough with the team. You partially disagree with this assessment.',
+                options: [
+                    'Respond by calmly explaining the reasons behind your working style and why the assessment may be inaccurate.',
+                    'Listen carefully, ask for specific examples, reflect genuinely on whether there is any truth to it, and share your perspective once you have done so.',
+                    'Nod along to avoid conflict and continue working as before.',
+                    'Ask a trusted colleague privately whether they agree with the feedback before responding to your manager.'
+                ]
+            }
+        ],
+        manager: [
+            {
+                title: 'Scenario 1: Underperforming Team Member',
+                text: 'A previously high-performing team member has become visibly disengaged — missing deadlines, attending meetings without contributing, and appearing withdrawn. The change has been noticeable for about three weeks.',
+                options: [
+                    'Monitor the situation for another two to three weeks to see if it resolves on its own.',
+                    'Have a private, candid conversation to understand what has changed, listen without judgment, and co-create a plan to move forward.',
+                    'Immediately escalate to HR and formally document the performance concern.',
+                    'Quietly redistribute their work to other team members to protect delivery while the issue resolves.'
+                ]
+            },
+            {
+                title: 'Scenario 2: Promotion Dilemma',
+                text: 'Two of your top team members are both strong candidates for the only promotion available this cycle. Both are genuinely ready and have comparable performance records.',
+                options: [
+                    'Promote the one with marginally higher performance ratings — the data should make the final call.',
+                    'Promote the one who is more collaborative and a stronger team player, as culture fit matters long-term.',
+                    'Give both a high-visibility stretch project for 90 days before deciding — let the assignment reveal the differentiation.',
+                    'Ask HR or your manager to make the final call to ensure objectivity and avoid internal conflict.'
+                ]
+            },
+            {
+                title: 'Scenario 3: Resistance to Change',
+                text: 'A new organizational initiative requires your team to replace a process they have used successfully for two years. The team is openly resistant and skeptical of the change.',
+                options: [
+                    'Override the resistance firmly — the organization has made its decision and implementation cannot wait.',
+                    'Translate the initiative into specific team-level steps and run a structured session to work through concerns and co-own the transition plan.',
+                    'Delay implementation until the team\'s skepticism fades naturally over the coming weeks.',
+                    'Allow each team member to implement the change in their own way and time to maintain morale.'
+                ]
+            }
+        ],
+        leader: [
+            {
+                title: 'Scenario 1: Cross-Team Misalignment',
+                text: 'You discover that a critical project milestone was missed because two teams operated in complete silos with fundamentally misaligned assumptions about who owned a key decision.',
+                options: [
+                    'Identify who was primarily responsible for the miscommunication and hold them accountable formally.',
+                    'Immediately bring both teams together, diagnose the root misalignment, and redesign the coordination mechanism to prevent recurrence.',
+                    'Absorb the delay, adjust the overall timeline, and monitor more closely going forward without restructuring anything.',
+                    'Bring in external consultants to review and redesign the cross-team operating model.'
+                ]
+            },
+            {
+                title: 'Scenario 2: Cost Reduction',
+                text: 'You must reduce costs by 15% this quarter. You can either (a) make targeted headcount reductions in lower-priority functions, or (b) implement proportional cuts across all teams equally to preserve morale.',
+                options: [
+                    'Make targeted headcount reductions in lower-priority functions to protect the highest-value capabilities.',
+                    'Implement proportional cuts across all teams equally to protect morale, culture, and team cohesion.',
+                    'Delay the decision by 60 days to gather more data before committing to an approach with long-term consequences.',
+                    'Present both options transparently to the leadership team and facilitate a collective decision to share ownership.'
+                ]
+            },
+            {
+                title: 'Scenario 3: Stakeholder Pressure',
+                text: 'A key external stakeholder is pressuring you strongly to commit to a project outcome that your internal data clearly shows is unrealistic within the current timeline and resources.',
+                options: [
+                    'Agree to the commitment to protect the relationship and plan to negotiate scope privately once momentum is established.',
+                    'Clearly present your data, explain what is genuinely achievable, and propose a realistic alternative that addresses the stakeholder\'s underlying goal.',
+                    'Escalate to your own manager to handle, as agreeing could set a bad organizational precedent.',
+                    'Commit publicly to the outcome and work the team hard internally to try to deliver on it.'
+                ]
+            }
+        ]
+    };
+
+    // ---- SECTION D – OPEN ENDED (common) ----
+    const dQuestions = [
+        { id: 'D1', label: 'D1. Professional Achievement',
+          text: 'Describe a professional achievement you are genuinely proud of. What was the situation, what did you do specifically, and what was the measurable result?' },
+        { id: 'D2', label: 'D2. Navigating Ambiguity',
+          text: 'Describe a time when you faced significant ambiguity or uncertainty at work. How did you approach it, and what did you learn?' },
+        { id: 'D3', label: 'D3. Your Distinct Value',
+          text: 'What would your closest colleagues say makes you distinctly valuable in a team? Give a specific example that illustrates this.' },
+        { id: 'D4', label: 'D4. Area for Growth',
+          text: 'What is one area where you know you could significantly improve your effectiveness at work? What specifically holds you back?' },
+        { id: 'D5', label: 'D5. What It Takes to Excel Here',
+          text: 'If a talented new colleague joined your team tomorrow, what would you tell them about what it truly takes to excel here — not the formal job description, but the real answer?' }
+    ];
+
+    // ================================================================
+    // RENDER FUNCTIONS
+    // ================================================================
+
+    function renderLikertItems(containerId, items, levelName) {
+        const container = document.getElementById(containerId);
+        let html = '';
+        items.forEach((item, idx) => {
+            const num = idx + 1;
+            const revLabel = item.rev ? ' <span style="background:#fde8ea;color:#8a2a2a;padding:1px 8px;border-radius:40px;font-size:11px;font-weight:600;">R</span>' : '';
+            html += `
+                <div class="question-block">
+                    <div class="q-text">${num}. ${item.text} ${revLabel}</div>
+                    <div class="q-options">
+                        <span class="opt"><span class="opt-label">1</span> Strongly Disagree</span>
+                        <span class="opt"><span class="opt-label">2</span> Disagree</span>
+                        <span class="opt"><span class="opt-label">3</span> Neutral</span>
+                        <span class="opt"><span class="opt-label">4</span> Agree</span>
+                        <span class="opt"><span class="opt-label">5</span> Strongly Agree</span>
+                    </div>
+                    <div class="q-meta"><span class="tag">${item.comp}</span> ${item.rev ? 'Reverse‑scored' : ''}</div>
+                </div>
+            `;
+        });
+        // Add attention checks (AC1 and AC2) – they are not in the items, but we can insert them manually at positions 7 and 14 after shuffle.
+        // For copy-paste, we just note them.
+        html += `
+            <div class="question-block" style="background:#fff8e7;border-color:#f0d080;">
+                <div class="q-text"><strong>⚠️ Attention Check 1 (AC1):</strong> This is a data quality check. Please select "Agree" (4) for this item only.</div>
+                <div class="q-options">
+                    <span class="opt"><span class="opt-label">1</span> Strongly Disagree</span>
+                    <span class="opt"><span class="opt-label">2</span> Disagree</span>
+                    <span class="opt"><span class="opt-label">3</span> Neutral</span>
+                    <span class="opt"><span class="opt-label">4</span> Agree</span>
+                    <span class="opt"><span class="opt-label">5</span> Strongly Agree</span>
+                </div>
+                <div class="q-meta"><span class="tag">Attention</span> Expected: 4</div>
+            </div>
+            <div class="question-block" style="background:#fff8e7;border-color:#f0d080;">
+                <div class="q-text"><strong>⚠️ Attention Check 2 (AC2):</strong> Data quality check only. Please select "Strongly Disagree" (1) for this item.</div>
+                <div class="q-options">
+                    <span class="opt"><span class="opt-label">1</span> Strongly Disagree</span>
+                    <span class="opt"><span class="opt-label">2</span> Disagree</span>
+                    <span class="opt"><span class="opt-label">3</span> Neutral</span>
+                    <span class="opt"><span class="opt-label">4</span> Agree</span>
+                    <span class="opt"><span class="opt-label">5</span> Strongly Agree</span>
+                </div>
+                <div class="q-meta"><span class="tag">Attention</span> Expected: 1</div>
+            </div>
+        `;
+        container.innerHTML = html;
+    }
+
+    function renderSectionB() {
+        const container = document.getElementById('b-items');
+        let html = '<h3>Rank these competencies from 1 (most critical) to 10 (least critical):</h3>';
+        bItems.forEach((item, idx) => {
+            const num = idx + 1;
+            html += `
+                <div class="question-block">
+                    <div class="q-text"><strong>${num}. ${item.name}</strong></div>
+                    <div style="font-size:13px;color:#3e5778;margin-bottom:4px;">${item.desc}</div>
+                    <div class="q-options">
+                        <span class="opt">Rank: 1–10 (dropdown)</span>
+                    </div>
+                </div>
+            `;
+        });
+        html += `
+            <div class="question-block" style="border:2px solid #1a6dd4;background:#f0f6fe;">
+                <div class="q-text"><strong>Cross‑check:</strong> Select your Top 3 priorities (exactly 3).</div>
+                <div class="q-options">
+                    ${bItems.map((item, idx) => `<span class="opt">${idx+1}. ${item.name}</span>`).join(' | ')}
+                </div>
+                <div class="q-meta"><span class="tag">Checkbox</span> Choose exactly 3</div>
+            </div>
+        `;
+        container.innerHTML = html;
+    }
+
+    function renderScenarios(level) {
+        const containerId = 'c-' + level + '-items';
+        const container = document.getElementById(containerId);
+        const scs = scenarios[level];
+        let html = '';
+        scs.forEach((sc, idx) => {
+            const num = idx + 1;
+            html += `
+                <div class="question-block" style="border-left:4px solid #1a6dd4;">
+                    <div class="q-text"><strong>${num}. ${sc.title}</strong></div>
+                    <div style="font-size:14px;color:#1f3650;margin-bottom:6px;">${sc.text}</div>
+                    <div style="font-size:13px;font-weight:500;color:#0b2a44;margin-bottom:4px;">Rank the following options from 1 (MOST effective) to 4 (LEAST effective):</div>
+                    ${sc.options.map((opt, oi) => `
+                        <div style="display:flex;align-items:center;gap:10px;padding:4px 0;border-bottom:1px solid #f0f5fc;">
+                            <span style="font-weight:500;color:#1a4a6a;">${String.fromCharCode(65+oi)}.</span>
+                            <span style="flex:1;">${opt}</span>
+                            <span style="background:#eef4fa;padding:1px 12px;border-radius:40px;font-size:12px;">Rank 1–4</span>
+                        </div>
+                    `).join('')}
+                    <div class="q-meta"><span class="tag">Scenario ${num}</span> Each rank must be used exactly once.</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderSectionD() {
+        const container = document.getElementById('d-items');
+        let html = '';
+        dQuestions.forEach((q, idx) => {
+            const num = idx + 1;
+            const min = (idx < 2) ? 50 : 40;
+            html += `
+                <div class="question-block">
+                    <div class="q-text"><strong>${q.label}</strong></div>
+                    <div style="font-size:14px;color:#1f3650;margin-bottom:6px;">${q.text}</div>
+                    <div class="q-options">
+                        <span class="opt">Open‑ended text (min ${min} words)</span>
+                    </div>
+                    <div class="q-meta"><span class="tag">Text area</span> Minimum ${min} words</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // ================================================================
+    // LEVEL TOGGLES
+    // ================================================================
+    function showLevel(level) {
+        document.querySelectorAll('#level-junior, #level-manager, #level-leader').forEach(el => el.classList.remove('show'));
+        document.getElementById('level-' + level).classList.add('show');
+        document.querySelectorAll('.level-toggle[data-level]').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.level-toggle[data-level="${level}"]`).classList.add('active');
+    }
+
+    function showLevelC(level) {
+        document.querySelectorAll('#c-junior, #c-manager, #c-leader').forEach(el => el.classList.remove('show'));
+        document.getElementById('c-' + level).classList.add('show');
+        document.querySelectorAll('.level-toggle[data-level^="c-"]').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.level-toggle[data-level="c-${level}"]`).classList.add('active');
+    }
+
+    // ================================================================
+    // COPY TO CLIPBOARD
+    // ================================================================
+    function copySection(section) {
+        let text = '';
+        switch (section) {
+            case 'demo':
+                text = document.querySelector('.section:first-child .question-block').innerText;
+                // but we want all demo fields
+                text = 'Demographics:\n1. Full Name (text)\n2. Employee ID (text)\n3. Job Level (dropdown): Junior/Executive, Manager/Team Lead, Leader/VP+\n4. Weekly Work Hours (dropdown): Less than 40, 40–45, 46–50, 51–55, More than 55\n5. Direct Reports (dropdown): 0, 1–3, 4–7, 8–12, More than 12\n6. Cross-Functional Involvement (dropdown): Rarely, Sometimes, Often, Very often';
+                break;
+            case 'junior':
+                text = 'JUNIOR LIKERT ITEMS (Section A):\n' + juniorItems.map((item, i) => `${i+1}. ${item.text} (${item.comp}${item.rev ? ' [R]' : ''})`).join('\n') + '\n\nAttention checks: AC1 – select Agree (4), AC2 – select Strongly Disagree (1)';
+                break;
+            case 'manager':
+                text = 'MANAGER LIKERT ITEMS (Section A):\n' + managerItems.map((item, i) => `${i+1}. ${item.text} (${item.comp}${item.rev ? ' [R]' : ''})`).join('\n') + '\n\nAttention checks: AC1 – select Agree (4), AC2 – select Strongly Disagree (1)';
+                break;
+            case 'leader':
+                text = 'LEADER LIKERT ITEMS (Section A):\n' + leaderItems.map((item, i) => `${i+1}. ${item.text} (${item.comp}${item.rev ? ' [R]' : ''})`).join('\n') + '\n\nAttention checks: AC1 – select Agree (4), AC2 – select Strongly Disagree (1)';
+                break;
+            case 'b':
+                text = 'SECTION B – Theory of Success:\nRank these 10 competencies from 1 (most critical) to 10 (least critical):\n' + bItems.map((item, i) => `${i+1}. ${item.name} – ${item.desc}`).join('\n') + '\n\nThen select exactly 3 as your Top 3 priorities.';
+                break;
+            case 'c-junior':
+                text = 'JUNIOR SCENARIOS (Section C):\n' + scenarios.junior.map((sc, idx) => `Scenario ${idx+1}: ${sc.title}\n${sc.text}\nOptions:\n${sc.options.map((o, oi) => `  ${String.fromCharCode(65+oi)}. ${o}`).join('\n')}`).join('\n\n');
+                break;
+            case 'c-manager':
+                text = 'MANAGER SCENARIOS (Section C):\n' + scenarios.manager.map((sc, idx) => `Scenario ${idx+1}: ${sc.title}\n${sc.text}\nOptions:\n${sc.options.map((o, oi) => `  ${String.fromCharCode(65+oi)}. ${o}`).join('\n')}`).join('\n\n');
+                break;
+            case 'c-leader':
+                text = 'LEADER SCENARIOS (Section C):\n' + scenarios.leader.map((sc, idx) => `Scenario ${idx+1}: ${sc.title}\n${sc.text}\nOptions:\n${sc.options.map((o, oi) => `  ${String.fromCharCode(65+oi)}. ${o}`).join('\n')}`).join('\n\n');
+                break;
+            case 'd':
+                text = 'SECTION D – Personal Reflections (open-ended):\n' + dQuestions.map((q, i) => `${i+1}. ${q.label}: ${q.text} (min ${i<2?50:40} words)`).join('\n\n');
+                break;
+            default:
+                text = 'Content copied.';
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('✅ Copied to clipboard!');
+        }).catch(() => {
+            // fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            showToast('✅ Copied to clipboard!');
+        });
+    }
+
+    // ================================================================
+    // TOAST
+    // ================================================================
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    renderLikertItems('junior-items', juniorItems, 'Junior');
+    renderLikertItems('manager-items', managerItems, 'Manager');
+    renderLikertItems('leader-items', leaderItems, 'Leader');
+    renderSectionB();
+    renderScenarios('junior');
+    renderScenarios('manager');
+    renderScenarios('leader');
+    renderSectionD();
+
+    console.log('✅ Survey content ready for Microsoft Forms.');
+</script>
+
+</body>
+</html>

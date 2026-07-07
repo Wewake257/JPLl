@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase 1 – Conduct Competency Survey (Step 2)</title>
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #e9eef5;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .document-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            padding: 50px 60px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .toolbar button {
+            background: #0b2a44;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar button:hover {
+            background: #1a4a6a;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(11, 42, 68, 0.20);
+        }
+        .toolbar button.print-btn {
+            background: #1a7a4a;
+        }
+        .toolbar button.print-btn:hover {
+            background: #0f5f3a;
+        }
+
+        .report {
+            color: #1a2a3a;
+            line-height: 1.6;
+        }
+
+        /* ── Header ── */
+        .report-header {
+            border-bottom: 4px solid #0b2a44;
+            padding-bottom: 24px;
+            margin-bottom: 30px;
+        }
+        .report-header .org-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b2a44;
+            letter-spacing: 1px;
+        }
+        .report-header .org-name span {
+            font-weight: 400;
+            color: #3e5778;
+            font-size: 14px;
+            margin-left: 12px;
+        }
+        .report-header .title-block {
+            margin-top: 12px;
+        }
+        .report-header .title-block h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0b2a44;
+            line-height: 1.2;
+        }
+        .report-header .title-block .subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            color: #3e5778;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        .report-header .badge {
+            display: inline-block;
+            background: #1a6dd4;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 20px;
+            border-radius: 40px;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+        }
+        .report-header .timeline-badge {
+            display: inline-block;
+            background: #0b2a44;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 20px;
+            border-radius: 40px;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Meta block ── */
+        .meta-block {
+            background: #f7faff;
+            border: 1px solid #dfe6ef;
+            border-radius: 10px;
+            padding: 16px 22px;
+            margin: 20px 0 30px 0;
+            font-size: 14px;
+            color: #1f3650;
+        }
+        .meta-block strong {
+            color: #0b2a44;
+        }
+        .meta-block .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 30px;
+            margin-top: 4px;
+        }
+        .meta-block .row span {
+            display: inline-block;
+        }
+
+        /* ── Flow Diagram ── */
+        .flow-diagram {
+            background: #f7faff;
+            border: 1px solid #dfe6ef;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 24px 0 32px 0;
+        }
+        .flow-diagram .flow-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b2a44;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .flow-phases {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+        .flow-phase {
+            flex: 1 1 280px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px 20px;
+            border: 2px solid #e6edf6;
+            min-width: 220px;
+        }
+        .flow-phase.active {
+            border-color: #1a6dd4;
+            background: #f0f6fe;
+            box-shadow: 0 0 0 3px rgba(26, 109, 212, 0.10);
+        }
+        .flow-phase .phase-label {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b2a44;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .flow-phase .phase-label .badge {
+            background: #0b2a44;
+            color: #fff;
+            font-size: 11px;
+            padding: 1px 12px;
+            border-radius: 40px;
+            font-weight: 600;
+        }
+        .flow-phase .phase-label .badge.active-badge {
+            background: #1a6dd4;
+        }
+        .flow-phase ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .flow-phase ul li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+            font-size: 14px;
+            color: #1f3650;
+        }
+        .flow-phase ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #1a6dd4;
+            font-weight: 700;
+        }
+        .flow-phase ul li.done {
+            color: #1a7a4a;
+        }
+        .flow-phase ul li.done::before {
+            content: "✓";
+            color: #1a7a4a;
+        }
+        .flow-phase ul li.current {
+            font-weight: 600;
+            color: #0b2a44;
+        }
+        .flow-phase ul li.current::before {
+            content: "●";
+            color: #1a6dd4;
+            font-size: 12px;
+        }
+
+        /* ── Sections ── */
+        .section {
+            margin: 40px 0 30px 0;
+        }
+        .section h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0b2a44;
+            border-bottom: 3px solid #e6edf6;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+        }
+        .section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a4a6a;
+            margin: 24px 0 12px 0;
+        }
+        .section p {
+            margin-bottom: 14px;
+            color: #1f3650;
+        }
+        .section ul,
+        .section ol {
+            margin: 8px 0 16px 24px;
+            color: #1f3650;
+        }
+        .section li {
+            margin-bottom: 6px;
+        }
+
+        /* ── Tables ── */
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 16px 0 24px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #dfe6ef;
+        }
+        .report-table th {
+            background: #0b2a44;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 14px;
+            text-align: left;
+        }
+        .report-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e9eff6;
+            vertical-align: top;
+            background: #fafcff;
+        }
+        .report-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comp-badge {
+            display: inline-block;
+            background: #e6edf6;
+            color: #0b2a44;
+            font-weight: 600;
+            padding: 1px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+            margin-right: 4px;
+        }
+
+        .callout {
+            background: #f7faff;
+            border-left: 5px solid #1a6dd4;
+            padding: 16px 22px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #1f3650;
+        }
+        .callout strong {
+            color: #0b2a44;
+        }
+        .callout-success {
+            background: #e8f5ee;
+            border-left-color: #1a7a4a;
+        }
+        .callout-warning {
+            background: #fff8e7;
+            border-left-color: #d4a030;
+        }
+
+        .status-ok {
+            color: #1a7a4a;
+            font-weight: 600;
+        }
+        .status-warn {
+            color: #b08020;
+            font-weight: 600;
+        }
+        .status-diff {
+            color: #1a6dd4;
+            font-weight: 600;
+        }
+
+        /* ── Level Adaptation ── */
+        .level-table td:first-child {
+            font-weight: 600;
+            color: #0b2a44;
+            background: #f0f5fc;
+        }
+
+        /* ── Print ── */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            .document-wrapper {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 40px 50px;
+                margin: 0;
+            }
+            .toolbar {
+                display: none !important;
+            }
+            .report-table th {
+                background: #0b2a44 !important;
+                color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .flow-diagram {
+                background: #f7faff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .flow-phase {
+                background: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .flow-phase.active {
+                background: #f0f6fe !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .callout {
+                background: #f7faff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .callout-success {
+                background: #e8f5ee !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .callout-warning {
+                background: #fff8e7 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .level-table td:first-child {
+                background: #f0f5fc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .meta-block {
+                background: #f7faff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .document-wrapper {
+                padding: 24px 18px;
+            }
+            .report-header .title-block h1 {
+                font-size: 24px;
+            }
+            .report-table {
+                font-size: 13px;
+            }
+            .report-table th,
+            .report-table td {
+                padding: 8px 10px;
+            }
+            .flow-phases {
+                flex-direction: column;
+            }
+            .flow-phase {
+                flex: 1 1 auto;
+            }
+            .toolbar {
+                justify-content: center;
+            }
+            .meta-block .row {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-wrapper" id="reportDocument">
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- REPORT CONTENT                                               -->
+        <!-- ============================================================ -->
+        <div class="report" id="reportContent">
+
+            <!-- ─── HEADER ─── -->
+            <div class="report-header">
+                <div class="org-name">
+                    JIO PLATFORMS LIMITED
+                    <span>HR Analytics — Internal / Confidential</span>
+                </div>
+                <div class="title-block">
+                    <h1>Performance Prediction &amp; Success Profile Analysis</h1>
+                    <div class="subtitle">Phase 1 — Conduct Competency Survey (Step 2 of 10)</div>
+                    <span class="badge">📋 Step 2: Conduct Competency Survey</span>
+                    <div class="timeline-badge">📅 Internship Timeline: 3 June – 3 August</div>
+                </div>
+            </div>
+
+            <!-- ─── META BLOCK ─── -->
+            <div class="meta-block">
+                <strong>Project Context</strong>
+                <div class="row">
+                    <span><strong>Organization:</strong> Jio Platforms Ltd (JioCX Business Unit)</span>
+                    <span><strong>Intern:</strong> Vivek Kumar Kohli (m2025anl036)</span>
+                    <span><strong>Mentor:</strong> Ms. Anisha Sharma</span>
+                    <span><strong>Guide:</strong> Ms. Arya Khamparia</span>
+                    <span><strong>Sponsor:</strong> Mr. Bharat Bhushan (HR Head)</span>
+                </div>
+                <div class="row" style="margin-top:6px;">
+                    <span><strong>Target:</strong> 150 complete responses</span>
+                    <span><strong>Deployment:</strong> Self‑contained HTML (or Microsoft Forms)</span>
+                    <span><strong>Expected Time:</strong> ~25–30 minutes</span>
+                    <span><strong>Total Fields:</strong> 44 (including demographics)</span>
+                </div>
+                <div class="row" style="margin-top:6px;">
+                    <span><strong>Instrument:</strong> 20 Likert items (2 per competency, 1 reverse‑scored per competency), 10 forced‑ranking items with Top‑3 cross‑check, 3 scenario‑based rankings per level, 5 open‑ended narratives (40–50 word minimum), 4 contextual demographic controls</span>
+                </div>
+            </div>
+
+            <!-- ─── PHASE FLOW DIAGRAM ─── -->
+            <div class="flow-diagram">
+                <div class="flow-title">📊 10‑Step End‑to‑End Process — From Identification to Application</div>
+                <div class="flow-phases">
+
+                    <!-- Phase 1 – ACTIVE -->
+                    <div class="flow-phase active">
+                        <div class="phase-label">
+                            <span>🔍 Phase 1</span>
+                            <span class="badge active-badge">Identify</span>
+                        </div>
+                        <ul>
+                            <li class="done">1. Identify Top / Avg / Low Performers</li>
+                            <li class="current">2. Conduct Competency Survey <span style="font-size:12px;color:#1a6dd4;font-weight:600;">⬅ You are here</span></li>
+                            <li>3. Extract Key Competencies and Map to Lominger Framework</li>
+                        </ul>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="flow-phase">
+                        <div class="phase-label">
+                            <span>⚙️ Phase 2</span>
+                            <span class="badge">Design</span>
+                        </div>
+                        <ul>
+                            <li>4. Build Competency Interviews</li>
+                            <li>5. Assign Weights to Competencies / Survey</li>
+                            <li>6. Validate Using HR Data (Correlation)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="flow-phase">
+                        <div class="phase-label">
+                            <span>✅ Phase 3</span>
+                            <span class="badge">Validate &amp; Apply</span>
+                        </div>
+                        <ul>
+                            <li>7. Build Success Prediction Matrix</li>
+                            <li>8. Test on Existing Employees</li>
+                            <li>9. Apply to New Employees &amp; Future Hiring</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div style="text-align:center;margin-top:14px;font-size:13px;color:#3e5778;">
+                    <span style="display:inline-block;background:#f0f6fe;padding:4px 16px;border-radius:40px;">
+                        <strong>Current Phase:</strong> Phase 1 — Conduct Competency Survey (Step 2 of 10)
+                    </span>
+                </div>
+            </div>
+
+            <!-- ─── 1. EXECUTIVE SUMMARY ─── -->
+            <div class="section">
+                <h2>1. Executive Summary</h2>
+
+                <div class="callout callout-success">
+                    <strong>📍 Current Status — Step 2: Conduct Competency Survey</strong><br />
+                    We have successfully completed <strong>Step 1: Identify Top / Avg / Low Performers</strong> using OLP composite scores. We are now actively executing <strong>Step 2: Conduct Competency Survey</strong> — deploying the level‑adapted survey instrument to collect behavioural data from 150 employees.<br /><br />
+                    Steps 3–10 (Extract Key Competencies, Map to Lominger, Build Interviews, Assign Weights, Validate, Build Matrix, Test, and Apply) are all upcoming.
+                </div>
+
+                <p>This document serves as the <strong>internal design specification and methodology reference</strong> for the Phase 1 Competency Survey — the second step in the 10‑step end‑to‑end process for building a predictive performance model at Jio Platforms Limited.</p>
+
+                <p>The project was initiated due to a critical gap: the organisation lacks a validated, context‑specific competency model that can predict employee performance for HR Manager and HRBP roles in the JioCX business unit. Five years of OLP performance ratings exist for 920 employees, enabling identification of top performers by quantitative composite score. However, no data exists on the specific behaviours and competencies that explain <em>why</em> those employees outperform their peers.</p>
+
+                <p><strong>We are now at Step 2:</strong> deploying a rigorous, level‑adapted competency survey to a target cohort of 150 employees. The survey instrument employs a mixed‑method design combining:</p>
+                <ul>
+                    <li><strong>20 Likert items</strong> (self‑perceived behavioural frequency on a 1–5 scale), distributed across 10 competencies (2 items each), with <strong>1 reverse‑scored item per competency</strong> (50% reverse‑scored) to mitigate acquiescence and straight‑lining.</li>
+                    <li><strong>2 attention checks</strong> embedded within the Likert section to identify inattentive or satisficing respondents.</li>
+                    <li><strong>Forced ranking (1–10)</strong> of the 10 competencies, measuring the mental model of what drives success, with a <strong>Top‑3 cross‑check</strong> to validate reflective ranking.</li>
+                    <li><strong>3 scenario‑based ranking exercises</strong> per job level (Junior/Manager/Leader), each requiring respondents to rank 4 behavioural options from most to least effective – revealing default behavioural autopilot.</li>
+                    <li><strong>5 open‑ended narrative questions</strong> with a 40–50 word minimum, measuring agency, attribution style, and generating interview language for Phase 1.</li>
+                    <li><strong>4 contextual demographic controls</strong> (job level, work hours, direct reports, cross‑functional involvement).</li>
+                </ul>
+
+                <p><strong>Critical design decision:</strong> Each job level (Junior, Manager, Leader) receives a <strong>fully level‑adapted questionnaire</strong> — the Likert items, scenarios, and belief items are all tailored to the respondent's seniority and scope of work. This ensures fair comparison within levels and meaningful differentiation across levels.</p>
+
+                <p>The survey is deployed as a <strong>self‑contained HTML file</strong> (or can be adapted to Microsoft Forms) with responses collected centrally for analysis. This HTML document is the <strong>internal design specification</strong> — it contains the complete methodology, item content, and level‑adaptation logic that has been implemented in the survey.</p>
+            </div>
+
+            <!-- ─── 2. THE 10‑STEP METHODOLOGY FRAMEWORK ─── -->
+            <div class="section">
+                <h2>2. The 10‑Step Methodology Framework</h2>
+                <p>The project follows a structured 10‑step end‑to‑end process, organised into three phases. <strong>We are currently at Step 2.</strong></p>
+
+                <table class="report-table">
+                    <thead><tr><th style="width:12%;">Phase</th><th style="width:18%;">Step</th><th>Activity</th><th style="width:15%;">Status</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3" style="vertical-align:middle;text-align:center;font-weight:700;color:#0b2a44;background:#f0f5fc;">Phase 1<br />Identify</td>
+                            <td>1</td><td>Identify Top / Avg / Low Performers</td>
+                            <td><span class="status-ok">✓ Completed</span></td></tr>
+                        <tr><td style="font-weight:600;color:#1a6dd4;">2</td>
+                            <td style="font-weight:600;color:#1a6dd4;">Conduct Competency Survey</td>
+                            <td><span class="status-diff">● In Progress — Current Step</span></td></tr>
+                        <tr><td>3</td><td>Extract Key Competencies and Map to Lominger Framework</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td rowspan="3" style="vertical-align:middle;text-align:center;font-weight:700;color:#0b2a44;background:#f0f5fc;">Phase 2<br />Design</td>
+                            <td>4</td><td>Build Competency Interviews</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td>5</td><td>Assign Weights to Competencies / Survey</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td>6</td><td>Validate Using HR Data (Correlation)</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td rowspan="4" style="vertical-align:middle;text-align:center;font-weight:700;color:#0b2a44;background:#f0f5fc;">Phase 3<br />Validate &amp; Apply</td>
+                            <td>7</td><td>Build Success Prediction Matrix</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td>8</td><td>Test on Existing Employees</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                        <tr><td>9</td><td>Apply to New Employees &amp; Future Hiring</td>
+                            <td><span class="status-warn">○ Upcoming</span></td></tr>
+                    </tbody>
+                </table>
+
+                <div class="callout callout-success">
+                    <strong>🎯 Current Focus — Step 2: Conduct Competency Survey</strong><br />
+                    This step involves:
+                    <ul style="margin:6px 0 0 20px;">
+                        <li>Deploying the level‑adapted survey instrument via self‑contained HTML (or Microsoft Forms)</li>
+                        <li>Targeting 150 employees across Junior, Manager, and Leader levels</li>
+                        <li>Collecting quantitative (Likert, ranking) and qualitative (open‑ended) data</li>
+                        <li>Monitoring response rates and sending reminders as needed</li>
+                        <li>Preparing raw data for export and cleaning (Step 3)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ─── 3. SURVEY ARCHITECTURE ─── -->
+            <div class="section">
+                <h2>3. Survey Architecture Overview</h2>
+
+                <h3>3.1 Multi‑Method Design Philosophy</h3>
+                <p>The survey employs four different response formats to capture complementary types of data about the same underlying behavioural constructs. This redundancy serves two purposes: (a) it increases the reliability of measurement for each competency by triangulating across multiple methods, and (b) it provides built‑in cross‑validation, making it possible to detect low‑quality, socially desirable, or inconsistent responses.</p>
+
+                <table class="report-table">
+                    <thead><tr><th>Format</th><th>Purpose</th><th>Bias Mitigation</th><th>Primary Bias Risk</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Likert Scale (Section A)</strong></td>
+                            <td>Self‑perceived behavioural frequency across 20 items (2 per competency)</td>
+                            <td>Provides scaled baseline; partially mitigated by Section B and C cross‑checks</td>
+                            <td>Central tendency, acquiescence bias</td></tr>
+                        <tr><td><strong>Forced Ranking (Section B)</strong></td>
+                            <td>Mental model of what drives success – eliminates ‘All 5s’ problem</td>
+                            <td>Cannot be gamed with uniform responses; must produce unique distribution</td>
+                            <td>Straight‑lining, central tendency</td></tr>
+                        <tr><td><strong>Scenario Ranking (Section C)</strong></td>
+                            <td>Default behavioural autopilot under realistic situational pressure</td>
+                            <td>No single obviously ‘correct’ answer; bypasses most social desirability</td>
+                            <td>Framing bias (mitigated by neutral language)</td></tr>
+                        <tr><td><strong>Open‑Ended Narratives (Section D)</strong></td>
+                            <td>Agency, attribution style, and authentic language for interview design</td>
+                            <td>Reveals genuine mental models; provides coding corpus for Phase 1</td>
+                            <td>Social desirability (mitigated by verb‑density coding)</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>3.2 Section‑Level Architecture</h3>
+                <p>The survey is divided into five sections. Total number of fields is <strong>44</strong>. Expected completion time is approximately 25–30 minutes.</p>
+
+                <table class="report-table">
+                    <thead><tr><th>Sec</th><th>Section Name</th><th>Format</th><th>Items</th><th>Time</th><th>What It Captures</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>A</strong></td>
+                            <td>Work Style Profile</td>
+                            <td>Likert (1–5)</td>
+                            <td>20 + 2 attention checks</td>
+                            <td>~10 min</td>
+                            <td>Self‑perceived behavioural frequency; 10 reverse‑scored; 2 attention checks</td></tr>
+                        <tr><td><strong>B</strong></td>
+                            <td>Theory of Success</td>
+                            <td>Forced Ranking (1–10, no ties) + Top‑3 Cross‑Check</td>
+                            <td>10 + 3</td>
+                            <td>~5 min</td>
+                            <td>Mental model of what drives success</td></tr>
+                        <tr><td><strong>C</strong></td>
+                            <td>Behavioural Scenarios</td>
+                            <td>Situational Judgement (Rank 4 options per scenario)</td>
+                            <td>3 scenarios (×4 options)</td>
+                            <td>~6 min</td>
+                            <td>Default behaviour under realistic pressure</td></tr>
+                        <tr><td><strong>D</strong></td>
+                            <td>Personal Reflections</td>
+                            <td>Open‑Ended STAR Narratives (40–50 word minimum)</td>
+                            <td>5</td>
+                            <td>~8 min</td>
+                            <td>Agency, attribution, self‑awareness, and coding language</td></tr>
+                        <tr><td><strong>E</strong></td>
+                            <td>Contextual Demographics</td>
+                            <td>Dropdown / Selection</td>
+                            <td>4</td>
+                            <td>~1 min</td>
+                            <td>Job level, work hours, direct reports, cross‑functional involvement</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 4. COMPETENCY FRAMEWORK ─── -->
+            <div class="section">
+                <h2>4. Competency Framework</h2>
+
+                <h3>4.1 The 10 Competencies</h3>
+                <p>The selection of exactly 10 competencies reflects a deliberate balance across three considerations: statistical reliability (2 items per competency — acceptable for initial screening), coverage of all three performance pillars (Task / Contextual / Adaptive), and cognitive load (respondents can reliably differentiate among 10–12 constructs).</p>
+
+                <table class="report-table">
+                    <thead><tr><th>Code</th><th>Competency</th><th>Definition</th><th>Pillar</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="comp-badge">EE</span></td><td>Execution Excellence</td>
+                            <td>Delivers results with consistent speed, quality, and personal accountability under varying conditions.</td>
+                            <td>Task</td></tr>
+                        <tr><td><span class="comp-badge">ST</span></td><td>Strategic Thinking</td>
+                            <td>Connects daily work to broader organisational goals and anticipates future developments.</td>
+                            <td>Adaptive</td></tr>
+                        <tr><td><span class="comp-badge">LA</span></td><td>Learning Agility</td>
+                            <td>Proactively acquires new skills, processes feedback, and adapts rapidly to new challenges.</td>
+                            <td>Adaptive</td></tr>
+                        <tr><td><span class="comp-badge">CI</span></td><td>Collaboration &amp; Influence</td>
+                            <td>Builds productive cross‑functional relationships and achieves outcomes without formal authority.</td>
+                            <td>Contextual</td></tr>
+                        <tr><td><span class="comp-badge">PS</span></td><td>Problem Solving</td>
+                            <td>Structures ambiguous problems, evaluates alternatives, and uses evidence‑based reasoning.</td>
+                            <td>Task</td></tr>
+                        <tr><td><span class="comp-badge">DI</span></td><td>Drive &amp; Initiative</td>
+                            <td>Self‑starts, persists through obstacles, and consistently exceeds formal expectations.</td>
+                            <td>Task</td></tr>
+                        <tr><td><span class="comp-badge">PL</span></td><td>People Leadership</td>
+                            <td>Invests in developing others, provides candid feedback, and creates enabling conditions for team success.</td>
+                            <td>Contextual</td></tr>
+                        <tr><td><span class="comp-badge">CM</span></td><td>Communication</td>
+                            <td>Presents ideas clearly, adapts to audiences, listens actively, and delivers difficult messages directly.</td>
+                            <td>Adaptive</td></tr>
+                        <tr><td><span class="comp-badge">RE</span></td><td>Resilience</td>
+                            <td>Maintains performance and composure under pressure and recovers rapidly from setbacks.</td>
+                            <td>Adaptive</td></tr>
+                        <tr><td><span class="comp-badge">CO</span></td><td>Stakeholder Orientation</td>
+                            <td>Understands and proactively serves stakeholders' underlying needs; maintains consistent reliability.</td>
+                            <td>Contextual</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>4.2 Mapping to Performance Pillars</h3>
+                <table class="report-table">
+                    <thead><tr><th>Performance Pillar</th><th>Definition</th><th>Mapped Competencies</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Task Performance</strong></td>
+                            <td>Proficiency with which the employee performs core technical and functional role requirements.</td>
+                            <td><span class="comp-badge">EE</span> · <span class="comp-badge">PS</span> · <span class="comp-badge">DI</span></td></tr>
+                        <tr><td><strong>Contextual Performance</strong></td>
+                            <td>Behaviours that support the organisational, social, and psychological environment.</td>
+                            <td><span class="comp-badge">CI</span> · <span class="comp-badge">PL</span> · <span class="comp-badge">CO</span></td></tr>
+                        <tr><td><strong>Adaptive Performance</strong></td>
+                            <td>Ability to handle change, learn from experience, and respond effectively to novel situations.</td>
+                            <td><span class="comp-badge">LA</span> · <span class="comp-badge">RE</span> · <span class="comp-badge">ST</span> · <span class="comp-badge">CM</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 5. THEORETICAL & EMPIRICAL FOUNDATIONS (NEW SECTION) ─── -->
+            <div class="section">
+                <h2>5. Theoretical &amp; Empirical Foundations</h2>
+                <p><strong>Why these frameworks and not others?</strong> The survey is not constructed in a theoretical vacuum. Its architecture is explicitly derived from peer‑reviewed frameworks in industrial‑organisational (I‑O) psychology. The selection was guided by three criteria: (1) empirical evidence of predictive validity for job performance, (2) direct translatability into observable behavioural items, and (3) cost‑effective and non‑proprietary implementation within an internship timeline. Below we detail the foundational research that anchors this survey, followed by a transparent rationale for excluding alternative frameworks.</p>
+
+                <div class="callout callout-success">
+                    <strong>🧠 Core Thesis:</strong> Performance is best predicted by measuring <strong>behavioural frequency (Likert), implicit priorities (ranking), situational judgement (scenarios), and narrative reasoning (open‑ended)</strong> – a multi‑method approach validated by over five decades of I‑O psychology research.
+                </div>
+
+                <h3>5.1 Core Foundational Frameworks (Included)</h3>
+                <table class="report-table">
+                    <thead><tr><th>Framework / Research</th><th>Key Contribution</th><th>How It Is Operationalised in This Survey</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Campbell’s Model of Job Performance (1990)</strong></td>
+                            <td>Performance is multi‑dimensional: Task, Contextual, and Adaptive performance.</td>
+                            <td>Our 10 competencies are explicitly mapped to these three pillars (see Section 4.2). Ensures comprehensive coverage of the performance domain.</td></tr>
+                        <tr><td><strong>Bartram’s “Great Eight” Competency Model (2005)</strong></td>
+                            <td>Eight competencies universally predict performance across roles and industries.</td>
+                            <td>Our 10 competencies are a curated expansion of the Great Eight, tailored to JioCX’s specific managerial/HRBP context. Provides the nomological net for item generation.</td></tr>
+                        <tr><td><strong>Lominger / Korn Ferry Leadership Architect</strong></td>
+                            <td>Industry‑standard competency library used in talent management.</td>
+                            <td>Step 3 of our process explicitly maps extracted competencies to the Lominger framework for organisational alignment and standardisation.</td></tr>
+                        <tr><td><strong>Classical Test Theory (CTT) – Cronbach (1951), Nunnally (1978)</strong></td>
+                            <td>Provides the psychometric foundation for reliability (Cronbach’s α) and validity assessment.</td>
+                            <td>Guides our data cleaning, item analysis, and reliability testing (Section 9 &amp; 10). Ensures the survey produces internally consistent and stable scores.</td></tr>
+                        <tr><td><strong>Ajzen’s Theory of Planned Behavior (1991)</strong></td>
+                            <td>Behavioural intention is the immediate antecedent of actual behaviour.</td>
+                            <td>Section C (Situational Judgement) measures behavioural intentions under realistic work dilemmas, bypassing social desirability to tap into true default responses.</td></tr>
+                        <tr><td><strong>Motowidlo et al. (1997) – SJT Validity</strong></td>
+                            <td>Situational Judgement Tests (SJTs) predict job performance above and beyond cognitive ability and personality.</td>
+                            <td>Section C scenarios are designed as low‑fidelity SJTs. They reveal tacit knowledge and practical intelligence, which are critical for managerial and HRBP roles.</td></tr>
+                        <tr><td><strong>Dweck’s Mindset Theory (2006)</strong></td>
+                            <td>Growth mindset (belief that abilities can be developed) correlates with higher performance and resilience.</td>
+                            <td>Section D open‑ended questions (e.g., “Area for Growth”) are coded for growth‑oriented language, providing a behavioural proxy for mindset.</td></tr>
+                        <tr><td><strong>Bandura’s Self‑Efficacy Theory (1977)</strong></td>
+                            <td>Belief in one’s capability to execute behaviours influences performance outcomes.</td>
+                            <td>Section A Likert items measure self‑perceived behavioural frequency – a direct operationalisation of domain‑specific self‑efficacy at work.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>5.2 Rationale for Exclusion (Why Not Others)</h3>
+                <p>Several well‑known frameworks were deliberately excluded. The table below provides the specific justification for each exclusion, based on theoretical misalignment, practical constraints, or lack of evidence for job performance prediction.</p>
+
+                <table class="report-table">
+                    <thead><tr><th>Excluded Framework</th><th>Reason for Exclusion</th><th>Justification</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Big Five / OCEAN (McCrae &amp; Costa, 1987)</strong></td>
+                            <td>Too trait‑based and dispositional; weak incremental validity for specific job behaviours.</td>
+                            <td>Big Five measures broad, stable personality traits (e.g., Extraversion). These are poor predictors of specific on‑the‑job behaviours because they do not capture context‑dependent skills. Meta‑analyses (e.g., Barrick &amp; Mount, 1991) show corrected correlations of only r = 0.10–0.25 with job performance – insufficient for our predictive modelling goals. Furthermore, traits are difficult to translate into actionable development feedback.</td></tr>
+                        <tr><td><strong>MBTI (Myers‑Briggs Type Indicator)</strong></td>
+                            <td>Poor predictive validity; categorises rather than measures; not evidence‑based for performance.</td>
+                            <td>MBTI has been widely criticised in I‑O psychology for its lack of predictive validity for job performance (see Pittenger, 2005). Its dichotomous (categorical) nature forces individuals into boxes, ignoring the dimensional nature of behaviour. It is not designed for performance prediction and has no place in a competency‑based assessment system.</td></tr>
+                        <tr><td><strong>DiSC Profile</strong></td>
+                            <td>Focuses on communication and interaction styles, not performance competencies.</td>
+                            <td>DiSC is useful for team building and understanding interpersonal dynamics, but it does not measure task execution, problem‑solving, or strategic thinking – all of which are critical for HR Manager/HRBP roles. It lacks the breadth needed for a comprehensive performance model.</td></tr>
+                        <tr><td><strong>Hogan Assessment Systems (HPI, HDS, MVPI)</strong></td>
+                            <td>Proprietary, expensive, and requires certified practitioners.</td>
+                            <td>Hogan is a well‑validated tool, but it is a commercial product. The cost and certification barrier make it unfeasible for an internship project with a limited budget. Additionally, it focuses on personality and dark‑side traits, whereas our project requires a purely competency‑based, behavioural model for internal calibration.</td></tr>
+                        <tr><td><strong>McKinsey 7S Framework</strong></td>
+                            <td>Macro‑organisational strategy framework; not designed for individual‑level performance.</td>
+                            <td>McKinsey 7S operates at the level of the organisation (Strategy, Structure, Systems, etc.). It does not provide a taxonomy of individual behaviours or competencies. Applying it to individual performance prediction would be a category error.</td></tr>
+                        <tr><td><strong>Balanced Scorecard (Kaplan &amp; Norton)</strong></td>
+                            <td>Designed for organisational performance management, not individual prediction.</td>
+                            <td>The Balanced Scorecard translates organisational strategy into performance metrics (Financial, Customer, Internal Process, Learning &amp; Growth). It is a strategy execution tool, not a behavioural competency model. It cannot differentiate between high and low performers at the individual level.</td></tr>
+                        <tr><td><strong>Iceberg Model of Competency (Spencer &amp; Spencer, 1993)</strong></td>
+                            <td>Too abstract and static; difficult to operationalise into survey items.</td>
+                            <td>While conceptually influential, the Iceberg Model divides competencies into “visible” (skills/knowledge) and “hidden” (self‑concept, traits, motives) layers. The hidden layer is exceptionally difficult to measure reliably via self‑report survey without psychometric validation (e.g., projective tests). Our chosen frameworks focus on measurable behaviours (Campbell, Bartram) rather than unobservable motives.</td></tr>
+                        <tr><td><strong>Gallup CliftonStrengths</strong></td>
+                            <td>Focuses on strengths (talents) rather than performance behaviours.</td>
+                            <td>CliftonStrengths identifies innate talent themes (e.g., Achiever, Strategic). While useful for career development, it does not measure the frequency or quality of behaviour execution. Performance depends on how talents are applied, not just their presence. Our survey measures applied behaviour, not inherent talent.</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="callout">
+                    <strong>🔬 Why the Chosen Frameworks Work Together:</strong>
+                    <ul style="margin:6px 0 0 20px;">
+                        <li><strong>Campbell + Bartram</strong> provide the <em>content</em> (what to measure).</li>
+                        <li><strong>Ajzen + Motowidlo</strong> provide the <em>format</em> (how to measure it – via intentions and judgement).</li>
+                        <li><strong>CTT + Bandura</strong> provide the <em>psychometric rigour</em> (reliability, self‑efficacy calibration).</li>
+                        <li><strong>Dweck</strong> provides the <em>qualitative lens</em> (narrative coding for growth mindset).</li>
+                    </ul>
+                    <p style="margin-top:6px;">This multi‑layered foundation ensures that the survey is not merely a collection of questions, but a theoretically grounded, empirically defensible instrument tailored specifically to predict performance in the JioCX context.</p>
+                </div>
+            </div>
+
+            <!-- ─── 6. LEVEL ADAPTATION ─── (renumbered from 5) -->
+            <div class="section">
+                <h2>6. Level‑Adapted Questionnaire Design</h2>
+
+                <div class="callout callout-success">
+                    <strong>✅ Critical Design Decision: Fully Level‑Adapted Content</strong><br />
+                    Each job level (Junior, Manager, Leader/VP+) receives a <strong>completely different questionnaire</strong> tailored to their seniority and scope of work. This ensures fair comparison within levels and meaningful differentiation across levels. The Likert items, scenarios, and belief items are all rewritten for each level.
+                </div>
+
+                <h3>6.1 Level Adaptation Logic</h3>
+                <table class="report-table level-table">
+                    <thead><tr><th style="width:15%;">Level</th><th>Section A (Likert) Adaptation</th><th>Section B (Beliefs) Adaptation</th><th>Section C (Scenarios) Adaptation</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Junior / Executive</strong></td>
+                            <td>First‑person singular language: "I deliver accurate work quickly…", "I proactively seek out new skills…"</td>
+                            <td>Focus on individual execution: "Doing your assigned tasks accurately and on time", "Learning new skills and adapting to change"</td>
+                            <td>Daily work dilemmas: competing priorities, receiving feedback, conflicting stakeholder instructions</td></tr>
+                        <tr><td><strong>Manager / Team Lead</strong></td>
+                            <td>Team‑level language: "My team consistently delivers high‑quality work on time…", "I set clear team goals and track progress…"</td>
+                            <td>Focus on team leadership: "Ensuring the team delivers quality results consistently", "Coaching, developing, and giving feedback to team members"</td>
+                            <td>Team management scenarios: prioritisation under pressure, managing underperformance, shifting strategic priorities</td></tr>
+                        <tr><td><strong>Leader / VP+</strong></td>
+                            <td>Organisational‑level language: "We maintain rigorous quality standards across all enterprise initiatives…", "I anchor all organisational decisions to the company's mission…"</td>
+                            <td>Focus on enterprise leadership: "Delivering enterprise‑wide outcomes with excellence", "Creating stakeholder trust and long‑term value"</td>
+                            <td>Strategic scenarios: board trade‑offs, executive misalignment, disruptive market entry</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>6.2 Section C — Scenario Examples by Level</h3>
+                <table class="report-table">
+                    <thead><tr><th>Level</th><th>Scenario 1</th><th>Scenario 2</th><th>Scenario 3</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Junior</strong></td>
+                            <td>Report error – immediate escalation</td>
+                            <td>Colleague in need – how to balance support vs. own work</td>
+                            <td>Feedback disagreement – response to manager</td></tr>
+                        <tr><td><strong>Manager</strong></td>
+                            <td>Underperforming team member – how to intervene</td>
+                            <td>Promotion dilemma – choosing between two strong candidates</td>
+                            <td>Resistance to change – managing team scepticism</td></tr>
+                        <tr><td><strong>Leader</strong></td>
+                            <td>Cross‑team misalignment – who owns the decision</td>
+                            <td>Cost reduction – targeted vs. proportional approach</td>
+                            <td>Stakeholder pressure – unrealistic demands</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 7. ITEM DESIGN ─── (renumbered from 6) -->
+            <div class="section">
+                <h2>7. Item Design Methodology</h2>
+
+                <h3>7.1 Section A — Likert Scale (20 Items)</h3>
+                <p><strong>Format:</strong> 1–5 Likert scale (1 = Strongly Disagree, 5 = Strongly Agree). Each competency has 2 items.</p>
+                <p><strong>Reverse‑Scored Items (50%):</strong> Exactly 1 item per competency is reverse‑scored, totalling 10 reverse‑scored items. This high proportion is intentional to minimise acquiescence bias and straight‑lining.</p>
+                <p><strong>Attention Checks:</strong> 2 checks embedded at positions 7 and 14 after shuffling (AC1: select "Agree" (4); AC2: select "Strongly Disagree" (1)).</p>
+                <p><strong>Shuffling:</strong> Items are mixed across competency groups and shuffled on each load.</p>
+
+                <h3>7.2 Section B — Forced Ranking (1–10) + Top‑3 Cross‑Check</h3>
+                <p>Respondents rank the 10 competencies from 1 (most critical) to 10 (least critical). No ties permitted. Used ranks are hidden from other dropdowns. A Top‑3 cross‑check validates the reflective ranking.</p>
+
+                <h3>7.3 Section C — Scenario‑Based Ranking</h3>
+                <p>Three scenarios per level. Each scenario has 4 options to rank from 1 (most effective) to 4 (least effective). Used ranks (1–4) are hidden within each scenario.</p>
+
+                <h3>7.4 Section D — Open‑Ended Reflections</h3>
+                <p>Five questions with a 40–50 word minimum: D1 (Professional Achievement), D2 (Navigating Ambiguity), D3 (Your Distinct Value), D4 (Area for Growth), D5 (What It Takes to Excel Here).</p>
+
+                <h3>7.5 Section E — Contextual Demographics</h3>
+                <p>Job Level, Average Weekly Work Hours, Number of Direct Reports, Cross‑Functional Project Involvement. Name and Employee ID are also collected for OLP merge.</p>
+            </div>
+
+            <!-- ─── 8. BIAS MITIGATION ─── (renumbered from 7) -->
+            <div class="section">
+                <h2>8. Bias Mitigation Strategy</h2>
+                <table class="report-table">
+                    <thead><tr><th>Bias</th><th>Section</th><th>Description</th><th>Mitigation Strategy</th></tr></thead>
+                    <tbody>
+                        <tr><td>Social Desirability</td><td>A, D</td><td>Over‑reporting desirable behaviours.</td>
+                            <td>Section C has no obvious correct answer. Section D coded for action verbs, not trait claims.</td></tr>
+                        <tr><td>Central Tendency</td><td>A</td><td>Clustering around midpoints.</td>
+                            <td>Section B forced ranking eliminates this. 50% reverse‑scored items reduce straight‑lining.</td></tr>
+                        <tr><td>Acquiescence</td><td>A</td><td>Tendency to agree with positive statements.</td>
+                            <td>50% reverse‑scored items + Sections B and C cross‑validation.</td></tr>
+                        <tr><td>Dunning‑Kruger</td><td>A</td><td>Lower performers overestimate ability.</td>
+                            <td>Section A scores cross‑validated against Section C scenario choices.</td></tr>
+                        <tr><td>Framing Bias</td><td>C</td><td>Scenario wording influences responses.</td>
+                            <td>Neutral language focusing on organisational context.</td></tr>
+                        <tr><td>Rank Instability</td><td>B</td><td>Small preference differences cause rank swings.</td>
+                            <td>Top‑3 cross‑check validates reflective ranking.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 9. DEPLOYMENT ─── (renumbered from 8) -->
+            <div class="section">
+                <h2>9. Deployment Options</h2>
+                <div class="callout">
+                    <strong>📋 Deployment Strategy</strong><br />
+                    The survey is currently designed as a <strong>self‑contained HTML file</strong> with all logic, styling, and data embedded. It can be deployed in two ways:
+                    <ul style="margin:8px 0 0 20px;">
+                        <li><strong>Option 1 – HTML file:</strong> Distribute the file via email/internal portal. Respondents open it in a browser, complete the survey, and download their Excel response. This is the current design.</li>
+                        <li><strong>Option 2 – Microsoft Forms (recommended for scale):</strong> Adapt the content into Microsoft Forms with conditional logic for level branching. This centralises response collection and reduces administrative overhead.</li>
+                    </ul>
+                    <p style="margin-top:8px;"><strong>Current status:</strong> The HTML prototype is ready for pilot testing. We recommend transitioning to Microsoft Forms for the main deployment to reach the target of 150 responses efficiently.</p>
+                </div>
+            </div>
+
+            <!-- ─── 10. DATA CLEANING ─── (renumbered from 9) -->
+            <div class="section">
+                <h2>10. Data Cleaning Protocol</h2>
+                <table class="report-table">
+                    <thead><tr><th>Filter</th><th>Rule</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Incomplete Response</strong></td>
+                            <td>Exclude any respondent completing fewer than 80% of all 44 fields.</td></tr>
+                        <tr><td><strong>Straight‑Liner Flag</strong></td>
+                            <td>For Section A, calculate standard deviation per respondent across all 20 items. Exclude SD &lt; 0.5.</td></tr>
+                        <tr><td><strong>Attention Check Fail</strong></td>
+                            <td>Exclude any respondent who fails either of the two embedded attention checks (AC1 or AC2).</td></tr>
+                        <tr><td><strong>Rank Violation</strong></td>
+                            <td>Exclude any Section B or Section C respondent who did not use each unique rank exactly once.</td></tr>
+                        <tr><td><strong>Speed Filter</strong></td>
+                            <td>Exclude responses completed in under 10 minutes (expected completion ~25–30 min).</td></tr>
+                        <tr><td><strong>Section B–C Consistency</strong></td>
+                            <td>Flag respondents whose Section B top‑ranked competency does not appear in their Top‑3 cross‑check – manual review.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 11. ANALYSIS FRAMEWORK ─── (renumbered from 10) -->
+            <div class="section">
+                <h2>11. Post‑Survey Data Analysis Framework</h2>
+                <p>Once data collection is complete (Step 2), we will proceed to Step 3 (Extract Key Competencies) and beyond. The analysis framework is:</p>
+                <table class="report-table">
+                    <thead><tr><th>Step</th><th>Analysis Action</th><th>Detail</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>1</strong></td>
+                            <td>Data Preparation &amp; Cleaning</td>
+                            <td>Export raw responses from HTML/Forms, merge with OLP composite scores, apply data cleaning protocol.</td></tr>
+                        <tr><td><strong>2</strong></td>
+                            <td>Statistical Item Analysis (Section A)</td>
+                            <td>Calculate mean and SD per item, split by performance tier. Run Mann‑Whitney U test per item. Record effect size. Rank 10 competencies by effect size to produce the Differentiator Index.</td></tr>
+                        <tr><td><strong>3</strong></td>
+                            <td>Thematic Coding (Section D)</td>
+                            <td>Separate D1–D5 responses by performance tier. Code for Action Verbs, Situational Contexts, Attribution Style. Produce Narrative Frequency Score per competency.</td></tr>
+                        <tr><td><strong>4</strong></td>
+                            <td>Triangulation Matrix</td>
+                            <td>For each of 10 competencies, combine evidence across all four sections. Competencies with strong signal from ≥3 sources are classified as Confirmed Core Competencies.</td></tr>
+                        <tr><td><strong>5</strong></td>
+                            <td>Competency Prioritisation &amp; Output Package</td>
+                            <td>Produce: Differentiator Index, Belief‑Profile Matrix, Behavioral Fingerprint, Narrative Corpus, Agency Score per respondent.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 12. DELIVERABLES ─── (renumbered from 11) -->
+            <div class="section">
+                <h2>12. Expected Deliverables</h2>
+                <table class="report-table">
+                    <thead><tr><th>Phase</th><th>#</th><th>Deliverable</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Phase 1</strong></td><td>1</td><td>Top/Avg/Low Performer Identification</td><td>OLP‑based segmentation of 920 employees <span class="status-ok">✓ Done</span></td></tr>
+                        <tr><td><strong>Phase 1</strong></td><td>2</td><td>Raw Survey Data (Collected)</td><td>Responses from 150 employees via HTML/Forms <span class="status-diff">● In Progress</span></td></tr>
+                        <tr><td><strong>Phase 1</strong></td><td>3</td><td>Extract Key Competencies and Map to Lominger</td><td>Initial list of differentiating competencies mapped to Lominger</td></tr>
+                        <tr><td><strong>Phase 2</strong></td><td>4</td><td>Build Competency Interviews</td><td>STAR‑based interview protocol derived from survey data</td></tr>
+                        <tr><td><strong>Phase 2</strong></td><td>5</td><td>Assign Weights to Competencies / Survey</td><td>Weighted competency model based on predictive power</td></tr>
+                        <tr><td><strong>Phase 2</strong></td><td>6</td><td>Validate Using HR Data (Correlation)</td><td>Correlation analysis between competency scores and OLP composites</td></tr>
+                        <tr><td><strong>Phase 3</strong></td><td>7</td><td>Build Success Prediction Matrix</td><td>Competency‑based performance prediction model</td></tr>
+                        <tr><td><strong>Phase 3</strong></td><td>8</td><td>Test on Existing Employees</td><td>Model validation on current employee population</td></tr>
+                        <tr><td><strong>Phase 3</strong></td><td>9</td><td>Apply to New Employees &amp; Future Hiring</td><td>Operationalise model for recruitment and development</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ─── 13. LIMITATIONS ─── (renumbered from 12) -->
+            <div class="section">
+                <h2>13. Limitations</h2>
+                <div class="callout callout-warning">
+                    <strong>⚠️ Key Limitations to Acknowledge</strong>
+                </div>
+                <ol>
+                    <li><strong>Common Method Variance (CMV):</strong> All data collected in this survey is self‑reported. Without external validation (manager ratings, peer feedback, or objective behavioural observation), we cannot definitively separate self‑perception from actual competency. This limitation is partially addressed by the multi‑method design (Likert + forced ranking + scenarios + open‑ended), but CMV remains the primary methodological concern.</li>
+                    <li><strong>Cross‑Sectional Design:</strong> The survey captures a single behavioural snapshot. Performance is dynamic; the same individual may display different competency profiles under different organisational conditions (e.g., during high‑pressure periods vs. stable periods).</li>
+                    <li><strong>Platform Constraints:</strong> If deployed via Microsoft Forms, it does not natively support Semantic Differential bipolar format or drag‑and‑drop ranking. The survey uses a Likert scale and dropdown menus, which may reduce the discriminating power of some items compared to a native Qualtrics or HTML prototype.</li>
+                    <li><strong>Response Rate Risk:</strong> With a target of 150 complete responses, there is a risk of low participation. If response rates are uneven across job levels (e.g., leaders respond less than juniors), the competency model will have unequal reliability across the hierarchy.</li>
+                    <li><strong>Social Desirability Bias:</strong> Despite mitigation strategies, respondents may still inflate their self‑ratings, particularly in Section A (Likert) and Section D (open‑ended). The forced ranking and scenario sections are designed to bypass this, but they cannot eliminate it entirely.</li>
+                    <li><strong>Dependency on OLP Data:</strong> The validity of the model depends on the accuracy and completeness of the OLP composite scores used to identify top performers. Any errors in the OLP dataset will cascade into the competency model.</li>
+                    <li><strong>Sample Representativeness:</strong> The survey is limited to the JioCX business unit. Generalising findings to other business units or to the wider Jio organisation may not be valid without additional validation.</li>
+                </ol>
+            </div>
+
+            <!-- ─── 14. FUTURE RECOMMENDATIONS ─── (renumbered from 13) -->
+            <div class="section">
+                <h2>14. Future Recommendations</h2>
+                <div class="callout">
+                    <strong>🚀 Recommendations for Subsequent Phases and Future Iterations</strong>
+                </div>
+                <ol>
+                    <li><strong>Transition to Qualtrics for Phase 2/3:</strong> Qualtrics natively supports Semantic Differential, drag‑and‑drop ranking, and advanced conditional logic. The improved format fidelity alone is expected to meaningfully increase the discriminating power of Section A‑equivalent items.</li>
+                    <li><strong>Implement 360‑Degree Component:</strong> In future survey cycles, incorporate a manager‑rating parallel survey where direct managers rate their reports on the same competencies. This eliminates Common Method Variance and adds an external validation layer that self‑report alone cannot provide.</li>
+                    <li><strong>Add Forced‑Choice Pairwise Format:</strong> Replace the Likert scale with pairwise behavioural comparisons (e.g., "Which is more like you: A or B?"). This is the methodological gold standard for eliminating faking and straight‑lining in competency surveys.</li>
+                    <li><strong>Longitudinal Tracking:</strong> Link the final competency model to actual performance outcomes (OLP composite scores, promotion rates, attrition flags) over an 18‑month horizon. This transitions the model from cross‑sectional to truly predictive and allows causality to be assessed.</li>
+                    <li><strong>NLP‑Assisted Coding for Open‑Ended Responses:</strong> For future survey cycles, leverage Natural Language Processing (NLP) tools to automate thematic coding of Section D responses. This enables near‑real‑time analysis and removes the manual effort bottleneck from the analytical pipeline.</li>
+                    <li><strong>Expand to Other Business Units:</strong> Once validated within JioCX, the competency model should be tested and calibrated across other Jio business units (e.g., Retail, Digital, Cloud) to ensure organisation‑wide applicability.</li>
+                    <li><strong>Integrate with Learning &amp; Development:</strong> Use the validated competency model to design targeted L&amp;D interventions. For example, if "Strategic Thinking" (ST) is identified as a key differentiator, create a dedicated programme to develop ST skills among high‑potential junior employees.</li>
+                </ol>
+            </div>
+
+            <!-- ─── 15. APPENDICES ─── (renumbered from 14) -->
+            <div class="section">
+                <h2>15. Appendices</h2>
+
+                <h3>Appendix A: Competency Coding Framework (Section D)</h3>
+                <table class="report-table">
+                    <thead><tr><th>Code</th><th>What It Codes For</th><th>Example of High‑Score Response</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="comp-badge">EE</span></td><td>Delivers quality work under pressure, completes tasks without reminders.</td>
+                            <td>"I restructured the entire report in 4 hours and delivered it with zero errors before the deadline."</td></tr>
+                        <tr><td><span class="comp-badge">ST</span></td><td>Connects work to organisational goals, anticipates problems.</td>
+                            <td>"Before starting, I asked how this would impact our Q3 revenue targets, then aligned the approach accordingly."</td></tr>
+                        <tr><td><span class="comp-badge">LA</span></td><td>Seeks learning, adapts to feedback, recovers from mistakes.</td>
+                            <td>"I took a weekend course to learn SQL so I could pull my own data. The team now uses my script daily."</td></tr>
+                        <tr><td><span class="comp-badge">CI</span></td><td>Builds networks, influences without authority, navigates conflict.</td>
+                            <td>"I pre‑aligned with all 5 stakeholders before the meeting to ensure a unanimous decision."</td></tr>
+                        <tr><td><span class="comp-badge">PS</span></td><td>Structures ambiguity, explores alternatives, uses data.</td>
+                            <td>"I broke the 3‑month project into 10 milestones, mapped dependencies, and identified the three critical‑path risks upfront."</td></tr>
+                        <tr><td><span class="comp-badge">DI</span></td><td>Self‑starts, persists, exceeds expectations.</td>
+                            <td>"I designed a new triage system without being asked. SLAs improved by 25% within 6 weeks."</td></tr>
+                        <tr><td><span class="comp-badge">PL</span></td><td>Develops others, gives candid feedback, enables performance.</td>
+                            <td>"I sat with the junior developer every week to review his code and gave specific, actionable improvements. He was promoted within 8 months."</td></tr>
+                        <tr><td><span class="comp-badge">CM</span></td><td>Communicates clearly, adapts style, listens actively.</td>
+                            <td>"I noticed the audience was non‑technical 10 minutes in, so I paused and rebuilt the presentation using an analogy instead of data."</td></tr>
+                        <tr><td><span class="comp-badge">RE</span></td><td>Maintains composure under pressure, recovers quickly.</td>
+                            <td>"When the server crashed during the client demo, I switched to my backup slides, stayed calm, and turned it into a discussion."</td></tr>
+                        <tr><td><span class="comp-badge">CO</span></td><td>Understands stakeholder needs, goes beyond stated requirements.</td>
+                            <td>"I asked why the stakeholder needed the report, discovered the real need, and built a real‑time dashboard instead of a PDF."</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Appendix B: STAR Interview Template</h3>
+                <div class="callout">
+                    <strong>STAR Question Template Structure</strong><br />
+                    Competency: [Competency Name &amp; Code]<br />
+                    Survey Signal: [The finding that validates this competency as differentiating]<br />
+                    Primary Question: "Tell me about a time you [action verb derived from Section D top performer responses]..."<br />
+                    Probing Follow‑Up 1: "What was the specific situation that prompted you to act?"<br />
+                    Probing Follow‑Up 2: "What were the specific steps you took, in order?"<br />
+                    Probing Follow‑Up 3: "What was the measurable outcome, and how did you know it was successful?"<br />
+                    Probing Follow‑Up 4: "With hindsight, what would you have done differently?"<br />
+                    Rating Anchor (5 – Exceptional): [Direct quote from a top performer's Section D response]<br />
+                    Rating Anchor (3 – Adequate): [Paraphrase of average performer's typical Section D response]<br />
+                    Rating Anchor (1 – Reactive/Insufficient): [Paraphrase of low‑quality or avoidant Section D response]
+                </div>
+
+                <h3>Appendix C: Data Cleaning Decision Log</h3>
+                <p>All data quality decisions will be documented in the Data Cleaning Decision Log, maintained alongside the master response dataset. For each exclusion, the following fields are recorded: Respondent ID and Job Level, Exclusion Reason (one of six cleaning filters), Raw data retained, Decision Reviewer (intern + mentor sign‑off required).</p>
+            </div>
+
+            <!-- ─── END MARK ─── -->
+            <div style="margin-top:40px; padding-top:24px; border-top:2px solid #0b2a44; text-align:center; color:#3e5778; font-size:14px;">
+                <strong>END OF REPORT</strong> &nbsp;·&nbsp; Step 2: Conduct Competency Survey &nbsp;·&nbsp; Internal / Confidential
+            </div>
+
+        </div><!-- /report -->
+    </div><!-- /document-wrapper -->
+
+    <script>
+        console.log('📋 Phase 1 — Conduct Competency Survey (Step 2 of 10)');
+        console.log('📍 Current Step: 2 — Conduct Competency Survey');
+        console.log('📅 Internship Timeline: 3 June – 3 August');
+        console.log('📊 Deployment: Self-contained HTML (or Microsoft Forms)');
+        console.log('📝 Survey: 20 Likert + 10 ranking + 3 scenarios + 5 open-ended + 4 demographics');
+        console.log('✅ Added Section 5: Theoretical & Empirical Foundations with inclusion/exclusion rationale.');
+    </script>
+
+</body>
+</html>

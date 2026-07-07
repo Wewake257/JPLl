@@ -1,0 +1,36 @@
+# Local Gemini/Antigravity Agent Directories
+.gemini/
+.agents/
+browser_recordings/
+html_artifacts/
+scratch/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# IDE configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# System files
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# Large Excel/Data sheets (Uncomment if you want to keep data private/out of GitHub)
+# *OLP Data.xlsx
+# *Stay and Exit Data*.xlsx
+# *Scored_Output.xlsx

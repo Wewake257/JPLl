@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OLP Top Performer Identification — Jio Platforms HR Analytics</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --jio-blue: #0052cc;
+    --jio-teal: #00b4d8;
+    --jio-deep: #003087;
+    --accent: #e63946;
+    --gold: #f4a533;
+    --green: #2dc653;
+    --ink: #1a1a2e;
+    --mid: #4a4a6a;
+    --light: #8888aa;
+    --bg: #f8f9fc;
+    --white: #ffffff;
+    --card: #ffffff;
+    --border: #e4e8f0;
+    --pill-blue: #e8f0fe;
+    --pill-teal: #e0f7ff;
+    --pill-red: #fde8ea;
+    --pill-green: #e6f9ed;
+    --pill-gold: #fff3dc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background:
+    radial-gradient(circle at top left,#00b4d8 0%,transparent 35%),
+    radial-gradient(circle at bottom right,#0052cc 0%,transparent 35%),
+    #f8f9fc;
+    color: var(--ink);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+  }
+
+  /* ── Canvas & background ── */
+  #bg-canvas {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* ── Slide shell ── */
+  #deck {
+    position: relative; z-index: 1;
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── Top bar ── */
+  #topbar {
+    display: flex; align-items: center;
+    padding: 0 32px; height: 52px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--jio-deep), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 13px; color: white; letter-spacing: -0.5px;
+  }
+
+  .topbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 13px; color: var(--jio-deep);
+    letter-spacing: 0.2px;
+  }
+
+  .topbar-sep { color: var(--border); font-size: 18px; }
+
+  .topbar-project {
+    font-size: 12px; color: var(--mid); font-weight: 400;
+  }
+
+  .topbar-right {
+    margin-left: auto; display: flex; align-items: center; gap: 16px;
+  }
+
+  #progress-bar-wrap {
+    width: 120px; height: 4px;
+    background: var(--border); border-radius: 99px; overflow: hidden;
+  }
+
+  #progress-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    transition: width 0.4s ease;
+  }
+
+  #slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--light);
+  }
+
+  /* ── Slide content ── */
+  #slide-viewport {
+    flex: 1; overflow: hidden;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 28px 48px;
+    opacity: 0; transform: translateX(40px);
+    transition: opacity 0.38s ease, transform 0.38s ease;
+    pointer-events: none;
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1; transform: translateX(0);
+    pointer-events: all;
+  }
+
+  .slide.exit-left {
+    opacity: 0; transform: translateX(-40px);
+  }
+
+  /* ── Bottom nav ── */
+  #bottomnav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; padding: 12px 32px; height: 60px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+  }
+
+  .nav-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px; border-radius: 10px; border: none;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 500; cursor: pointer; transition: all 0.2s;
+  }
+
+  .nav-btn.primary {
+    background: var(--jio-blue); color: white;
+    box-shadow: 0 2px 8px rgba(0,82,204,0.25);
+  }
+  .nav-btn.primary:hover { background: var(--jio-deep); transform: translateY(-1px); }
+  .nav-btn.secondary {
+    background: white; color: var(--mid);
+    border: 1px solid var(--border);
+  }
+  .nav-btn.secondary:hover { background: var(--bg); color: var(--ink); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  .dot-nav { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border); cursor: pointer; transition: all 0.2s;
+  }
+  .dot.active { width: 18px; border-radius: 99px; background: var(--jio-blue); }
+
+  /* ── Slide components ── */
+  .slide-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--jio-teal);
+    margin-bottom: 10px;
+  }
+
+  .slide-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(22px, 3vw, 38px);
+    font-weight: 700; color: var(--ink);
+    line-height: 1.15; text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .slide-title span.accent { color: var(--jio-blue); }
+  .slide-title span.teal   { color: var(--jio-teal); }
+
+  .slide-subtitle {
+    font-size: 14px; color: var(--mid); text-align: center;
+    max-width: 600px; line-height: 1.6; margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .card-grid {
+    display: grid; gap: 14px;
+    width: 100%; max-width: 900px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .stat-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px; font-weight: 700;
+    line-height: 1; margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px; color: var(--mid); font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+  }
+
+  .tag.blue { background: var(--pill-blue); color: var(--jio-blue); }
+  .tag.teal { background: var(--pill-teal); color: #0077a8; }
+  .tag.red  { background: var(--pill-red);  color: var(--accent); }
+  .tag.green{ background: var(--pill-green); color: #1a8a3d; }
+  .tag.gold { background: var(--pill-gold);  color: #b87800; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  .col-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .col-row:last-child { border-bottom: none; }
+
+  .col-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; padding: 3px 8px; border-radius: 6px;
+    background: var(--pill-blue); color: var(--jio-blue);
+    white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .col-name {
+    font-weight: 600; font-size: 13px; color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .col-desc { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+  .formula-box {
+    background: linear-gradient(135deg, #f0f4ff, #e8f7ff);
+    border: 1px solid #c5d8f8; border-radius: 12px;
+    padding: 16px 20px; margin: 4px 0;
+  }
+
+  .formula-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--jio-blue); margin-bottom: 8px;
+  }
+
+  .formula-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--jio-deep);
+    line-height: 1.6;
+  }
+
+  .weight-bar-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0;
+  }
+
+  .weight-label {
+    font-size: 12px; font-weight: 500; width: 200px;
+    color: var(--ink); flex-shrink: 0;
+  }
+
+  .weight-bar-bg {
+    flex: 1; height: 10px; border-radius: 99px;
+    background: var(--border); overflow: hidden;
+  }
+
+  .weight-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    transition: width 1s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .weight-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600; color: var(--jio-blue);
+    width: 36px; text-align: right; flex-shrink: 0;
+  }
+
+  .tier-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px; border-radius: 12px; margin-bottom: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .tier-icon { font-size: 22px; flex-shrink: 0; }
+
+  .tier-info { flex: 1; }
+  .tier-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+  .tier-range { font-size: 11px; color: var(--mid); }
+
+  .tier-count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 22px;
+  }
+
+  .inference-card {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border);
+    background: white; margin-bottom: 10px;
+    transition: box-shadow 0.2s;
+  }
+  .inference-card:hover { box-shadow: 0 4px 16px rgba(0,82,204,0.08); }
+
+  .inf-num {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px;
+  }
+
+  .inf-title { font-weight: 600; font-size: 13px; margin-bottom: 3px; color: var(--ink); }
+  .inf-body  { font-size: 12px; color: var(--mid); line-height: 1.5; }
+  .inf-arrow { font-size: 11px; color: var(--jio-teal); font-weight: 600; margin-top: 4px; }
+
+  .question-card {
+    background: linear-gradient(135deg, #f0f4ff, #f8fdff);
+    border: 1px solid #c5d8f8; border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px; display: flex; gap: 12px;
+  }
+
+  .q-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .q-text { font-size: 13px; color: var(--ink); line-height: 1.6; }
+  .q-cat  { font-size: 10px; font-weight: 700; letter-spacing: 1px;
+             text-transform: uppercase; color: var(--jio-blue); margin-bottom: 4px; }
+
+  /* Cover slide specific */
+  .cover-brand {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  }
+
+  .cover-logo {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--jio-deep), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+    font-size: 22px; color: white; letter-spacing: -1px;
+  }
+
+  .cover-brand-text { text-align: left; }
+  .cover-brand-main {
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+    font-size: 20px; color: var(--jio-deep); line-height: 1;
+  }
+  .cover-brand-sub { font-size: 12px; color: var(--light); margin-top: 2px; }
+
+  .cover-title-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4.5vw, 54px);
+    line-height: 1.1; text-align: center; color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .cover-divider {
+    width: 60px; height: 4px; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    margin: 0 auto 20px;
+  }
+
+  .meta-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 28px; }
+
+  .process-step {
+    display: flex; align-items: center; gap: 0;
+    width: 100%; max-width: 820px;
+  }
+
+  .pstep {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+  }
+
+  .pstep-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .pstep-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--light); margin-bottom: 2px;
+  }
+
+  .pstep-name {
+    font-size: 12px; font-weight: 600; color: var(--ink);
+    text-align: center; line-height: 1.3;
+  }
+
+  .pstep-desc { font-size: 11px; color: var(--mid); text-align: center; }
+
+  .pstep-arrow {
+    font-size: 18px; color: var(--border); flex-shrink: 0;
+    padding: 0 4px; margin-top: -20px;
+  }
+
+  .score-example {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    width: 100%; max-width: 820px;
+  }
+
+  .score-ex-card {
+    background: white; border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+
+  .score-ex-name { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+  .score-ex-bars { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+
+  .mini-bar-row { display: flex; align-items: center; gap: 8px; }
+  .mini-bar-label { font-size: 10px; color: var(--mid); width: 80px; flex-shrink: 0; }
+  .mini-bar-bg { flex: 1; height: 6px; border-radius: 99px; background: var(--border); }
+  .mini-bar-fill { height: 100%; border-radius: 99px; }
+  .mini-bar-val { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--mid); width: 30px; text-align: right; }
+
+  .final-score-display {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px;
+  }
+
+  .final-score-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 32px; color: var(--jio-blue);
+  }
+
+  /* Responsive scrolling for smaller content areas */
+  .slide-inner {
+    width: 100%; max-width: 920px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .full-w { width: 100%; }
+
+  /* ── Hide/show toggle buttons ── */
+  #toggle-topbar, #toggle-bottomnav {
+    position: fixed;
+    z-index: 100;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    color: var(--mid);
+    transition: all 0.2s;
+    opacity: 0.5;
+  }
+  #toggle-topbar:hover, #toggle-bottomnav:hover {
+    opacity: 1;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,82,204,0.2);
+    color: var(--jio-blue);
+  }
+  #toggle-topbar  { top: 58px; right: 12px; }
+  #toggle-bottomnav { bottom: 66px; right: 12px; }
+
+  /* When topbar is hidden, reposition its toggle */
+  #toggle-topbar.bar-hidden  { top: 8px; }
+  #toggle-bottomnav.bar-hidden { bottom: 8px; }
+
+  /* Smooth hide transitions */
+  #topbar, #bottomnav {
+    transition: height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+  }
+  #topbar.hidden   { height: 0 !important; opacity: 0; border: none; padding: 0; }
+  #bottomnav.hidden { height: 0 !important; opacity: 0; border: none; padding: 0; }
+
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="deck">
+  <!-- Toggle buttons -->
+  <button id="toggle-topbar"   title="Hide/show header" onclick="toggleBar('top')">▲</button>
+  <button id="toggle-bottomnav" title="Hide/show footer" onclick="toggleBar('bottom')">▼</button>
+
+  <!-- Top bar -->
+  <div id="topbar">
+    <div class="logo-mark">JP</div>
+    <span class="topbar-brand">Jio Platforms Ltd — HR Analytics</span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-project">Performance Predictor & Success Profile Analysis</span>
+    <div class="topbar-right">
+      <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+      <span id="slide-counter">1 / 13</span>
+    </div>
+  </div>
+
+  <!-- Slide viewport -->
+  <div id="slide-viewport">
+
+    <!-- ═══════════ SLIDE 1 — COVER ═══════════ -->
+    <div class="slide active" id="s1">
+      <div class="slide-inner" style="align-items:center;text-align:center">
+        <div class="cover-brand">
+          <div class="cover-logo">J</div>
+          <div class="cover-brand-text">
+            <div class="cover-brand-main">Jio Platforms Ltd</div>
+            <div class="cover-brand-sub">HR Analytics · Internship Project</div>
+          </div>
+        </div>
+
+        <div class="cover-title-big">
+          How We Identify<br/>
+          <span style="color:var(--jio-blue)">Top Performers</span><br/>
+          for the Success Profile Interview
+        </div>
+        <div class="cover-divider"></div>
+        <div class="slide-subtitle">
+          Using OLP (Online Performance) Data to rank 920 employees, build a composite score,
+          and select 15 individuals for structured competency interviews.
+        </div>
+
+        <div class="meta-pills">
+          <span class="tag blue">📊 920 Employees Analysed</span>
+          <span class="tag teal">⚙️ 7 Scoring Variables</span>
+          <span class="tag green">🏆 15 Top Performers Selected</span>
+          <span class="tag gold">📅 FY 2021–2026 Data</span>
+          <span class="tag red">🎯 HR Manager & HRBP Roles</span>
+        </div>
+
+        <div style="margin-top:28px;font-size:12px;color:var(--light)">
+          Presented by Vivek Kumar Kohli · Jio Platforms Ltd · June 2026
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 2 — WHY ═══════════ -->
+    <div class="slide" id="s2">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Context & Objective</div>
+        <div class="slide-title">Why Are We Doing This?</div>
+        <div class="slide-subtitle">The strategic purpose behind the OLP data analysis</div>
+
+        <div class="card-grid cols-2" style="max-width:820px;margin-bottom:20px">
+          <div class="card" style="border-left:4px solid var(--jio-blue)">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--jio-blue)">🎯 The Challenge</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.6">
+              We need to build a <b>competency-based success profile</b> for HR Manager and HRBP roles.
+              But we don't know which behavioural competencies actually drive high performance.
+            </div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--jio-teal)">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:var(--jio-teal)">💡 The Solution</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.6">
+              Interview <b>proven top performers</b> using structured STAR-format questions to extract
+              the behaviours that actually made them successful — then build the model from that.
+            </div>
+          </div>
+        </div>
+
+        <div class="card full-w" style="max-width:820px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:14px">The 3-Layer Logic</div>
+          <div class="process-step">
+            <div class="pstep">
+              <div class="pstep-icon">📁</div>
+              <div class="pstep-num">STEP 1</div>
+              <div class="pstep-name">OLP Data<br/>Analysis</div>
+              <div class="pstep-desc">Score 920 employees on objective metrics</div>
+            </div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep">
+              <div class="pstep-icon">🗣️</div>
+              <div class="pstep-num">STEP 2</div>
+              <div class="pstep-name">Competency<br/>Interviews</div>
+              <div class="pstep-desc">Interview top performers, extract behaviours</div>
+            </div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep">
+              <div class="pstep-icon">📋</div>
+              <div class="pstep-num">STEP 3</div>
+              <div class="pstep-name">Survey<br/>Validation</div>
+              <div class="pstep-desc">Competency survey distributed to 50+ employees</div>
+            </div>
+            <div class="pstep-arrow">→</div>
+            <div class="pstep">
+              <div class="pstep-icon">🔮</div>
+              <div class="pstep-num">OUTPUT</div>
+              <div class="pstep-name">Predictor<br/>Model</div>
+              <div class="pstep-desc">Predict performance from competency scores</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;font-size:12px;color:var(--light);text-align:center;">
+          ⚠️ OLP data is used <b>only to identify interview candidates</b> — not as a direct predictor input. This design ensures the model works for new hires too.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 3 — DATASET ═══════════ -->
+    <div class="slide" id="s3">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Data Source</div>
+        <div class="slide-title">The OLP Dataset — At a Glance</div>
+        <div class="slide-subtitle">920 employees · 27 columns · 5 years of performance history · Reliance IT workforce</div>
+
+        <div class="card-grid cols-4" style="max-width:820px;margin-bottom:18px">
+          <div class="card" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-blue)">920</div>
+            <div class="stat-label">Total Employees</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-teal)">27</div>
+            <div class="stat-label">Original Columns</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="stat-big" style="color:var(--gold)">5</div>
+            <div class="stat-label">Rating Years</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div class="stat-big" style="color:var(--green)">184</div>
+            <div class="stat-label">Top Performers<br/><span style="font-size:11px;font-weight:400">(Top 20%)</span></div>
+          </div>
+        </div>
+
+        <div class="card full-w" style="max-width:820px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Key Columns Used in Analysis</div>
+          <div class="col-row">
+            <span class="col-badge">Identity</span>
+            <div><div class="col-name">Emp.Code, Name, Cohort, Current Grade, Org.Unit</div>
+            <div class="col-desc">Uniquely identifies each employee; Grade and Cohort provide organisational context for benchmarking</div></div>
+          </div>
+          <div class="col-row">
+            <span class="col-badge">Experience</span>
+            <div><div class="col-name">RilExp YY.MM, Prev Exp YY.MM, Tot Exp YY.MM, Age (YY.MM)</div>
+            <div class="col-desc">Internal Reliance tenure + prior experience + age — all in Year.Month decimal format</div></div>
+          </div>
+          <div class="col-row">
+            <span class="col-badge" style="background:#e6f9ed;color:#1a8a3d">Performance</span>
+            <div><div class="col-name">RTG21-22, RTG22-23, RTG23-24, RTG24-25, RTG25-26</div>
+            <div class="col-desc">Annual performance ratings — text values: <b>A*</b> (Exceptional), <b>A+</b> (Exceeds), <b>A</b> (Meets), <b>B</b> (Below). Core predictor signal.</div></div>
+          </div>
+          <div class="col-row">
+            <span class="col-badge" style="background:#fff3dc;color:#b87800">Recognition</span>
+            <div><div class="col-name">DOL PROM, DOL PROGRESSION</div>
+            <div class="col-desc">Date of last promotion and grade progression — used as binary flags (was_promoted / had_progression). Organisational validation of performance.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 4 — ENCODING ═══════════ -->
+    <div class="slide" id="s4">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Step 1 of 4 — Data Preparation</div>
+        <div class="slide-title">Rating <span class="accent">Encoding</span> — Making Text Computable</div>
+        <div class="slide-subtitle">Performance ratings are stored as text (A*, A+, A, B). We convert them to numbers so we can do maths with them.</div>
+
+        <div class="card-grid cols-2" style="max-width:820px;margin-bottom:18px">
+          <div class="card">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Encoding Map</div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px">
+              <thead>
+                <tr style="background:var(--bg)">
+                  <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--mid);font-weight:600;border-bottom:1px solid var(--border)">Rating</th>
+                  <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--mid);font-weight:600;border-bottom:1px solid var(--border)">Numeric</th>
+                  <th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--mid);font-weight:600;border-bottom:1px solid var(--border)">Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:8px 10px;border-bottom:1px solid var(--border)"><span class="tag gold">A*</span></td><td style="padding:8px 10px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-weight:600">4</td><td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--mid)">Exceptional</td></tr>
+                <tr><td style="padding:8px 10px;border-bottom:1px solid var(--border)"><span class="tag green">A+</span></td><td style="padding:8px 10px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-weight:600">3</td><td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--mid)">Exceeds expectations</td></tr>
+                <tr><td style="padding:8px 10px;border-bottom:1px solid var(--border)"><span class="tag blue">A</span></td><td style="padding:8px 10px;border-bottom:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-weight:600">2</td><td style="padding:8px 10px;border-bottom:1px solid var(--border);color:var(--mid)">Meets expectations</td></tr>
+                <tr><td style="padding:8px 10px"><span class="tag red">B</span></td><td style="padding:8px 10px;font-family:'JetBrains Mono',monospace;font-weight:600">1</td><td style="padding:8px 10px;color:var(--mid)">Below expectations</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Why We Need This</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.7">
+              Text strings like <code style="background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px">"A*"</code> cannot be averaged, trended, or scored.<br/><br/>
+              Once converted to numbers, we can:<br/>
+              ✅ Calculate 5-year <b>average</b><br/>
+              ✅ Detect <b>improvement / decline</b> over time<br/>
+              ✅ Measure <b>consistency</b> (standard deviation)<br/>
+              ✅ Apply <b>recency weights</b> (recent years matter more)<br/><br/>
+              <span style="color:var(--jio-blue);font-size:12px;font-weight:500">These numeric columns are named RTG21-22_num through RTG25-26_num</span>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 5 — ENGINEERED FEATURES ═══════════ -->
+    <div class="slide" id="s5">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Step 2 of 4 — Feature Engineering</div>
+        <div class="slide-title">4 Derived <span class="accent">Metrics</span> We Created</div>
+        <div class="slide-subtitle">Raw ratings alone don't tell the full story. We engineered 4 new variables that capture level, direction, stability, and recency.</div>
+
+        <div class="full-w" style="max-width:820px">
+          <div class="inference-card">
+            <div class="inf-num">1</div>
+            <div>
+              <div class="inf-title">avg_rating — Overall Performance Level</div>
+              <div class="inf-body">Simple mean across all available rating years (RTG21-22 through RTG25-26). Missing years are excluded from the calculation (not treated as zero).</div>
+              <div class="formula-text" style="font-size:12px;margin-top:6px;color:var(--jio-deep)">avg_rating = mean(RTG21-22_num, RTG22-23_num, ..., RTG25-26_num)</div>
+              <div class="inf-arrow">→ Proxy for: sustained performance quality across tenure</div>
+            </div>
+          </div>
+
+          <div class="inference-card">
+            <div class="inf-num">2</div>
+            <div>
+              <div class="inf-title">rating_trend — Trajectory Direction</div>
+              <div class="inf-body">Most recent rating minus earliest available rating. Positive = improving. Negative = declining. Zero = stable.</div>
+              <div class="formula-text" style="font-size:12px;margin-top:6px;color:var(--jio-deep)">rating_trend = RTG25-26_num − RTG21-22_num</div>
+              <div class="inf-arrow">→ Proxy for: growth potential and career trajectory direction</div>
+            </div>
+          </div>
+
+          <div class="inference-card">
+            <div class="inf-num">3</div>
+            <div>
+              <div class="inf-title">rating_consistency — Reliability Score</div>
+              <div class="inf-body">Standard deviation of all year ratings. Low std dev = same level every year (reliable). High std dev = volatile year-to-year performance.</div>
+              <div class="formula-text" style="font-size:12px;margin-top:6px;color:var(--jio-deep)">rating_consistency = std_dev(RTG21-22_num … RTG25-26_num)</div>
+              <div class="inf-arrow">→ Proxy for: behavioural reliability — key success profile criterion</div>
+            </div>
+          </div>
+
+          <div class="inference-card">
+            <div class="inf-num">4</div>
+            <div>
+              <div class="inf-title">recency_weighted_rtg — Recent-Weighted Average</div>
+              <div class="inf-body">Weighted average that gives more importance to recent years. A person who improved recently scores better than one who peaked 3 years ago.</div>
+              <div class="formula-text" style="font-size:12px;margin-top:6px;color:var(--jio-deep)">= (RTG21-22 × 10%) + (RTG22-23 × 15%) + (RTG23-24 × 20%) + (RTG24-25 × 25%) + (RTG25-26 × 30%)</div>
+              <div class="inf-arrow">→ Proxy for: current performance state — most predictive of near-future performance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 6 — TRAJECTORY ═══════════ -->
+    <div class="slide" id="s6">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Step 2 of 4 — Feature Engineering</div>
+        <div class="slide-title">Performance <span class="accent">Trajectory</span> Classification</div>
+        <div class="slide-subtitle">Each employee is assigned one of 6 trajectory labels based on a decision-tree logic using avg_rating, rating_trend, and rating_consistency together.</div>
+
+        <div class="card-grid cols-2" style="max-width:820px">
+          <div class="card">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Classification Logic</div>
+            <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--ink);line-height:2;background:var(--bg);border-radius:8px;padding:12px">
+              <span style="color:var(--jio-blue)">if</span> avg ≥ 3.5 <span style="color:var(--jio-blue)">AND</span> consistency ≤ 0.5:<br/>
+              &nbsp;&nbsp;→ <b>Consistent Star</b><br/>
+              <span style="color:var(--jio-blue)">elif</span> trend ≥ 1 <span style="color:var(--jio-blue)">AND</span> avg ≥ 2.8:<br/>
+              &nbsp;&nbsp;→ <b>Rising Performer</b><br/>
+              <span style="color:var(--jio-blue)">elif</span> trend ≤ -1 <span style="color:var(--jio-blue)">AND</span> avg &lt; 2.5:<br/>
+              &nbsp;&nbsp;→ <b>Declining Risk</b><br/>
+              <span style="color:var(--jio-blue)">elif</span> avg ≥ 3.0:<br/>
+              &nbsp;&nbsp;→ <b>Solid Performer</b><br/>
+              <span style="color:var(--jio-blue)">else</span>:<br/>
+              &nbsp;&nbsp;→ <b>Developing</b>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">6 Trajectory Categories</div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">⭐</span><span style="font-size:12px;font-weight:600">Consistent Star</span></div>
+              <span class="tag gold">Benchmark Group</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">📈</span><span style="font-size:12px;font-weight:600">Rising Performer</span></div>
+              <span class="tag green">High Potential</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">💪</span><span style="font-size:12px;font-weight:600">Solid Performer</span></div>
+              <span class="tag blue">Reliable</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">🌱</span><span style="font-size:12px;font-weight:600">Developing</span></div>
+              <span class="tag teal">Needs Support</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">📉</span><span style="font-size:12px;font-weight:600">Declining Risk</span></div>
+              <span class="tag red">HR Intervention</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0">
+              <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">❓</span><span style="font-size:12px;font-weight:600">Insufficient Data</span></div>
+              <span class="tag" style="background:#f0f0f0;color:var(--mid)">New Joiner</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;font-size:12px;color:var(--mid);max-width:820px;text-align:center;line-height:1.6">
+          💡 <b>Consistent Stars</b> = your primary interview pool. Their trajectory confirms that high performance isn't a one-year fluke — it's a pattern. That pattern is what you want to decode through Phase 2 interviews.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 7 — NORMALISATION ═══════════ -->
+    <div class="slide" id="s7">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Step 3 of 4 — Normalisation</div>
+        <div class="slide-title">Why We <span class="accent">Normalise</span> to 0–100</div>
+        <div class="slide-subtitle">7 variables have different natural ranges. Without normalisation, experience (0–35 years) would dominate the score just because it's a bigger number.</div>
+
+        <div class="card-grid cols-2" style="max-width:820px;margin-bottom:16px">
+          <div class="card" style="border-left:4px solid var(--accent)">
+            <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">❌ Without Normalisation</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              An employee with 30 years experience + avg rating 2.5 would score
+              <b>higher</b> than a 5-year employee with all A* ratings.<br/><br/>
+              Reason: raw experience numbers are 10× bigger than rating numbers.
+            </div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--green)">
+            <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:8px">✅ With Normalisation</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              Every variable contributes exactly its assigned <b>weight</b> to the final score —
+              no variable dominates just because of its measurement scale.<br/><br/>
+              Formula: <code style="background:var(--bg);padding:2px 5px;border-radius:4px">(Value − Min) / (Max − Min) × 100</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="card full-w" style="max-width:820px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:14px">7 Normalised Score Variables Created</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_avg_rating</span>
+              <span style="color:var(--mid)">Direct normalisation of avg_rating</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_recency_rtg</span>
+              <span style="color:var(--mid)">Direct normalisation of recency-weighted rating</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_trend</span>
+              <span style="color:var(--mid)">Trend shifted by +2, then normalised</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_exp</span>
+              <span style="color:var(--mid)">Reliance experience normalised</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_consistency</span>
+              <span style="color:var(--mid)"><b>Inverted</b> then normalised (low std = high score)</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+              <span class="col-badge">score_promotion</span>
+              <span style="color:var(--mid)">Binary × 100 (no normalisation needed)</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;padding:6px 0">
+              <span class="col-badge">score_progression</span>
+              <span style="color:var(--mid)">Binary × 100 (no normalisation needed)</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:var(--mid);text-align:center">
+          ⚠️ <b>Consistency is inverted</b> because std deviation measures volatility — lower is better. We flip it with <code style="background:var(--bg);padding:1px 5px;border-radius:3px;font-size:11px">1 − consistency</code> before normalising.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 8 — WEIGHTS ═══════════ -->
+    <div class="slide" id="s8">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Step 4 of 4 — Composite Scoring</div>
+        <div class="slide-title">The Weightage System — <span class="accent">Why Each Weight?</span></div>
+        <div class="slide-subtitle">7 normalised scores combined into one 0–100 composite score. Weights reflect the relative predictive power of each dimension.</div>
+
+        <div class="card full-w" style="max-width:820px;margin-bottom:16px">
+          <div id="weight-bars">
+            <div class="weight-bar-row">
+              <div class="weight-label">📊 Avg Rating (Level)</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="30"></div></div>
+              <div class="weight-pct">30%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">⏰ Recency-Weighted Rating</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="20"></div></div>
+              <div class="weight-pct">20%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">📈 Rating Trend (Direction)</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="15"></div></div>
+              <div class="weight-pct">15%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🎯 Rating Consistency</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="15"></div></div>
+              <div class="weight-pct">15%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🏢 Reliance Experience</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="10"></div></div>
+              <div class="weight-pct">10%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🏅 Promotion Flag</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="5"></div></div>
+              <div class="weight-pct">5%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🎖 Progression Flag</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:0%" data-w="5"></div></div>
+              <div class="weight-pct">5%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-3" style="max-width:820px">
+          <div class="card" style="text-align:center;border-top:3px solid var(--jio-blue)">
+            <div style="font-size:12px;font-weight:600;color:var(--jio-blue);margin-bottom:6px">50% — Rating Level</div>
+            <div style="font-size:11px;color:var(--mid)">Avg + Recency-weighted. The strongest predictor. What you've achieved and how you're performing right now.</div>
+          </div>
+          <div class="card" style="text-align:center;border-top:3px solid var(--jio-teal)">
+            <div style="font-size:12px;font-weight:600;color:var(--jio-teal);margin-bottom:6px">30% — Trajectory</div>
+            <div style="font-size:11px;color:var(--mid)">Trend + Consistency. Are you getting better? Are you reliable? Direction and stability of performance over time.</div>
+          </div>
+          <div class="card" style="text-align:center;border-top:3px solid var(--gold)">
+            <div style="font-size:12px;font-weight:600;color:#b87800;margin-bottom:6px">20% — Validation</div>
+            <div style="font-size:11px;color:var(--mid)">Experience + Promotion + Progression. Confirmatory signals — the org formally recognised this person's performance.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 9 — FORMULA ═══════════ -->
+    <div class="slide" id="s9">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">The Final Formula</div>
+        <div class="slide-title">Composite Score — <span class="accent">Full Calculation</span></div>
+        <div class="slide-subtitle">One formula. One number. 0 to 100. Ranks every one of the 920 employees on the same objective scale.</div>
+
+        <div class="formula-box full-w" style="max-width:820px;margin-bottom:18px">
+          <div class="formula-label">Composite Score Formula</div>
+          <div class="formula-text" style="font-size:14px;line-height:2.2">
+            composite_score =<br/>
+            &nbsp;&nbsp;(score_avg_rating    × <b>0.30</b>) +<br/>
+            &nbsp;&nbsp;(score_recency_rtg   × <b>0.20</b>) +<br/>
+            &nbsp;&nbsp;(score_trend         × <b>0.15</b>) +<br/>
+            &nbsp;&nbsp;(score_consistency   × <b>0.15</b>) +<br/>
+            &nbsp;&nbsp;(score_exp           × <b>0.10</b>) +<br/>
+            &nbsp;&nbsp;(score_promotion     × <b>0.05</b>) +<br/>
+            &nbsp;&nbsp;(score_progression   × <b>0.05</b>)
+          </div>
+        </div>
+
+        <div class="score-example">
+          <div class="score-ex-card">
+            <div class="score-ex-name">🏆 Mr. Arindam Banerjee — Star Performer</div>
+            <div class="score-ex-bars">
+              <div class="mini-bar-row"><span class="mini-bar-label">Avg Rating</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:100%;background:linear-gradient(90deg,#0052cc,#00b4d8)"></div></div><span class="mini-bar-val">100</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Recency Rtg</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:96%;background:linear-gradient(90deg,#0052cc,#00b4d8)"></div></div><span class="mini-bar-val">96</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Trend</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:50%;background:linear-gradient(90deg,#0052cc,#00b4d8)"></div></div><span class="mini-bar-val">50</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Consistency</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:74%;background:linear-gradient(90deg,#0052cc,#00b4d8)"></div></div><span class="mini-bar-val">74</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Experience</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:83%;background:linear-gradient(90deg,#0052cc,#00b4d8)"></div></div><span class="mini-bar-val">83</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Promotion</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:100%;background:linear-gradient(90deg,#f4a533,#ffd166)"></div></div><span class="mini-bar-val">100</span></div>
+            </div>
+            <div class="final-score-display">
+              <div><div style="font-size:10px;color:var(--mid);font-weight:600;letter-spacing:0.5px">COMPOSITE SCORE</div><div class="final-score-num">90.54</div></div>
+              <span class="tag gold">Star Performer</span>
+            </div>
+          </div>
+
+          <div class="score-ex-card">
+            <div class="score-ex-name">⚖️ Mr. Vijay Dubhalkar — Contrast Group</div>
+            <div class="score-ex-bars">
+              <div class="mini-bar-row"><span class="mini-bar-label">Avg Rating</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:60%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">60</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Recency Rtg</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:45%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">45</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Trend</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:50%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">50</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Consistency</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:68%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">68</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Experience</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:12%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">12</span></div>
+              <div class="mini-bar-row"><span class="mini-bar-label">Promotion</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:0%;background:linear-gradient(90deg,#aaa,#ccc)"></div></div><span class="mini-bar-val">0</span></div>
+            </div>
+            <div class="final-score-display">
+              <div><div style="font-size:10px;color:var(--mid);font-weight:600;letter-spacing:0.5px">COMPOSITE SCORE</div><div class="final-score-num" style="color:var(--mid)">54.16</div></div>
+              <span class="tag" style="background:#f0f0f0;color:var(--mid)">Developing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 10 — TIERS ═══════════ -->
+    <div class="slide" id="s10">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Segmentation Output</div>
+        <div class="slide-title">5 Performance <span class="accent">Tiers</span> — Who Falls Where</div>
+        <div class="slide-subtitle">Composite scores are grouped into 5 tiers. Top performers = those scoring at or above the 80th percentile (composite ≥ 80th %ile).</div>
+
+        <div class="full-w" style="max-width:820px;margin-bottom:16px">
+          <div class="tier-row" style="background:linear-gradient(135deg,#fff9e6,#fffdf5);border-color:#f4a533">
+            <div class="tier-icon">🏆</div>
+            <div class="tier-info">
+              <div class="tier-name" style="color:#b87800">Star Performer</div>
+              <div class="tier-range">Composite Score: 85 – 100 · Rating: Predominantly A*</div>
+            </div>
+            <div class="tier-count" style="color:#b87800">21</div>
+          </div>
+          <div class="tier-row" style="background:linear-gradient(135deg,#e8f7ee,#f4fdf7);border-color:#2dc653">
+            <div class="tier-icon">📈</div>
+            <div class="tier-info">
+              <div class="tier-name" style="color:#1a8a3d">Exceeds Expectation</div>
+              <div class="tier-range">Composite Score: 70 – 84 · Rating: A+ to A*</div>
+            </div>
+            <div class="tier-count" style="color:#1a8a3d">150</div>
+          </div>
+          <div class="tier-row" style="background:linear-gradient(135deg,#e8f0fe,#f0f5ff);border-color:var(--jio-blue)">
+            <div class="tier-icon">💼</div>
+            <div class="tier-info">
+              <div class="tier-name" style="color:var(--jio-blue)">Meets Expectation</div>
+              <div class="tier-range">Composite Score: 55 – 69 · Rating: A to A+</div>
+            </div>
+            <div class="tier-count" style="color:var(--jio-blue)">224</div>
+          </div>
+          <div class="tier-row" style="background:linear-gradient(135deg,#fdf4e6,#fffbf5);border-color:#f4a533">
+            <div class="tier-icon">🌱</div>
+            <div class="tier-info">
+              <div class="tier-name" style="color:#b87800">Developing</div>
+              <div class="tier-range">Composite Score: 40 – 54 · Rating: A to B</div>
+            </div>
+            <div class="tier-count" style="color:#b87800">271</div>
+          </div>
+          <div class="tier-row" style="background:linear-gradient(135deg,#fde8ea,#fff4f5);border-color:var(--accent)">
+            <div class="tier-icon">⚠️</div>
+            <div class="tier-info">
+              <div class="tier-name" style="color:var(--accent)">Below Expectation</div>
+              <div class="tier-range">Composite Score: 0 – 39 · Rating: Predominantly B</div>
+            </div>
+            <div class="tier-count" style="color:var(--accent)">253</div>
+          </div>
+        </div>
+
+        <div class="card full-w" style="max-width:820px;background:linear-gradient(135deg,#e8f0fe,#f0f5ff);border-color:var(--jio-blue)">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:4px">is_top_performer = 1</div>
+              <div style="font-size:12px;color:var(--mid)">184 employees in the top 20% by composite score. These form the initial pool from which 15 are selected for interviews.</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;color:var(--jio-blue)">184</div>
+              <div style="font-size:11px;color:var(--mid)">Top Performer Pool</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 11 — SHORTLIST ═══════════ -->
+    <div class="slide" id="s11">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Interview Selection</div>
+        <div class="slide-title">How We Select <span class="accent">15 Employees</span> from 184</div>
+        <div class="slide-subtitle">Stratified sampling across 4 groups ensures diversity of grade, cohort, and performance profile — not just "top 15 scores".</div>
+
+        <div class="card-grid cols-2" style="max-width:820px;margin-bottom:16px">
+          <div class="card" style="border-top:3px solid var(--gold)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-size:13px;font-weight:600">🏆 Star Performers</div>
+              <span class="tag gold">5 employees</span>
+            </div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              performance_tier = 'Star Performer'<br/>
+              Sorted by composite_score descending<br/>
+              Select top 5 · Composite range: <b>89–91</b>
+            </div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--green)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-size:13px;font-weight:600">📈 Exceeds Expectation</div>
+              <span class="tag green">5 employees</span>
+            </div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              performance_tier = 'Exceeds'<br/>
+              Sorted by composite_score descending<br/>
+              Select top 5 · Composite range: <b>82–84</b>
+            </div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--jio-blue)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-size:13px;font-weight:600">🎖 Promoted + High Rating</div>
+              <span class="tag blue">3 employees</span>
+            </div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              was_promoted = 1 AND avg_rating ≥ 3.2<br/>
+              Sorted by composite_score descending<br/>
+              Adds career-trajectory validation signal
+            </div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--accent)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-size:13px;font-weight:600">⚖️ Contrast Group</div>
+              <span class="tag red">5 employees</span>
+            </div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              Composite between 50th–65th percentile<br/>
+              <b>NOT top performers</b> — required for discriminant validity<br/>
+              Helps identify what separates good from great
+            </div>
+          </div>
+        </div>
+
+        <div class="card full-w" style="max-width:820px;background:linear-gradient(135deg,#f0f4ff,#f8fdff);border-color:#c5d8f8">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-size:28px">💡</div>
+            <div style="font-size:13px;color:var(--ink);line-height:1.6">
+              <b>Why include a contrast group?</b> Without average performers, we can't know which competencies are unique to top performers vs. universal to all employees.
+              If everyone scores high on "Communication", it's not a differentiator — and shouldn't be in the success profile.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 12 — INFERENCES ═══════════ -->
+    <div class="slide" id="s12">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">Key Findings</div>
+        <div class="slide-title">10 Data <span class="accent">Inferences</span> That Drive the Project</div>
+        <div class="slide-subtitle">What the OLP data actually tells us — and what each finding means for the predictor model.</div>
+
+        <div class="full-w" style="max-width:820px;overflow-y:auto;max-height:320px;padding-right:4px">
+          <div class="inference-card">
+            <div class="inf-num">1</div>
+            <div><div class="inf-title">Grade–Performance Link (r &gt; 0.7)</div>
+            <div class="inf-body">Higher grade correlates strongly with higher avg rating.</div>
+            <div class="inf-arrow">→ Grade / seniority is a top predictor; benchmarking must be grade-segmented</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">2</div>
+            <div><div class="inf-title">Experience is a Moderate Predictor (r = 0.417)</div>
+            <div class="inf-body">Total experience vs avg rating shows moderate positive correlation.</div>
+            <div class="inf-arrow">→ Include at ~10% weight; don't over-weight or it penalises newer high-performers</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">3</div>
+            <div><div class="inf-title">Performance Peak: Age 30–50</div>
+            <div class="inf-body">Avg rating: 3.0–3.19 for age 30–50 vs 2.49 for age 20–30.</div>
+            <div class="inf-arrow">→ Success profile targets mid-career professionals; add context for younger talent pipeline</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">4</div>
+            <div><div class="inf-title">Cohort Differentiation</div>
+            <div class="inf-body">JioCX and IT Infrastructure cohorts outperform others consistently.</div>
+            <div class="inf-arrow">→ Benchmark HRBP success profiles cohort-specifically — not one-size-fits-all</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">5</div>
+            <div><div class="inf-title">Rating Trend Identifies Rising Stars & Flight Risks</div>
+            <div class="inf-body">101 employees improved by 1+ grade; 100 declined over 5 years.</div>
+            <div class="inf-arrow">→ Trend variable surfaces hidden talent and early warning signals simultaneously</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">6</div>
+            <div><div class="inf-title">Promotion Decisions Align With Performance Data</div>
+            <div class="inf-body">was_promoted correlates with higher avg ratings — organisational decisions are validated.</div>
+            <div class="inf-arrow">→ Promotion flag is a reliable confirmatory signal; use as 5% weight in composite</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">7</div>
+            <div><div class="inf-title">Star Performers Are Consistent</div>
+            <div class="inf-body">Top 20% show significantly lower rating_consistency std dev than bottom 80%.</div>
+            <div class="inf-arrow">→ Reliability is a key success criterion — not just peak performance in one year</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">8</div>
+            <div><div class="inf-title">Recency-Weighted Rating &gt; Simple Average</div>
+            <div class="inf-body">Recent years capture current performance state better than an unweighted mean.</div>
+            <div class="inf-arrow">→ Phase 2 interviews should probe recent behaviours, not historical career narrative</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">9</div>
+            <div><div class="inf-title">Composite Score Enables Clean Segmentation</div>
+            <div class="inf-body">The 0–100 scale clearly separates the 5 tiers with meaningful score gaps.</div>
+            <div class="inf-arrow">→ Provides an objective benchmark to validate interview + survey scores against</div></div>
+          </div>
+          <div class="inference-card">
+            <div class="inf-num">10</div>
+            <div><div class="inf-title">Success Profile Fingerprint Identified</div>
+            <div class="inf-body">Top 20% = higher Reliance exp, higher progression rate, consistently A+/A*.</div>
+            <div class="inf-arrow">→ This IS the baseline. Phase 2 interviews will add the behavioural layer on top of this.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- ═══════════ SLIDE 13 — SUMMARY ═══════════ -->
+    <div class="slide" id="s13">
+      <div class="slide-inner" style="text-align:center">
+        <div class="slide-eyebrow">Phase 1 Complete</div>
+        <div class="slide-title">What We've Done.<br/>What Comes <span class="accent">Next.</span></div>
+        <div class="cover-divider"></div>
+
+        <div class="card-grid cols-2" style="max-width:820px;margin-bottom:20px">
+          <div class="card" style="border-left:4px solid var(--green)">
+            <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:10px;letter-spacing:0.5px">✅ PHASE 1 — COMPLETE</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              ✅ 920 employees loaded & audited<br/>
+              ✅ Ratings encoded (A*→4, A+→3, A→2, B→1)<br/>
+              ✅ 4 derived metrics engineered<br/>
+              ✅ 7 scores normalised to 0–100<br/>
+              ✅ Composite score computed<br/>
+              ✅ 5 performance tiers assigned<br/>
+              ✅ 184 top performers flagged<br/>
+              ✅ 15-employee interview shortlist built<br/>
+              ✅ 10 key inferences documented
+            </div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--jio-blue)">
+            <div style="font-size:12px;font-weight:600;color:var(--jio-blue);margin-bottom:10px;letter-spacing:0.5px">🚀 PHASE 2 — STARTING JUNE 21</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              🗓 Schedule 15–18 interviews (incl. contrast)<br/>
+              🎤 Conduct STAR-format competency interviews<br/>
+              📝 Qualitative coding of interview transcripts<br/>
+              🗺 Map themes → Lominger 67 competency library<br/>
+              📋 Design & pilot competency survey (50+ resp.)<br/>
+              📊 Validate: interview scores vs. composite scores<br/>
+              🏁 Final report + HR Head presentation by July 31
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="max-width:820px;background:linear-gradient(135deg,var(--jio-deep),var(--jio-blue));border:none">
+          <div style="font-size:16px;font-weight:700;color:white;margin-bottom:6px">The Goal</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.7">
+            Build a competency predictor model that uses structured interview + survey scores to predict
+            whether a candidate will be a high-performing HR Manager or HRBP at Jio Platforms —
+            <b style="color:white">without relying on internal performance history</b> that new hires don't have.
+          </div>
+        </div>
+
+        <div style="margin-top:20px;font-size:12px;color:var(--light)">
+          Vivek Kumar Kohli · Jio Platforms Ltd · HR Analytics Project · June 2026
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end slide-viewport -->
+
+  <!-- Bottom nav -->
+  <div id="bottomnav">
+    <button class="nav-btn secondary" id="btn-prev" onclick="navigate(-1)" disabled>← Previous</button>
+    <div class="dot-nav" id="dot-nav"></div>
+    <button class="nav-btn primary" id="btn-next" onclick="navigate(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+// ── Background canvas — subtle Jio-inspired moving geometry ──────────────────
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const nodes = [];
+const NODE_COUNT = 18;
+
+for (let i = 0; i < NODE_COUNT; i++) {
+  nodes.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: 2 + Math.random() * 3,
+    pulse: Math.random() * Math.PI * 2,
+  });
+}
+
+// Jio brand colors for the geometry
+const JIO_BLUE = 'rgba(0,82,204,';
+const JIO_TEAL = 'rgba(0,180,216,';
+
+function drawBg() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Soft radial gradient base
+  const grad = ctx.createRadialGradient(
+    canvas.width * 0.3, canvas.height * 0.2, 0,
+    canvas.width * 0.5, canvas.height * 0.5, canvas.width * 0.8
+  );
+  grad.addColorStop(0, 'rgba(220,235,255,0.35)');
+  grad.addColorStop(0.5, 'rgba(235,248,255,0.2)');
+  grad.addColorStop(1, 'rgba(248,249,252,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const t = Date.now() * 0.001;
+
+  // Move nodes
+  nodes.forEach(n => {
+    n.x += n.vx;
+    n.y += n.vy;
+    n.pulse += 0.02;
+    if (n.x < -20) n.x = canvas.width + 20;
+    if (n.x > canvas.width + 20) n.x = -20;
+    if (n.y < -20) n.y = canvas.height + 20;
+    if (n.y > canvas.height + 20) n.y = -20;
+  });
+
+  // Draw connections
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 200) {
+        const alpha = (1 - dist / 200) * 0.12;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = JIO_BLUE + alpha + ')';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Draw nodes
+  nodes.forEach((n, i) => {
+    const pulse = Math.sin(n.pulse) * 0.5 + 0.5;
+    const r = n.r * (0.8 + pulse * 0.4);
+    const alpha = 0.15 + pulse * 0.2;
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r * 3, 0, Math.PI * 2);
+    ctx.fillStyle = (i % 2 === 0 ? JIO_BLUE : JIO_TEAL) + (alpha * 0.3) + ')';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = (i % 2 === 0 ? JIO_BLUE : JIO_TEAL) + alpha + ')';
+    ctx.fill();
+  });
+
+  // Subtle Jio hexagonal accent — top right
+  ctx.save();
+  ctx.translate(canvas.width - 80, 60);
+  ctx.rotate(t * 0.05);
+  ctx.beginPath();
+  for (let k = 0; k < 6; k++) {
+    const angle = (k / 6) * Math.PI * 2;
+    const hx = Math.cos(angle) * 30;
+    const hy = Math.sin(angle) * 30;
+    k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = JIO_TEAL + '0.08)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.restore();
+
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── Slide navigation ─────────────────────────────────────────────────────────
+const slides = document.querySelectorAll('.slide');
+const TOTAL = slides.length;
+let current = 0;
+
+const dotNav   = document.getElementById('dot-nav');
+const btnPrev  = document.getElementById('btn-prev');
+const btnNext  = document.getElementById('btn-next');
+const counter  = document.getElementById('slide-counter');
+const fillBar  = document.getElementById('progress-bar-fill');
+
+// Build dots
+for (let i = 0; i < TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotNav.appendChild(d);
+}
+
+function updateUI() {
+  const dots = dotNav.querySelectorAll('.dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  counter.textContent = `${current + 1} / ${TOTAL}`;
+  fillBar.style.width = `${((current + 1) / TOTAL) * 100}%`;
+  btnPrev.disabled = current === 0;
+  btnNext.disabled = current === TOTAL - 1;
+  btnNext.textContent = current === TOTAL - 2 ? 'Finish →' : 'Next →';
+
+  // Animate weight bars when entering slide 8
+  if (current === 7) {
+    setTimeout(() => {
+      document.querySelectorAll('.weight-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+    }, 200);
+  }
+}
+
+function goTo(idx) {
+  if (idx === current) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit-left');
+  setTimeout(() => slides[current === idx ? idx : current].classList.remove('exit-left'), 380);
+
+  current = idx;
+  slides[current].classList.add('active');
+  
+/* Premium particle background */
+const bgCanvas = document.getElementById("bg-canvas");
+const bgCtx = bgCanvas.getContext("2d");
+
+function resizeBG(){
+  bgCanvas.width = window.innerWidth;
+  bgCanvas.height = window.innerHeight;
+}
+resizeBG();
+window.addEventListener("resize", resizeBG);
+
+const particles = Array.from({length:80},()=> ({
+  x:Math.random()*bgCanvas.width,
+  y:Math.random()*bgCanvas.height,
+  r:Math.random()*2+1,
+  dx:(Math.random()-0.5)*0.5,
+  dy:(Math.random()-0.5)*0.5
+}));
+
+function animateBG(){
+  bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+
+  particles.forEach(p=>{
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    if(p.x<0||p.x>bgCanvas.width) p.dx*=-1;
+    if(p.y<0||p.y>bgCanvas.height) p.dy*=-1;
+
+    bgCtx.beginPath();
+    bgCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    bgCtx.fillStyle="rgba(0,180,216,0.25)";
+    bgCtx.fill();
+  });
+
+  requestAnimationFrame(animateBG);
+}
+animateBG();
+
+
+updateUI();
+}
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= TOTAL) return;
+
+  const prev = current;
+  slides[prev].classList.remove('active');
+
+  if (dir > 0) {
+    slides[prev].style.transform = 'translateX(-40px)';
+    slides[prev].style.opacity = '0';
+  } else {
+    slides[prev].style.transform = 'translateX(40px)';
+    slides[prev].style.opacity = '0';
+  }
+
+  setTimeout(() => {
+    slides[prev].style.transform = '';
+    slides[prev].style.opacity = '';
+  }, 380);
+
+  current = next;
+  slides[current].style.transform = dir > 0 ? 'translateX(40px)' : 'translateX(-40px)';
+  slides[current].style.opacity = '0';
+  slides[current].classList.add('active');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      slides[current].style.transform = 'translateX(0)';
+      slides[current].style.opacity = '1';
+    });
+  });
+
+  updateUI();
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); navigate(1);
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); navigate(-1);
+  }
+});
+
+// Touch/swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+});
+
+updateUI();
+
+// ── Toggle topbar / bottomnav ─────────────────────────────────────────────
+function toggleBar(which) {
+  if (which === 'top') {
+    const bar = document.getElementById('topbar');
+    const btn = document.getElementById('toggle-topbar');
+    const hidden = bar.classList.toggle('hidden');
+    btn.textContent = hidden ? '▼' : '▲';
+    btn.classList.toggle('bar-hidden', hidden);
+    btn.title = hidden ? 'Show header' : 'Hide header';
+  } else {
+    const bar = document.getElementById('bottomnav');
+    const btn = document.getElementById('toggle-bottomnav');
+    const hidden = bar.classList.toggle('hidden');
+    btn.textContent = hidden ? '▲' : '▼';
+    btn.classList.toggle('bar-hidden', hidden);
+    btn.title = hidden ? 'Show footer' : 'Hide footer';
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workplace Effectiveness & Culture Survey</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Arial, sans-serif; background: #f0f4f9; padding: 30px 20px; display: flex; justify-content: center; }
+        .container { max-width: 1000px; width: 100%; background: #ffffff; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,0.07); padding: 40px 50px; }
+        h1 { font-size: 26px; font-weight: 600; color: #0b2a44; }
+        .subhead { font-size: 15px; color: #3e5778; border-left: 4px solid #1a6dd4; padding: 14px 18px; background: #f7faff; border-radius: 8px; margin-bottom: 28px; line-height: 1.6; }
+        .disclaimer-box { background: #f8fafc; border: 1px solid #dfe6ef; border-radius: 12px; padding: 16px 22px; margin-bottom: 30px; font-size: 14px; color: #1f3650; }
+        .disclaimer-box ul { margin: 8px 0 0 20px; }
+        .progress-container { background: #e9eef5; border-radius: 30px; height: 8px; margin: 20px 0 30px 0; overflow: hidden; }
+        .progress-bar { background: #1a6dd4; height: 100%; width: 0%; border-radius: 30px; transition: width 0.3s ease; }
+        .progress-text { font-size: 13px; color: #3f5a7a; text-align: right; margin-top: -18px; margin-bottom: 20px; font-weight: 500; }
+        .section-title { font-size: 20px; font-weight: 600; color: #0b2a44; margin: 40px 0 14px 0; padding-bottom: 8px; border-bottom: 3px solid #e6edf6; display: flex; justify-content: space-between; align-items: center; }
+        .section-title .badge-time { font-size: 13px; font-weight: 400; color: #617e9e; background: #eef4fa; padding: 4px 14px; border-radius: 40px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 500; font-size: 14px; color: #1a304a; margin-bottom: 4px; }
+        .form-group label .req { color: #c83a3a; }
+        input, select, textarea { width: 100%; padding: 11px 14px; font-size: 15px; border: 1px solid #ccd7e6; border-radius: 8px; background: #ffffff; transition: 0.2s; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #1a6dd4; box-shadow: 0 0 0 3px rgba(26, 109, 212, 0.10); }
+        textarea { min-height: 90px; resize: vertical; }
+        .row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .row-3col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+
+        /* Semantic Differential */
+        .semantic-item { background: #fafcff; border: 1px solid #e6edf6; border-radius: 10px; padding: 14px 20px; margin-bottom: 12px; }
+        .semantic-item .anchor-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+        .semantic-item .left-anchor { font-size: 14px; color: #1f3650; font-weight: 500; min-width: 120px; text-align: right; }
+        .semantic-item .right-anchor { font-size: 14px; color: #1f3650; font-weight: 500; min-width: 120px; text-align: left; }
+        .semantic-item .slider-group { display: flex; gap: 6px; flex: 1; justify-content: center; flex-wrap: wrap; }
+        .semantic-item .slider-group label { background: #f9fbfd; border: 1px solid #e2e8f0; border-radius: 30px; padding: 3px 10px; font-size: 13px; display: flex; align-items: center; gap: 3px; cursor: pointer; transition: 0.1s; margin: 0; }
+        .semantic-item .slider-group label:hover { background: #e6eef9; }
+        .semantic-item .slider-group input[type="radio"] { width: 15px; height: 15px; accent-color: #1a6dd4; margin: 0; }
+
+        /* Ranking Styles */
+        .ranking-card { background: #fafcff; border: 1px solid #e6edf6; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; }
+        .ranking-card .ranking-text { font-weight: 500; color: #0b2a44; margin-bottom: 12px; font-size: 15px; }
+        .ranking-row { display: grid; grid-template-columns: 2fr 1fr; align-items: center; padding: 6px 0; border-bottom: 1px solid #f0f5fc; gap: 10px; }
+        .ranking-row .opt-label { font-size: 14px; color: #1f3650; }
+        .ranking-row select { width: 70px; padding: 4px; border-radius: 6px; border: 1px solid #ccd7e6; background: white; font-size: 13px; }
+
+        /* Section B Ranking */
+        .belief-grid { display: flex; flex-direction: column; gap: 10px; }
+        .belief-row { display: grid; grid-template-columns: 2fr 1fr 100px; align-items: center; background: #fafcff; padding: 8px 14px; border-radius: 8px; border: 1px solid #e9eff6; }
+        .belief-row .b-label { font-weight: 500; color: #1e3652; }
+        .belief-row .b-competency { font-size: 13px; color: #5a7a9c; }
+        .belief-row select { width: 70px; padding: 6px; border-radius: 6px; border: 1px solid #ccd7e6; background: white; font-size: 14px; }
+
+        .forced-choice-box { background: #f0f6fe; border-radius: 12px; padding: 20px 24px; margin: 20px 0 10px 0; border: 1px solid #d4e1f2; }
+        .forced-choice-box .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 10px; }
+        .forced-choice-box .fc-grid label { background: white; padding: 8px 12px; border-radius: 30px; border: 1px solid #d0deed; font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+
+        .btn-submit { background: #0b2a44; color: white; border: none; padding: 16px 30px; font-size: 18px; font-weight: 600; border-radius: 50px; cursor: pointer; width: 100%; margin-top: 30px; transition: 0.2s; }
+        .btn-submit:hover { background: #154a74; transform: scale(1.01); box-shadow: 0 8px 20px rgba(11, 42, 68, 0.15); }
+        .footer-note { text-align: center; font-size: 13px; color: #6f8aa8; margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 25px; }
+        .role-prompt { background: #e3edf9; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; border-left: 5px solid #1a6dd4; color: #0b2a44; font-weight: 500; }
+        .error-msg { color: #c83a3a; font-size: 14px; margin-top: 10px; display: none; }
+        .text-muted { color: #5a7a9c; font-size: 13px; }
+        @media (max-width: 700px) { .container { padding: 20px 15px; } .row-2col, .row-3col { grid-template-columns: 1fr; } .semantic-item .anchor-row { flex-wrap: wrap; } .belief-row { grid-template-columns: 1fr 1fr; } .ranking-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container" id="app">
+    <h1>📋 Workplace Effectiveness & Culture Survey</h1>
+    <div class="subhead">We are studying how work gets done across different roles. Your honest insights will help shape future development programs.</div>
+    <div class="disclaimer-box"><strong>🔒 Privacy:</strong> Your responses are confidential. Individual answers will never be shared with your manager. By submitting, you consent to internal research use.</div>
+
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">0% completed</div>
+
+    <form id="surveyForm" onsubmit="return handleSubmit(event)">
+        <!-- BASIC DETAILS -->
+        <div class="row-2col">
+            <div class="form-group"><label>Full Name <span class="req">*</span></label><input type="text" id="fullName" required placeholder="e.g. Priya Sharma"></div>
+            <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" id="email" required placeholder="priya.s@company.com"></div>
+        </div>
+        <div class="row-3col">
+            <div class="form-group"><label>Department <span class="req">*</span></label><input type="text" id="dept" required placeholder="e.g. Marketing, IT"></div>
+            <div class="form-group"><label>Current Job Level <span class="req">*</span></label>
+                <select id="jobLevel" required onchange="handleLevelChange()">
+                    <option value="">— Select —</option>
+                    <option value="Junior">Junior / Executive</option>
+                    <option value="Manager">Manager / Team Lead</option>
+                    <option value="Leader">Leader / VP+</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Avg Weekly Work Hours <span class="req">*</span></label>
+                <select id="workHours" required>
+                    <option value="">— Select —</option>
+                    <option value="<40">< 40 hrs</option>
+                    <option value="40-45">40–45 hrs</option>
+                    <option value="45-50">45–50 hrs</option>
+                    <option value="50+">50+ hrs</option>
+                </select>
+            </div>
+        </div>
+        <div class="row-2col" style="margin-top:10px;">
+            <div class="form-group"><label>Number of Direct Reports <span class="req">*</span></label>
+                <select id="directReports" required>
+                    <option value="">— Select —</option>
+                    <option value="0">0 (None)</option>
+                    <option value="1-5">1–5 people</option>
+                    <option value="6-15">6–15 people</option>
+                    <option value="16+">16+ people</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Cross-Functional Project Involvement <span class="req">*</span></label>
+                <select id="crossFunc" required>
+                    <option value="">— Select —</option>
+                    <option value="Rarely">Rarely</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Daily">Daily</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- DYNAMIC CONTENT -->
+        <div id="dynamicContent">
+            <div class="role-prompt" id="rolePrompt">Please select your Job Level above to see the relevant questions.</div>
+            <div id="sectionAContainer"></div>
+            <div id="sectionBContainer"></div>
+            <div id="sectionCContainer"></div>
+        </div>
+
+        <!-- SECTION D: OPEN-ENDED -->
+        <div class="section-title" style="margin-top:50px;"><span>Section D: Personal Reflections</span><span class="badge-time">5 items • ~10 min</span></div>
+        <p style="color:#3e5778; margin-bottom:20px; font-size:14px;">Be honest and specific. Aim for 3–5 sentences per question. Focus on <strong>what YOU did</strong>.</p>
+        <div id="openEndedContainer"></div>
+
+        <button type="submit" class="btn-submit">✉️ Submit Survey</button>
+    </form>
+    <div class="footer-note">Confidential internal survey. All responses aggregated for analysis.</div>
+</div>
+
+<script>
+    // ================================================================
+    // 1. SEMANTIC DIFFERENTIAL PAIRS (Level-Specific)
+    // ================================================================
+    const semanticPairsJunior = [
+        { left: "I often need extra time to get my work right.", right: "I deliver accurate work quickly, even under pressure." },
+        { left: "I sometimes forget to follow up on my tasks.", right: "I always follow through on everything I own." },
+        { left: "I raise issues only after they become urgent.", right: "I flag risks to my manager well before they matter." },
+        { left: "I work without clear goals and adjust as I go.", right: "I set specific goals and track my progress daily." },
+        { left: "I focus only on my daily tasks.", right: "I constantly connect my work to my team's bigger goals." },
+        { left: "I react to problems when they appear.", right: "I anticipate problems and prepare solutions early." },
+        { left: "I follow processes without questioning them.", right: "I suggest better ways when I see inefficiency." },
+        { left: "I think only about my own work.", right: "I consider how my work affects the whole team." },
+        { left: "I avoid learning new things unless forced.", right: "I actively seek out new, uncomfortable skills." },
+        { left: "I dismiss feedback I disagree with.", right: "I reflect deeply on feedback, even when it stings." },
+        { left: "I dwell on my mistakes for a long time.", right: "I recover fast from failures and extract the lesson." },
+        { left: "I stick to my original plan no matter what.", right: "I adapt mid-task if a better approach emerges." },
+        { left: "I only build relationships inside my team.", right: "I invest time building networks across the company." },
+        { left: "I struggle to get others to support my ideas.", right: "I persuade others even without formal authority." },
+        { left: "I hoard useful information and resources.", right: "I freely share knowledge and resources with others." },
+        { left: "I avoid disagreements to keep the peace.", right: "I navigate disagreements while preserving trust." },
+        { left: "I get overwhelmed by complex problems.", right: "I break complex problems into manageable parts." },
+        { left: "I go with the first solution I think of.", right: "I explore multiple options before deciding." },
+        { left: "I rely on gut feeling for decisions.", right: "I use data and evidence to back my decisions." },
+        { left: "I give up when standard solutions fail.", right: "I invent creative alternatives when stuck." },
+        { left: "I avoid challenging or uncomfortable work.", right: "I volunteer for hard, stretch assignments." },
+        { left: "I escalate problems to my manager quickly.", right: "I persist and solve problems on my own first." },
+        { left: "I meet the minimum expected standard.", right: "I hold myself to a much higher standard." },
+        { left: "I wait to be told what to improve.", right: "I initiate improvements without being asked." },
+        { left: "I focus only on my own growth.", right: "I actively help junior colleagues develop." },
+        { left: "I give vague, positive feedback only.", right: "I give honest, specific feedback to help others." },
+        { left: "I focus on my own work only.", right: "I create conditions for others to do their best." },
+        { left: "I take credit for team work.", right: "I publicly recognize and credit others." },
+        { left: "I overcomplicate explanations.", right: "I explain complex ideas in a clear, simple way." },
+        { left: "I communicate the same way to everyone.", right: "I adjust my style based on who I'm talking to." },
+        { left: "I listen just enough to reply.", right: "I listen fully to understand before responding." },
+        { left: "I avoid difficult conversations.", right: "I deliver tough messages directly but with care." },
+        { left: "I lose focus and productivity under pressure.", right: "I stay focused and productive during chaos." },
+        { left: "I get visibly stressed in tough situations.", right: "I manage my emotions effectively under stress." },
+        { left: "It takes me weeks to recover from setbacks.", right: "I recover quickly and move forward after setbacks." },
+        { left: "I spend energy blaming and analyzing what went wrong.", right: "I stay solution-focused and move forward." },
+        { left: "I deliver exactly what is asked, no more.", right: "I go beyond stated requirements to serve real needs." },
+        { left: "I wait for formal reviews to get feedback.", right: "I regularly seek feedback from stakeholders." },
+        { left: "I sometimes drop small commitments.", right: "I follow through on every commitment, even tiny ones." },
+        { left: "I only learn about stakeholders when needed.", right: "I proactively understand stakeholders' goals and pressures." }
+    ];
+
+    const semanticPairsManager = [
+        { left: "My team sometimes misses deadlines due to quality issues.", right: "My team consistently delivers high-quality work on time." },
+        { left: "I often need to remind my team to complete tasks.", right: "My team takes full ownership and finishes without reminders." },
+        { left: "We escalate risks only after they impact delivery.", right: "We proactively identify and mitigate risks early." },
+        { left: "We work without clear team goals.", right: "I set clear team goals and track progress against them." },
+        { left: "My team operates in isolation from department strategy.", right: "I explicitly connect my team's work to departmental goals." },
+        { left: "We react to external changes as they happen.", right: "I anticipate external changes and prepare my team." },
+        { left: "I enforce existing processes without question.", right: "I encourage my team to challenge inefficient processes." },
+        { left: "I consider only my team's interests.", right: "I evaluate how my team's decisions impact other functions." },
+        { left: "I rely on the same management methods I've always used.", right: "I proactively learn new leadership and management approaches." },
+        { left: "I dismiss feedback about my management style.", right: "I reflect seriously on feedback that challenges my style." },
+        { left: "My team dwells on failures for too long.", right: "I help my team recover quickly and extract key learnings." },
+        { left: "I keep my team on the original plan regardless.", right: "I pivot my team's approach when a better path emerges." },
+        { left: "My team only collaborates internally.", right: "I build strong cross-functional relationships for my team." },
+        { left: "My team struggles to get buy-in from peers.", right: "I help my team influence others without formal authority." },
+        { left: "We protect our resources and information.", right: "We generously share resources and knowledge with other teams." },
+        { left: "Conflict is avoided or handled poorly.", right: "I navigate disagreements while preserving relationships." },
+        { left: "My team gets lost in ambiguous problems.", right: "I break down complex problems into structured plans." },
+        { left: "We jump to the first solution.", right: "I insist on evaluating multiple solution paths." },
+        { left: "We make decisions based on opinions.", right: "I mandate data and evidence for team decisions." },
+        { left: "We escalate when standard solutions fail.", right: "I encourage creative alternatives when stuck." },
+        { left: "My team avoids stretch assignments.", right: "I push my team to take on challenging, growth-oriented work." },
+        { left: "My team escalates issues immediately.", right: "I encourage my team to persist before escalating." },
+        { left: "We meet the minimum expectations.", right: "I hold my team to a high standard beyond requirements." },
+        { left: "We wait for directives on improvements.", right: "I drive process improvements without waiting to be asked." },
+        { left: "I focus on my own performance only.", right: "I actively coach and develop my team members." },
+        { left: "I avoid giving tough feedback.", right: "I give specific, candid feedback to help my team grow." },
+        { left: "I manage tasks, not the environment.", right: "I create enabling conditions for my team to excel." },
+        { left: "I take credit for my team's wins.", right: "I publicly recognize and credit my team's contributions." },
+        { left: "I confuse my team with complex communication.", right: "I communicate clearly to my team and senior leaders." },
+        { left: "I use the same style with everyone.", right: "I tailor my communication to different audiences." },
+        { left: "I respond before fully hearing concerns.", right: "I practice active listening before responding." },
+        { left: "I avoid delivering bad news.", right: "I deliver difficult messages directly but with empathy." },
+        { left: "I lose composure when under pressure.", right: "I maintain composure and focus during intense pressure." },
+        { left: "My emotions become visible to my team.", right: "I regulate my emotions to set a stable tone." },
+        { left: "My team takes weeks to bounce back.", right: "I help my team move forward quickly after setbacks." },
+        { left: "We spend time blaming each other.", right: "I guide my team to focus on solutions, not blame." },
+        { left: "We deliver exactly what stakeholders ask for.", right: "We go beyond stated requirements to meet true stakeholder needs." },
+        { left: "We wait for complaints to improve.", right: "I proactively seek stakeholder feedback on our work." },
+        { left: "We sometimes drop small commitments.", right: "We model reliability by following through on all commitments." },
+        { left: "We only learn about stakeholders when needed.", right: "I invest in understanding stakeholder challenges and goals." }
+    ];
+
+    const semanticPairsLeader = [
+        { left: "Our organization occasionally compromises quality for speed.", right: "We maintain rigorous quality standards across all enterprise initiatives." },
+        { left: "Strategic initiatives often lack clear ownership and follow-through.", right: "I ensure full accountability and governance on all strategic initiatives." },
+        { left: "Enterprise risks are often discovered reactively.", right: "I proactively build mitigation strategies for enterprise-wide risks." },
+        { left: "We set broad goals without disciplined tracking.", right: "I set long-term, organization-level goals with clear metrics." },
+        { left: "Strategic decisions are disconnected from company vision.", right: "I anchor all organizational decisions to the company's mission." },
+        { left: "We react to market changes after they occur.", right: "I anticipate market shifts, regulations, and competitive threats." },
+        { left: "I maintain the status quo to avoid disruption.", right: "I drive transformation and challenge the enterprise status quo." },
+        { left: "I focus on functional silos.", right: "I evaluate decisions for their cascading impact across the entire business." },
+        { left: "Our leadership team relies on past industry playbooks.", right: "I actively seek disruptive trends and invest in organizational learning." },
+        { left: "Dissenting feedback is discouraged.", right: "I demonstrate intellectual humility by seriously considering dissenting views." },
+        { left: "We cover up failures.", right: "I lead the organization through failures by extracting systemic learnings." },
+        { left: "We rigidly stick to long-term plans.", right: "I swiftly pivot organizational strategy when new superior information emerges." },
+        { left: "We operate as an island in the ecosystem.", right: "I cultivate relationships with key industry, government, and ecosystem partners." },
+        { left: "We rely on authority to drive outcomes.", right: "I shape industry narratives and influence without formal authority." },
+        { left: "We protect our internal IP and knowledge.", right: "I foster a culture of open knowledge-sharing across the enterprise." },
+        { left: "High-stakes disagreements damage relationships.", right: "I navigate political and strategic disagreements to preserve alliances." },
+        { left: "Complex problems overwhelm the leadership team.", right: "I architect frameworks to deconstruct the most complex organizational problems." },
+        { left: "We commit to the first strategic option.", right: "I champion rigorous exploration of multiple strategic alternatives." },
+        { left: "We make decisions based on intuition or politics.", right: "I mandate evidence-based decision-making as a core discipline." },
+        { left: "We accept industry-standard approaches.", right: "I encourage breakthrough innovation when conventional approaches are inadequate." },
+        { left: "We are comfortable with incremental growth.", right: "I model and encourage stretching beyond comfort zones organization-wide." },
+        { left: "Leadership escalates every major decision upward.", right: "I empower teams to autonomously solve problems up to their appropriate threshold." },
+        { left: "We benchmark against competitors.", right: "I set an organizational standard of excellence that exceeds external benchmarks." },
+        { left: "We wait for external pressure to improve.", right: "I drive enterprise-wide continuous improvement proactively." },
+        { left: "Talent development is delegated to HR.", right: "I invest in developing the next generation of leaders through systemic programs." },
+        { left: "Feedback to senior leaders is always positive.", right: "I provide candid, developmental feedback to the executive team." },
+        { left: "Departments operate in isolation.", right: "I architect enabling conditions for entire business units to excel." },
+        { left: "Credit flows upward.", right: "I institutionalize recognition and credit-sharing across the hierarchy." },
+        { left: "Strategic narratives are often confusing.", right: "I communicate complex strategic narratives with clarity and conviction." },
+        { left: "I use the same style for board and employees.", right: "I dynamically adjust my style for boards, investors, and employees." },
+        { left: "I dominate conversations and miss signals.", right: "I create space for deep listening and sense-making." },
+        { left: "I soften difficult organizational messages.", right: "I deliver transparent and difficult messages with courage and empathy." },
+        { left: "I show visible anxiety under external pressure.", right: "I remain calm and decisive under extreme external pressure." },
+        { left: "My emotional state affects organizational morale.", right: "I regulate my emotions to maintain organizational stability and trust." },
+        { left: "Organization takes years to recover from major crises.", right: "I guide the organization to rapid recovery and learning after major setbacks." },
+        { left: "Blame culture persists after failures.", right: "I orient the entire organization toward solution-forward thinking." },
+        { left: "We focus on serving stated requirements.", right: "We anticipate and serve unarticulated stakeholder needs." },
+        { left: "Stakeholder feedback is gathered annually.", right: "I institutionalize continuous feedback loops with major stakeholder groups." },
+        { left: "We sometimes overpromise and underdeliver.", right: "I build an organizational reputation for unwavering reliability." },
+        { left: "We assume stakeholder needs remain static.", right: "I proactively understand the pressures of all ecosystem partners." }
+    ];
+
+    // ================================================================
+    // 2. RANKING SCENARIOS (Level-Specific)
+    // ================================================================
+    const rankingScenariosJunior = [
+        { title: "Scenario F1: Competing Daily Priorities", text: "You have multiple urgent tasks due today. Rank the following approaches from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Work on whichever task your manager mentioned most recently.", "(B) Pause, list all tasks, prioritize by impact and urgency, then execute in that order.", "(C) Start with the easiest task to clear your mind first.", "(D) Ask your manager which task to do first before starting anything."] },
+        { title: "Scenario F2: Receiving Critical Feedback", text: "Your supervisor gives you negative feedback on a recent project. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Defend your work immediately and explain why the criticism is unfair.", "(B) Listen quietly, say 'thank you,' and forget about it later.", "(C) Ask clarifying questions to understand the feedback fully, then create an action plan to improve.", "(D) Agree emotionally but then vent to a trusted colleague afterward."] },
+        { title: "Scenario F3: Noticing a Process Improvement", text: "You spot a small but repetitive inefficiency in your daily workflow. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Mention it casually to a teammate during lunch.", "(B) Ignore it because it's not your job to fix processes.", "(C) Document the issue and propose a simple fix to your manager.", "(D) Try to fix it yourself immediately without telling anyone."] }
+    ];
+
+    const rankingScenariosManager = [
+        { title: "Scenario F1: Team Prioritization Under Pressure", text: "Your team has two critical projects due simultaneously, and they cannot both be done well. Rank the following approaches from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Split the team evenly across both projects and hope for the best.", "(B) Prioritize one project fully and delay the other, communicating the trade-offs to stakeholders.", "(C) Ask the team to work overtime to complete both projects.", "(D) Escalate to your manager to decide which project to drop."] },
+        { title: "Scenario F2: Managing Underperformance", text: "A direct report has been consistently missing deadlines. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Ignore it and hope they improve on their own.", "(B) Have a private, direct conversation to understand the root cause and co-create an improvement plan.", "(C) Immediately escalate the issue to HR.", "(D) Assign their work to a stronger team member and give them less responsibility."] },
+        { title: "Scenario F3: Stakeholder Pushback", text: "A powerful stakeholder outside your team is demanding an unrealistic timeline. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Comply with the timeline to maintain the relationship, even if it strains your team.", "(B) Agree to the timeline but quietly deliver lower quality work.", "(C) Proactively schedule a meeting, understand their core needs, and negotiate a revised, realistic plan.", "(D) Inform your manager and let them handle the stakeholder."] }
+    ];
+
+    const rankingScenariosLeader = [
+        { title: "Scenario F1: Strategic Trade-Off", text: "Your board demands both short-term profitability and long-term market share growth, but you have limited capital. Rank the following approaches from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Split capital 50/50 and underdeliver on both.", "(B) Focus solely on profitability to satisfy quarterly expectations.", "(C) Present a compelling, data-backed strategic narrative that proposes a phased approach—prioritizing growth now for higher profitability later.", "(D) Ask the board to decide the allocation for you."] },
+        { title: "Scenario F2: Executive Misalignment", text: "Your executive team is deeply divided on a major strategic direction. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Push for a quick majority vote and move forward.", "(B) Avoid the conflict and wait for consensus to emerge naturally.", "(C) Conduct rigorous one-on-one alignment sessions with each executive, surfacing concerns and finding common ground.", "(D) Let the CEO make the final decision unilaterally."] },
+        { title: "Scenario F3: External Disruption", text: "A new, unregulated competitor is rapidly gaining market share using a business model you cannot easily replicate. Rank your likely responses from MOST effective (1) to LEAST effective (4).",
+          options: ["(A) Aggressively cut prices to compete on cost.", "(B) Copy their business model as closely as possible.", "(C) Commission a deep analysis of their model, then pivot your value proposition to a segment they cannot serve effectively.", "(D) Wait to see if their model is sustainable before reacting."] }
+    ];
+
+    // ================================================================
+    // 3. BELIEF ITEMS (Level-specific) - FORCED RANKING (1-10)
+    // ================================================================
+    const beliefItemsJunior = [
+        { id: 'B1', label: 'Doing your assigned tasks accurately and on time', comp: 'EE' },
+        { id: 'B2', label: 'Understanding how your work fits into team goals', comp: 'ST' },
+        { id: 'B3', label: 'Learning new skills and adapting to change', comp: 'LA' },
+        { id: 'B4', label: 'Collaborating well with colleagues in other teams', comp: 'CI' },
+        { id: 'B5', label: 'Solving problems by breaking them down logically', comp: 'PS' },
+        { id: 'B6', label: 'Taking initiative and starting things without being told', comp: 'DI' },
+        { id: 'B7', label: 'Helping peers and juniors develop their skills', comp: 'PL' },
+        { id: 'B8', label: 'Communicating clearly and effectively with others', comp: 'CM' },
+        { id: 'B9', label: 'Staying calm and focused under pressure', comp: 'RE' },
+        { id: 'B10', label: 'Going above and beyond to help stakeholders', comp: 'CO' }
+    ];
+    const beliefItemsManager = [
+        { id: 'B1', label: 'Ensuring the team delivers quality results consistently', comp: 'EE' },
+        { id: 'B2', label: 'Connecting team goals to departmental strategy', comp: 'ST' },
+        { id: 'B3', label: 'Continuous learning and adapting as a manager', comp: 'LA' },
+        { id: 'B4', label: 'Building cross-functional networks and influencing peers', comp: 'CI' },
+        { id: 'B5', label: 'Structuring complex problems for the team to solve', comp: 'PS' },
+        { id: 'B6', label: 'Proactively driving improvement and holding the team accountable', comp: 'DI' },
+        { id: 'B7', label: 'Coaching, developing, and giving feedback to team members', comp: 'PL' },
+        { id: 'B8', label: 'Communicating clearly upward, downward, and laterally', comp: 'CM' },
+        { id: 'B9', label: 'Maintaining team composure and momentum under pressure', comp: 'RE' },
+        { id: 'B10', label: 'Prioritizing stakeholder needs while balancing team capacity', comp: 'CO' }
+    ];
+    const beliefItemsLeader = [
+        { id: 'B1', label: 'Delivering enterprise-wide outcomes with excellence', comp: 'EE' },
+        { id: 'B2', label: 'Shaping and driving long-term organizational strategy', comp: 'ST' },
+        { id: 'B3', label: 'Fostering an agile, learning-oriented organizational culture', comp: 'LA' },
+        { id: 'B4', label: 'Building strategic alliances and influencing the ecosystem', comp: 'CI' },
+        { id: 'B5', label: 'Solving complex, systemic organizational problems', comp: 'PS' },
+        { id: 'B6', label: 'Driving proactive transformation and setting the pace for change', comp: 'DI' },
+        { id: 'B7', label: 'Developing executive talent and building succession pipelines', comp: 'PL' },
+        { id: 'B8', label: 'Communicating a compelling vision and inspiring action', comp: 'CM' },
+        { id: 'B9', label: 'Leading with composure and resilience through organizational turbulence', comp: 'RE' },
+        { id: 'B10', label: 'Creating stakeholder trust and long-term value', comp: 'CO' }
+    ];
+
+    // ================================================================
+    // 4. OPEN-ENDED (Static)
+    // ================================================================
+    const openEnded = [
+        { id: 'D1', label: 'D1. Professional Achievement', text: 'What is one professional achievement from the past 12 months that you are most proud of? Describe specifically what YOU personally did to make it successful. (3–5 sentences)' },
+        { id: 'D2', label: 'D2. Challenging Situation', text: 'Describe a situation at work that was particularly challenging or ambiguous. What did YOU specifically do to handle it, and what was the outcome? (3–5 sentences)' },
+        { id: 'D3', label: 'D3. Personal Differentiator', text: 'What is something you consistently do differently from most of your colleagues that you believe makes you more effective? (2–3 sentences)' },
+        { id: 'D4', label: 'D4. Area for Improvement', text: 'What is one area of your work where you believe you could be significantly better? What specifically holds you back? (2–3 sentences)' },
+        { id: 'D5', label: 'D5. Advice to a New Colleague', text: 'If a talented new colleague asked you "What does it actually take to truly excel here?" — what would you tell them? (2–4 sentences)' }
+    ];
+
+    // ================================================================
+    // 5. RENDER FUNCTIONS
+    // ================================================================
+    function getLevelData(level) {
+        switch(level) {
+            case 'Junior': return { a: semanticPairsJunior, b: beliefItemsJunior, c: rankingScenariosJunior, label: 'Junior / Executive' };
+            case 'Manager': return { a: semanticPairsManager, b: beliefItemsManager, c: rankingScenariosManager, label: 'Manager' };
+            case 'Leader': return { a: semanticPairsLeader, b: beliefItemsLeader, c: rankingScenariosLeader, label: 'Leader / VP+' };
+            default: return null;
+        }
+    }
+
+    function renderDynamicContent(level) {
+        const data = getLevelData(level);
+        const containerA = document.getElementById('sectionAContainer');
+        const containerB = document.getElementById('sectionBContainer');
+        const containerC = document.getElementById('sectionCContainer');
+        const prompt = document.getElementById('rolePrompt');
+
+        if (!data) {
+            prompt.innerHTML = 'Please select your Job Level above to see the relevant questions.';
+            containerA.innerHTML = ''; containerB.innerHTML = ''; containerC.innerHTML = '';
+            return;
+        }
+        prompt.innerHTML = `📌 You are answering questions tailored to the <strong>${data.label}</strong> level. Please answer based on your actual experience.`;
+
+        // ---- SECTION A: Semantic Differential (40 items) ----
+        let aHtml = `
+            <div class="section-title" style="margin-top:20px;">
+                <span>Section A: Work Style Profile (${data.label})</span>
+                <span class="badge-time">40 items • ~15 min</span>
+            </div>
+            <p style="color:#3e5778; margin-bottom:20px; font-size:14px;">
+                For each pair, select the dot that best reflects where you fall between the two extremes. 
+                <strong>There is no neutral "middle" cop-out</strong> — choose the side that is <em>most</em> like you.
+            </p>
+        `;
+        data.a.forEach((item, idx) => {
+            const num = idx + 1;
+            aHtml += `
+                <div class="semantic-item">
+                    <div class="anchor-row">
+                        <span class="left-anchor">${item.left}</span>
+                        <div class="slider-group" data-q="a${num}">
+                            ${[1,2,3,4,5].map(v => `
+                                <label>
+                                    <input type="radio" name="a${num}" value="${v}" required>
+                                    <span>${v}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <span class="right-anchor">${item.right}</span>
+                    </div>
+                </div>
+            `;
+        });
+        containerA.innerHTML = aHtml;
+
+        // ---- SECTION B: Forced Ranking (1-10) ----
+        let bHtml = `
+            <div class="section-title" style="margin-top:40px;">
+                <span>Section B: Your Theory of Success (${data.label})</span>
+                <span class="badge-time">10 items • ~5 min</span>
+            </div>
+            <p style="color:#3e5778; margin-bottom:20px; font-size:14px;">
+                <strong>Rank these 10 factors from 1 (MOST critical for success in YOUR role) to 10 (LEAST critical).</strong> 
+                Each rank (1 through 10) must be used <strong>exactly once</strong>. This forces you to make real trade-offs.
+            </p>
+            <div class="belief-grid">
+        `;
+        data.b.forEach((b, idx) => {
+            const num = idx + 1;
+            bHtml += `
+                <div class="belief-row">
+                    <span class="b-label">${num}. ${b.label}</span>
+                    <span class="b-competency">(${b.comp})</span>
+                    <select name="b_rank_${num}" required>
+                        <option value="">Rank</option>
+                        ${[1,2,3,4,5,6,7,8,9,10].map(v => `<option value="${v}">${v}</option>`).join('')}
+                    </select>
+                </div>
+            `;
+        });
+        bHtml += `</div>
+            <div id="bRankError" class="error-msg">⚠️ Please assign a unique rank (1–10) to each of the 10 items. No rank can be used twice.</div>
+            <div class="forced-choice-box">
+                <strong>Top 3 Priorities (Cross-Check):</strong> Regardless of the ranking above, which THREE factors are <strong>most critical</strong> for success in your role? Select exactly 3.
+                <div class="fc-grid" id="fcGrid">`;
+        data.b.forEach((b, idx) => {
+            bHtml += `<label><input type="checkbox" name="fc" value="${idx+1}" class="fc-checkbox" onchange="validateForcedChoice()"> ${idx+1}. ${b.label}</label>`;
+        });
+        bHtml += `</div><p id="fcError" class="error-msg">Please select exactly 3 items.</p></div>`;
+        containerB.innerHTML = bHtml;
+
+        // ---- SECTION C: Ranking Scenarios (3 items) ----
+        let cHtml = `
+            <div class="section-title" style="margin-top:40px;">
+                <span>Section C: Behavioral Scenarios (${data.label})</span>
+                <span class="badge-time">3 scenarios • ~6 min</span>
+            </div>
+            <p style="color:#3e5778; margin-bottom:20px; font-size:14px;">
+                For each scenario, rank the options from <strong>1 (MOST effective / Most like me)</strong> to <strong>4 (LEAST effective / Least like me)</strong>. 
+                Each rank (1–4) must be used exactly once per scenario.
+            </p>
+        `;
+        data.c.forEach((scenario, idx) => {
+            const num = idx + 1;
+            cHtml += `
+                <div class="ranking-card">
+                    <div class="ranking-text">${num}. ${scenario.title}</div>
+                    <p style="color:#3e5778; font-size:14px; margin-bottom:12px;">${scenario.text}</p>
+                    ${scenario.options.map((opt, oi) => `
+                        <div class="ranking-row">
+                            <span class="opt-label">${opt}</span>
+                            <select name="rank_${num}_${oi}" required>
+                                <option value="">Rank</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                    `).join('')}
+                    <div style="font-size:12px; color:#8a9bb0; margin-top:6px;">⚠️ Each rank (1–4) must be used exactly once per scenario.</div>
+                </div>
+            `;
+        });
+        containerC.innerHTML = cHtml;
+
+        // Attach listeners
+        document.querySelectorAll('.fc-checkbox').forEach(cb => {
+            cb.addEventListener('change', validateForcedChoice);
+        });
+        // Add ranking validation listener for Section B
+        document.querySelectorAll('select[name^="b_rank_"]').forEach(sel => {
+            sel.addEventListener('change', validateBeliefRanking);
+        });
+        setTimeout(updateProgress, 100);
+    }
+
+    // ================================================================
+    // 6. VALIDATION FUNCTIONS
+    // ================================================================
+    function validateForcedChoice() {
+        const checked = document.querySelectorAll('.fc-checkbox:checked').length;
+        const err = document.getElementById('fcError');
+        if (err) {
+            if (checked === 3) err.style.display = 'none';
+            else { err.style.display = 'block'; err.innerText = `Please select exactly 3 items. (Selected: ${checked})`; }
+        }
+    }
+
+    function validateBeliefRanking() {
+        const selects = document.querySelectorAll('select[name^="b_rank_"]');
+        const values = [];
+        selects.forEach(sel => { if(sel.value) values.push(parseInt(sel.value)); });
+        const err = document.getElementById('bRankError');
+        if (values.length === 10) {
+            const unique = new Set(values);
+            if (unique.size === 10) {
+                err.style.display = 'none';
+            } else {
+                err.style.display = 'block';
+            }
+        } else {
+            err.style.display = 'block';
+        }
+    }
+
+    // ================================================================
+    // 7. PROGRESS BAR
+    // ================================================================
+    function updateProgress() {
+        let filled = 0;
+        const total = 81; // 7 basic + 40 semantic + 10 belief ranks + 3 FC + 12 scenario ranks + 5 OE
+
+        // Basic (7)
+        ['fullName','email','dept','jobLevel','workHours','directReports','crossFunc'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el && el.value && el.value !== '') filled++;
+        });
+
+        // Section A (40 semantic)
+        for(let i=1; i<=40; i++) {
+            const radios = document.querySelectorAll(`input[name="a${i}"]`);
+            if (radios.length > 0) { let checked = false; radios.forEach(r => { if(r.checked) checked = true; }); if(checked) filled++; }
+        }
+
+        // Section B (10 ranks)
+        for(let i=1; i<=10; i++) {
+            const sel = document.querySelector(`select[name="b_rank_${i}"]`);
+            if(sel && sel.value && sel.value !== '') filled++;
+        }
+        // Forced choice (3)
+        if(document.querySelectorAll('.fc-checkbox:checked').length === 3) filled += 3;
+
+        // Ranking scenarios (12 selects)
+        for(let s=1; s<=3; s++) {
+            for(let o=0; o<4; o++) {
+                const sel = document.querySelector(`select[name="rank_${s}_${o}"]`);
+                if(sel && sel.value && sel.value !== '') filled++;
+            }
+        }
+
+        // Open Ended (5)
+        openEnded.forEach(q => {
+            const ta = document.querySelector(`textarea[name="${q.id}"]`);
+            if(ta && ta.value.trim().length > 10) filled++;
+        });
+
+        const pct = Math.min(100, Math.round((filled / total) * 100));
+        const bar = document.getElementById('progressBar');
+        const text = document.getElementById('progressText');
+        if(bar) bar.style.width = pct + '%';
+        if(text) text.innerText = pct + '% completed (' + filled + '/' + total + ' fields)';
+    }
+
+    // ================================================================
+    // 8. HANDLE LEVEL CHANGE & SUBMIT
+    // ================================================================
+    function handleLevelChange() {
+        const level = document.getElementById('jobLevel').value;
+        renderDynamicContent(level);
+        updateProgress();
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        // Validate Section B ranking uniqueness
+        const ranks = [];
+        for(let i=1; i<=10; i++) {
+            const sel = document.querySelector(`select[name="b_rank_${i}"]`);
+            if(sel && sel.value) ranks.push(parseInt(sel.value));
+        }
+        if(ranks.length === 10) {
+            const unique = new Set(ranks);
+            if(unique.size !== 10) {
+                document.getElementById('bRankError').style.display = 'block';
+                document.getElementById('bRankError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+        } else {
+            document.getElementById('bRankError').style.display = 'block';
+            return false;
+        }
+
+        // Validate Forced Choice
+        if(document.querySelectorAll('.fc-checkbox:checked').length !== 3) {
+            document.getElementById('fcError').style.display = 'block';
+            document.getElementById('fcError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+        }
+
+        // Validate Scenario uniqueness
+        for(let s=1; s<=3; s++) {
+            const vals = [];
+            for(let o=0; o<4; o++) {
+                const sel = document.querySelector(`select[name="rank_${s}_${o}"]`);
+                if(sel && sel.value) vals.push(sel.value);
+            }
+            if(vals.length === 4) {
+                const unique = new Set(vals);
+                if(unique.size !== 4) {
+                    alert(`Scenario ${s}: Please assign a unique rank (1, 2, 3, 4) to each option.`);
+                    return false;
+                }
+            }
+        }
+
+        const name = document.getElementById('fullName').value;
+        alert(`✅ Thank you, ${name}! Your responses have been recorded. This is a demo — in live deployment, data would be saved securely.`);
+        return false;
+    }
+
+    // ================================================================
+    // 9. STATIC RENDER (Open Ended)
+    // ================================================================
+    function renderStaticContent() {
+        const oeContainer = document.getElementById('openEndedContainer');
+        openEnded.forEach((q) => {
+            const div = document.createElement('div');
+            div.style.marginBottom = '25px';
+            div.innerHTML = `
+                <label style="font-weight:600; font-size:15px; color:#0b2a44;">${q.label}</label>
+                <p style="color:#3e5778; font-size:14px; margin:4px 0 8px 0;">${q.text}</p>
+                <textarea name="${q.id}" rows="4" required placeholder="Write your response here..."></textarea>
+            `;
+            oeContainer.appendChild(div);
+        });
+    }
+
+    document.addEventListener('change', updateProgress);
+    document.addEventListener('input', updateProgress);
+    renderStaticContent();
+    document.getElementById('dynamicContent').querySelector('.role-prompt').innerHTML = 'Please select your Job Level above to see the relevant questions.';
+    setTimeout(updateProgress, 500);
+</script>
+</body>
+</html>

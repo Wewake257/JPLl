@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Performance Predictor & Success Profile Analysis — Project Status Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --jio-blue: #0052cc;
+    --jio-teal: #00b4d8;
+    --jio-deep: #003087;
+    --accent: #e63946;
+    --gold: #f4a533;
+    --green: #2dc653;
+    --ink: #1a1a2e;
+    --mid: #4a4a6a;
+    --light: #8888aa;
+    --bg: #f8f9fc;
+    --white: #ffffff;
+    --card: #ffffff;
+    --border: #e4e8f0;
+    --pill-blue: #e8f0fe;
+    --pill-teal: #e0f7ff;
+    --pill-red: #fde8ea;
+    --pill-green: #e6f9ed;
+    --pill-gold: #fff3dc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top left, #00b4d8 0%, transparent 35%),
+                radial-gradient(circle at bottom right, #0052cc 0%, transparent 35%),
+                #f8f9fc;
+    color: var(--ink);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ── Canvas & background ── */
+  #bg-canvas {
+    position: fixed; inset: 0;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* ── Slide shell ── */
+  #deck {
+    position: relative; z-index: 1;
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── Top bar ── */
+  #topbar {
+    display: flex; align-items: center;
+    padding: 0 32px; height: 52px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--jio-deep), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 13px; color: white; letter-spacing: -0.5px;
+  }
+
+  .topbar-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; color: var(--jio-deep); letter-spacing: 0.2px; }
+  .topbar-sep { color: var(--border); font-size: 18px; }
+  .topbar-project { font-size: 12px; color: var(--mid); font-weight: 400; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+
+  #progress-bar-wrap {
+    width: 120px; height: 4px;
+    background: var(--border); border-radius: 99px; overflow: hidden;
+  }
+  #progress-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    transition: width 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  #slide-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--light);
+  }
+
+  /* ── Slide content ── */
+  #slide-viewport {
+    flex: 1; overflow: hidden;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-start;
+    padding: 32px 48px;
+    opacity: 0; transform: translateX(60px) scale(0.97);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    pointer-events: none;
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1; transform: translateX(0) scale(1);
+    pointer-events: all;
+  }
+
+  .slide.exit-left {
+    opacity: 0; transform: translateX(-60px) scale(0.97);
+  }
+
+  /* ── Bottom nav ── */
+  #bottomnav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; padding: 12px 32px; height: 60px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0; z-index: 10;
+  }
+
+  .nav-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 20px; border-radius: 10px; border: none;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 500; cursor: pointer; transition: all 0.2s;
+  }
+  .nav-btn.primary {
+    background: var(--jio-blue); color: white;
+    box-shadow: 0 2px 8px rgba(0,82,204,0.25);
+  }
+  .nav-btn.primary:hover { background: var(--jio-deep); transform: translateY(-1px); }
+  .nav-btn.secondary {
+    background: white; color: var(--mid);
+    border: 1px solid var(--border);
+  }
+  .nav-btn.secondary:hover { background: var(--bg); color: var(--ink); }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  .dot-nav { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--border); cursor: pointer; transition: all 0.3s;
+  }
+  .dot.active { width: 20px; border-radius: 99px; background: var(--jio-blue); }
+  .dot:hover { background: var(--jio-teal); }
+
+  /* ── Slide components ── */
+  .slide-inner {
+    width: 100%; max-width: 1000px;
+    display: flex; flex-direction: column;
+    align-items: center;
+  }
+  .full-w { width: 100%; }
+
+  .slide-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--jio-teal);
+    margin-bottom: 10px;
+  }
+
+  .slide-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(24px, 3.2vw, 42px);
+    font-weight: 700; color: var(--ink);
+    line-height: 1.15; text-align: center;
+    margin-bottom: 10px;
+  }
+  .slide-title span.accent { color: var(--jio-blue); }
+  .slide-title span.teal   { color: var(--jio-teal); }
+
+  .slide-subtitle {
+    font-size: 15px; color: var(--mid); text-align: center;
+    max-width: 700px; line-height: 1.6; margin-bottom: 28px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .card:hover { box-shadow: 0 6px 24px rgba(0,82,204,0.1); transform: translateY(-2px); }
+
+  .card-grid {
+    display: grid; gap: 14px;
+    width: 100%; max-width: 900px;
+  }
+  .card-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .stat-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 42px; font-weight: 700;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 12px; color: var(--mid); font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+  }
+  .tag.blue { background: var(--pill-blue); color: var(--jio-blue); }
+  .tag.teal { background: var(--pill-teal); color: #0077a8; }
+  .tag.red  { background: var(--pill-red);  color: var(--accent); }
+  .tag.green{ background: var(--pill-green); color: #1a8a3d; }
+  .tag.gold { background: var(--pill-gold);  color: #b87800; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; justify-content: center; }
+
+  /* ── Accordion / Dropdown ── */
+  .accordion {
+    width: 100%; max-width: 900px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  .accordion:hover { box-shadow: 0 4px 16px rgba(0,82,204,0.08); }
+  .accordion-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #f8f9fc, #ffffff);
+    cursor: pointer;
+    border: none; width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink);
+    transition: background 0.2s;
+  }
+  .accordion-header:hover { background: linear-gradient(135deg, #e8f0fe, #f8f9fc); }
+  .accordion-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+  .accordion.open .accordion-icon { transform: rotate(90deg); }
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.4s;
+    padding: 0 20px;
+    font-size: 13px; color: var(--mid); line-height: 1.7;
+  }
+  .accordion.open .accordion-body {
+    max-height: 800px;
+    padding: 16px 20px 20px;
+  }
+  .accordion-arrow {
+    margin-left: auto;
+    font-size: 16px; color: var(--light);
+    transition: transform 0.3s;
+  }
+  .accordion.open .accordion-arrow { transform: rotate(180deg); }
+
+  /* ── Formula boxes ── */
+  .formula-box {
+    background: linear-gradient(135deg, #f0f4ff, #e8f7ff);
+    border: 1px solid #c5d8f8; border-radius: 12px;
+    padding: 16px 20px; margin: 4px 0;
+  }
+  .formula-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--jio-blue); margin-bottom: 8px;
+  }
+  .formula-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--jio-deep);
+    line-height: 1.6;
+  }
+
+  /* ── Weight bars (animated) ── */
+  .weight-bar-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 0;
+  }
+  .weight-label {
+    font-size: 12px; font-weight: 500; width: 220px;
+    color: var(--ink); flex-shrink: 0;
+  }
+  .weight-bar-bg {
+    flex: 1; height: 10px; border-radius: 99px;
+    background: var(--border); overflow: hidden;
+  }
+  .weight-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  }
+  .weight-bar-fill.gold { background: linear-gradient(90deg, var(--gold), #ffd166); }
+  .weight-bar-fill.green { background: linear-gradient(90deg, var(--green), #52e082); }
+  .weight-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600; color: var(--jio-blue);
+    width: 40px; text-align: right; flex-shrink: 0;
+  }
+
+  /* ── Tier rows ── */
+  .tier-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px; border-radius: 12px; margin-bottom: 8px;
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .tier-row:hover { border-color: var(--jio-blue); box-shadow: 0 4px 16px rgba(0,82,204,0.08); }
+  .tier-icon { font-size: 22px; flex-shrink: 0; }
+  .tier-info { flex: 1; }
+  .tier-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+  .tier-range { font-size: 11px; color: var(--mid); }
+  .tier-count {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 22px;
+  }
+
+  /* ── Inference cards ── */
+  .inference-card {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border);
+    background: white; margin-bottom: 10px;
+    transition: all 0.3s;
+  }
+  .inference-card:hover { box-shadow: 0 4px 16px rgba(0,82,204,0.08); border-color: var(--jio-blue); }
+  .inf-num {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px;
+  }
+  .inf-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--ink); }
+  .inf-body  { font-size: 12px; color: var(--mid); line-height: 1.5; }
+  .inf-arrow { font-size: 11px; color: var(--jio-teal); font-weight: 600; margin-top: 4px; }
+
+  /* ── Timeline ── */
+  .timeline-container {
+    display: flex; align-items: flex-start; gap: 0;
+    width: 100%; max-width: 900px; position: relative;
+  }
+  .timeline-line {
+    position: absolute; top: 24px; left: 0; right: 0;
+    height: 3px; background: var(--border); z-index: 0;
+  }
+  .timeline-progress {
+    position: absolute; top: 24px; left: 0;
+    height: 3px; background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    z-index: 1;
+    width: 0%;
+    transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  .tphase {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 10px; position: relative; z-index: 2;
+    text-align: center;
+  }
+  .tphase-dot {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    background: white; border: 3px solid var(--border);
+    transition: all 0.5s;
+  }
+  .tphase.done .tphase-dot {
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    border-color: var(--jio-blue); color: white;
+    box-shadow: 0 4px 12px rgba(0,82,204,0.3);
+  }
+  .tphase.active .tphase-dot {
+    background: white; border-color: var(--jio-blue);
+    color: var(--jio-blue);
+    box-shadow: 0 0 0 4px rgba(0,82,204,0.15);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(0,82,204,0.15); }
+    50% { box-shadow: 0 0 0 8px rgba(0,82,204,0.08); }
+  }
+  .tphase-label { font-size: 12px; font-weight: 600; color: var(--ink); margin-top: 4px; }
+  .tphase-desc { font-size: 11px; color: var(--mid); max-width: 140px; line-height: 1.4; }
+  .tphase-date { font-size: 10px; color: var(--jio-teal); font-weight: 600; margin-top: 2px; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 13px;
+    font-weight: 600; cursor: pointer;
+    transition: all 0.25s; text-decoration: none;
+    border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    color: white;
+    box-shadow: 0 4px 16px rgba(0,82,204,0.25);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,82,204,0.35); }
+  .btn-outline {
+    background: white; color: var(--jio-blue);
+    border: 1.5px solid var(--jio-blue);
+  }
+  .btn-outline:hover { background: var(--pill-blue); }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), #ffd166);
+    color: #5a4000;
+    box-shadow: 0 4px 16px rgba(244,165,51,0.25);
+  }
+  .btn-gold:hover { transform: translateY(-2px); }
+
+  /* ── Link row ── */
+  .link-row {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px;
+  }
+
+  /* ── Cover slide ── */
+  .cover-brand {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  }
+  .cover-logo {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--jio-deep), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+    font-size: 22px; color: white; letter-spacing: -1px;
+  }
+  .cover-brand-text { text-align: left; }
+  .cover-brand-main { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: var(--jio-deep); line-height: 1; }
+  .cover-brand-sub { font-size: 12px; color: var(--light); margin-top: 2px; }
+  .cover-title-big {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4.5vw, 54px);
+    line-height: 1.1; text-align: center; color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .cover-divider {
+    width: 60px; height: 4px; border-radius: 99px;
+    background: linear-gradient(90deg, var(--jio-blue), var(--jio-teal));
+    margin: 0 auto 20px;
+  }
+
+  /* ── Step connector ── */
+  .process-step {
+    display: flex; align-items: center; gap: 0;
+    width: 100%; max-width: 820px;
+  }
+  .pstep {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+  }
+  .pstep-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--jio-blue), var(--jio-teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .pstep-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--light); margin-bottom: 2px; }
+  .pstep-name { font-size: 12px; font-weight: 600; color: var(--ink); text-align: center; line-height: 1.3; }
+  .pstep-desc { font-size: 11px; color: var(--mid); text-align: center; }
+  .pstep-arrow { font-size: 18px; color: var(--border); flex-shrink: 0; padding: 0 4px; margin-top: -20px; }
+
+  /* ── KPI cards ── */
+  .kpi-card {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; text-align: center;
+    transition: all 0.3s;
+  }
+  .kpi-card:hover { border-color: var(--jio-blue); box-shadow: 0 4px 20px rgba(0,82,204,0.1); transform: translateY(-3px); }
+  .kpi-icon { font-size: 28px; margin-bottom: 8px; }
+  .kpi-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .kpi-desc { font-size: 11px; color: var(--mid); line-height: 1.4; }
+
+  /* ── Challenge card ── */
+  .challenge-card {
+    background: white; border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 10px;
+    transition: all 0.3s;
+  }
+  .challenge-card:hover { box-shadow: 0 4px 16px rgba(230,57,70,0.12); }
+  .challenge-card.solved { border-left-color: var(--green); }
+  .challenge-card.solved:hover { box-shadow: 0 4px 16px rgba(45,198,83,0.12); }
+  .ch-title { font-weight: 600; font-size: 13px; color: var(--ink); margin-bottom: 4px; }
+  .ch-body { font-size: 12px; color: var(--mid); line-height: 1.5; }
+  .ch-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 99px;
+    font-size: 10px; font-weight: 600; margin-top: 6px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--light); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .card-grid.cols-2, .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: 1fr; }
+    .slide { padding: 20px 20px; }
+    .weight-label { width: 140px; font-size: 11px; }
+    .timeline-container { overflow-x: auto; }
+  }
+
+  /* ── Fade in animation ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeInUp 0.5s ease forwards; }
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+  /* ── Status badge ── */
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 99px;
+    font-size: 12px; font-weight: 600;
+  }
+  .status-done { background: var(--pill-green); color: #1a8a3d; }
+  .status-active { background: var(--pill-blue); color: var(--jio-blue); }
+  .status-pending { background: var(--pill-gold); color: #b87800; }
+
+  /* ── Two column layout ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 900px; }
+
+  /* ── Deliverable checklist ── */
+  .deliverable-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 10px;
+    background: white; border: 1px solid var(--border);
+    margin-bottom: 8px; transition: all 0.3s;
+  }
+  .deliverable-item:hover { border-color: var(--jio-blue); }
+  .del-check { font-size: 18px; }
+  .del-text { font-size: 13px; color: var(--ink); }
+  .del-date { font-size: 10px; color: var(--jio-teal); font-weight: 600; margin-left: auto; white-space: nowrap; }
+
+  /* ── Hover tooltip ── */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-text {
+    visibility: hidden; width: 220px;
+    background: var(--ink); color: white;
+    text-align: center; border-radius: 8px; padding: 8px 12px;
+    position: absolute; z-index: 100; bottom: 125%; left: 50%; margin-left: -110px;
+    font-size: 11px; line-height: 1.4;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+  /* ── Table ── */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th { padding: 10px 12px; text-align: left; font-size: 11px; color: var(--mid); font-weight: 600; border-bottom: 2px solid var(--border); background: var(--bg); }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--ink); }
+  .data-table tr:hover td { background: var(--pill-blue); }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div id="deck">
+
+  <!-- Top bar -->
+  <div id="topbar">
+    <div class="logo-mark">JP</div>
+    <span class="topbar-brand">Jio Platforms Ltd — HR Analytics</span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-project">Performance Predictor & Success Profile Analysis — Project Status Update</span>
+    <div class="topbar-right">
+      <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+      <span id="slide-counter">1 / 17</span>
+    </div>
+  </div>
+
+  <!-- Slide viewport -->
+  <div id="slide-viewport">
+
+    <!-- ═══════════ SLIDE 1 — COVER ═══════════ -->
+    <div class="slide active" id="s1">
+      <div class="slide-inner" style="align-items:center;justify-content:center;height:100%;text-align:center">
+        <div class="cover-brand animate-in">
+          <div class="cover-logo">J</div>
+          <div class="cover-brand-text">
+            <div class="cover-brand-main">Jio Platforms Ltd</div>
+            <div class="cover-brand-sub">HR Analytics · Success Profile Project</div>
+          </div>
+        </div>
+
+        <div class="cover-title-big animate-in delay-1">
+          Performance Predictor &<br/>
+          <span style="color:var(--jio-blue)">Success Profile Analysis</span>
+        </div>
+        <div class="cover-divider animate-in delay-2"></div>
+        <div class="slide-subtitle animate-in delay-2" style="max-width:650px">
+          A structured framework to identify, measure, and predict high-performing HR Manager potential.
+          <br/>Phase 1 Complete · Phase 2 In Progress · Final Presentation: July 3, 2026
+        </div>
+
+        <div class="meta-pills animate-in delay-3">
+          <span class="tag blue">📊 920 Employees Analysed</span>
+          <span class="tag teal">⚙️ 7 Scoring Variables</span>
+          <span class="tag green">🏆 184 Top Performers</span>
+          <span class="tag gold">📅 June 3 – July 31, 2026</span>
+          <span class="tag red">🎯 HR Manager & HRBP Roles</span>
+        </div>
+
+        <div style="margin-top:32px" class="animate-in delay-4">
+          <div class="status-badge status-done">✅ Phase 1: Data Analysis Complete</div>
+          <span style="width:8px;display:inline-block"></span>
+          <div class="status-badge status-active">🔄 Phase 2: Interviews & Survey In Progress</div>
+        </div>
+
+        <div style="margin-top:20px;font-size:12px;color:var(--light)" class="animate-in delay-4">
+          Presented by <b>Vivek Kumar Kohli</b> · HR Analytics Intern · June 2026<br/>
+          Mentor: <b>Ms. Anisha Sharma</b> · Sponsor: <b>Mr. Bharat Bhushan</b> · Guide: <b>Ms. Arya Khamparia</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 2 — PROBLEM STATEMENT ═══════════ -->
+    <div class="slide" id="s2">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">01 — Introduction</div>
+        <div class="slide-title">The Problem We Are <span class="accent">Solving</span></div>
+        <div class="slide-subtitle">Why this project exists — moving from intuition-based talent decisions to data-driven performance prediction</div>
+
+        <div class="card-grid cols-3" style="max-width:900px;margin-bottom:24px">
+          <div class="card animate-in" style="border-top:4px solid var(--accent)">
+            <div style="font-size:28px;margin-bottom:8px">❌</div>
+            <div style="font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px">No Standard Success Profile</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              No defined benchmark for what 'excellent' looks like in HR Manager and HRBP roles. Hiring and promotion decisions lack a competency-based foundation.
+            </div>
+          </div>
+          <div class="card animate-in delay-1" style="border-top:4px solid var(--gold)">
+            <div style="font-size:28px;margin-bottom:8px">📉</div>
+            <div style="font-size:14px;font-weight:600;color:#b87800;margin-bottom:8px">Inconsistent Performance Ratings</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              Ratings vary across managers and departments with no structured basis. Performance scores are lagging indicators, not leading predictors.
+            </div>
+          </div>
+          <div class="card animate-in delay-2" style="border-top:4px solid var(--jio-blue)">
+            <div style="font-size:28px;margin-bottom:8px">🎯</div>
+            <div style="font-size:14px;font-weight:600;color:var(--jio-blue);margin-bottom:8px">Reactive Talent Decisions</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.6">
+              No data-backed tool to proactively identify at-risk or high-potential employees. Talent decisions happen after problems emerge, not before.
+            </div>
+          </div>
+        </div>
+
+        <div class="card full-w animate-in delay-3" style="max-width:900px;background:linear-gradient(135deg,#f0f4ff,#e8f7ff);border-color:#c5d8f8">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-size:36px">💡</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--jio-deep);margin-bottom:4px">The Objective</div>
+              <div style="font-size:13px;color:var(--mid);line-height:1.6">
+                Move from <b>intuition-based talent decisions</b> to <b>data-driven performance prediction</b> — by identifying the competencies that actually differentiate top performers from average ones, and building a model that can predict success <i>before</i> it happens.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 3 — BUSINESS CASE ═══════════ -->
+    <div class="slide" id="s3">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">02 — Business Case</div>
+        <div class="slide-title">Why This Project <span class="teal">Matters</span></div>
+        <div class="slide-subtitle">Strategic value for Jio Platforms — how success profile analytics transforms HR decision-making</div>
+
+        <div class="two-col" style="margin-bottom:20px">
+          <div>
+            <div class="card animate-in" style="margin-bottom:14px">
+              <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:10px">📈 Talent Retention ROI</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.7">
+                Our exit interview analysis shows <b>58% leave for compensation</b> (market pull), but <b>18% leave for growth/career reasons</b> — the only segment where HR intervention actually works. A success profile lets us proactively design growth paths for high-potential employees before they consider leaving.
+              </div>
+            </div>
+            <div class="card animate-in delay-1">
+              <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:10px">🎯 Precision in Hiring</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.7">
+                Currently, hiring decisions rely on interviews and manager judgement alone. With validated competency profiles, we can assess candidates against the <b>same behavioral standards</b> that our top performers exhibit — reducing mis-hires and improving time-to-productivity.
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card animate-in delay-1" style="margin-bottom:14px">
+              <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:10px">⚡ Development Focus</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.7">
+                Learning & Development budgets are limited. Our stay interview data shows only <b>~10% are active learners</b>. By knowing which competencies predict success, L&D can target the highest-ROI development interventions for each employee tier.
+              </div>
+            </div>
+            <div class="card animate-in delay-2">
+              <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:10px">🔄 Succession Planning</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.7">
+                With 920 employees analysed and <b>184 top performers identified</b>, we now have an evidence-based pipeline for succession. The competency model becomes the common language for "ready for next level" discussions.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="formula-box full-w animate-in delay-3" style="max-width:900px">
+          <div class="formula-label">Bharat's Direction (June 12 Meeting)</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.6">
+            <i>"The project should be positioned as a <b>Success Profile Analytics framework</b> rather than a rating-only prediction model. The final model should explain what makes employees successful in a particular role by combining quantitative performance data with qualitative behavioural and managerial insights."</i>
+            <div style="text-align:right;margin-top:8px;font-weight:600;color:var(--jio-deep)">— Mr. Bharat Bhushan, HR Head</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 4 — TIMELINE ═══════════ -->
+    <div class="slide" id="s4">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">03 — Project Timeline</div>
+        <div class="slide-title">Where We Are <span class="accent">Now</span></div>
+        <div class="slide-subtitle">8-week structured execution plan | June 3 – July 31, 2026 — Week 4 (Current)</div>
+
+        <div class="card full-w animate-in" style="max-width:900px;margin-bottom:24px;padding:28px">
+          <div class="timeline-container">
+            <div class="timeline-line"></div>
+            <div class="timeline-progress" id="timeline-progress" data-target="38"></div>
+
+            <div class="tphase done">
+              <div class="tphase-dot">✅</div>
+              <div class="tphase-label">Wk 1–3</div>
+              <div class="tphase-desc">Project kickoff, data collection, EDA</div>
+              <div class="tphase-date">Jun 3–20</div>
+            </div>
+            <div class="tphase active">
+              <div class="tphase-dot">🔄</div>
+              <div class="tphase-label">Wk 4–6</div>
+              <div class="tphase-desc">Interviews, survey design, coding</div>
+              <div class="tphase-date">Jun 21–Jul 11</div>
+            </div>
+            <div class="tphase">
+              <div class="tphase-dot">⏳</div>
+              <div class="tphase-label">Wk 7–8</div>
+              <div class="tphase-desc">Analysis, dashboard, final report</div>
+              <div class="tphase-date">Jul 19–31</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-3 animate-in delay-2">
+          <div class="card" style="border-top:3px solid var(--green)">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1a8a3d;margin-bottom:10px">Phase 1 — Foundation ✅</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.7">
+              • OLP data received & cleaned<br/>
+              • Stay & Exit interview data merged<br/>
+              • Rating encoding & feature engineering<br/>
+              • Composite scoring model built<br/>
+              • <b>184 top performers identified</b><br/>
+              • Phase 1 report submitted
+            </div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--jio-blue)">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--jio-blue);margin-bottom:10px">Phase 2 — Active 🔄</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.7">
+              • Pull interview shortlist from master dataset<br/>
+              • Conduct 13–18 competency interviews<br/>
+              • Qualitative coding & thematic analysis<br/>
+              • Design all-employee behavioral survey<br/>
+              • Map themes to Lominger 67 framework<br/>
+              • Determine competency weights
+            </div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--gold)">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b87800;margin-bottom:10px">Phase 3 — Delivery ⏳</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.7">
+              • Build HR dashboard / visual report<br/>
+              • Final correlation analysis<br/>
+              • Success profile templates (2 roles)<br/>
+              • Final project report<br/>
+              • <b>Presentation to Bharat: July 3</b><br/>
+              • Complete documentation
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 5 — PHASE 1 SUMMARY ═══════════ -->
+    <div class="slide" id="s5">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">04 — Phase 1 Completion</div>
+        <div class="slide-title">What We've <span class="accent">Accomplished</span></div>
+        <div class="slide-subtitle">End-to-end data ingestion, cleaning, feature engineering, and analytical synthesis across 3 organisational datasets</div>
+
+        <div class="card-grid cols-4" style="max-width:900px;margin-bottom:20px">
+          <div class="card animate-in" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-blue)">920</div>
+            <div class="stat-label">Employees Analysed<br/><span style="font-size:11px;font-weight:400">(OLP Dataset)</span></div>
+          </div>
+          <div class="card animate-in delay-1" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-teal)">184</div>
+            <div class="stat-label">Top Performers<br/><span style="font-size:11px;font-weight:400">(Top 20%)</span></div>
+          </div>
+          <div class="card animate-in delay-2" style="text-align:center">
+            <div class="stat-big" style="color:var(--gold)">12</div>
+            <div class="stat-label">Cross-Dataset<br/><span style="font-size:11px;font-weight:400">Inferences</span></div>
+          </div>
+          <div class="card animate-in delay-3" style="text-align:center">
+            <div class="stat-big" style="color:var(--green)">36</div>
+            <div class="stat-label">Engineered<br/><span style="font-size:11px;font-weight:400">Columns Created</span></div>
+          </div>
+        </div>
+
+        <div class="two-col" style="max-width:900px">
+          <div>
+            <div class="accordion open" style="margin-bottom:10px">
+              <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-icon">📁</div>
+                <span>OLP Performance Data</span>
+                <span class="accordion-arrow">▼</span>
+              </div>
+              <div class="accordion-body">
+                <b>920 employees × 27 columns</b> — 5-year performance ratings (RTG21-22 to RTG25-26), Grade, Cohort, DOJ, Age, Experience, Promotion, Progression history. Ratings encoded: A*=4, A+=3, A=2, B=1.
+              </div>
+            </div>
+            <div class="accordion" style="margin-bottom:10px">
+              <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-icon">🗣️</div>
+                <span>Stay Interview Data</span>
+                <span class="accordion-arrow">▼</span>
+              </div>
+              <div class="accordion-body">
+                <b>49 employees</b> (Sep 2025–Mar 2026) — Learning engagement, Career aspiration, Engagement drivers, Tenure. <b>30 linked back to OLP</b> for quantitative enrichment.
+              </div>
+            </div>
+            <div class="accordion">
+              <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div class="accordion-icon">🚪</div>
+                <span>Exit Interview Data</span>
+                <span class="accordion-arrow">▼</span>
+              </div>
+              <div class="accordion-body">
+                <b>38 employees</b> (Aug 2025–May 2026) — Exit reason, Retention outcome, Manager relationship, KRA clarity, Rejoining intent. <b>16 appeared in both Stay and Exit</b> — predictor validation group.
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="card animate-in delay-2" style="height:calc(100% - 0px)">
+              <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Key Phase 1 Outputs</div>
+              <div style="font-size:12px;color:var(--mid);line-height:2">
+                ✅ OLP Analysis Notebook (Python)<br/>
+                ✅ Stay & Exit Analysis Notebook<br/>
+                ✅ Master Performance Dataset (920×36)<br/>
+                ✅ Phase 1 Completion Report<br/>
+                ✅ Interview Shortlist Ready<br/>
+                ✅ Exit Interview Clean Summary<br/>
+                ✅ <b>Top Performer Identification</b>
+              </div>
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+                <span class="status-badge status-done">Phase 1 Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════ SLIDE 6 — METHODOLOGY: RATING ENCODING ═══════════ -->
+    <div class="slide" id="s6">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">05 — Methodology: Step 1</div>
+        <div class="slide-title">Rating <span class="accent">Encoding</span> & Feature Engineering</div>
+        <div class="slide-subtitle">How we converted raw performance text into computable numeric scores — then built 4 derived metrics</div>
+
+        <div class="card-grid cols-2" style="max-width:900px;margin-bottom:18px">
+          <div class="card animate-in">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:14px">Rating Encoding Map</div>
+            <table class="data-table" style="margin-bottom:8px">
+              <thead>
+                <tr><th>Rating</th><th>Numeric</th><th>Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><span class="tag gold">A*</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">4</td><td style="color:var(--mid)">Exceptional</td></tr>
+                <tr><td><span class="tag green">A+</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">3</td><td style="color:var(--mid)">Exceeds expectations</td></tr>
+                <tr><td><span class="tag blue">A</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">2</td><td style="color:var(--mid)">Meets expectations</td></tr>
+                <tr><td><span class="tag red">B</span></td><td style="font-family:'JetBrains Mono',monospace;font-weight:600">1</td><td style="color:var(--mid)">Below expectations</td></tr>
+              </tbody>
+            </table>
+            <div style="font-size:11px;color:var(--mid);margin-top:8px">
+              Text strings like "A*" cannot be averaged or trended. Once converted to numbers, we can calculate 5-year averages, detect improvement/decline, measure consistency, and apply recency weights.
+            </div>
+          </div>
+          <div class="card animate-in delay-1">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:14px">4 Engineered Features</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div class="inference-card" style="margin-bottom:0">
+                <div class="inf-num">1</div>
+                <div>
+                  <div class="inf-title">avg_rating — Overall Level</div>
+                  <div class="inf-body">Mean across all 5 years. Proxy for sustained performance quality.</div>
+                </div>
+              </div>
+              <div class="inference-card" style="margin-bottom:0">
+                <div class="inf-num">2</div>
+                <div>
+                  <div class="inf-title">rating_trend — Trajectory</div>
+                  <div class="inf-body">RTG25-26 minus RTG21-22. Positive = improving.</div>
+                </div>
+              </div>
+              <div class="inference-card" style="margin-bottom:0">
+                <div class="inf-num">3</div>
+                <div>
+                  <div class="inf-title">rating_consistency — Reliability</div>
+                  <div class="inf-body">Std dev across years. Low = reliable, consistent performer.</div>
+                </div>
+              </div>
+              <div class="inference-card" style="margin-bottom:0">
+                <div class="inf-num">4</div>
+                <div>
+                  <div class="inf-title">recency_weighted_rtg — Current State</div>
+                  <div class="inf-body">Weighted avg: recent years matter more (10/15/20/25/30%).</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="link-row animate-in delay-3">
+          <a href="/mnt/agents/upload/OLP_Scored_Model_FORMULAS.xlsx" class="btn btn-outline" title="Open Excel Scoring Model" target="_blank">📊 View OLP Scoring Model (Excel)</a>
+          <a href="/mnt/agents/upload/Jio_HR_Analytics_v2.html" class="btn btn-outline" title="Open Dashboard" target="_blank">📈 View Top Performer Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 7 — COMPOSITE SCORING FORMULA ═══════════ -->
+    <div class="slide" id="s7">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">05 — Methodology: Step 2</div>
+        <div class="slide-title">The Composite Score <span class="accent">Formula</span></div>
+        <div class="slide-subtitle">7 normalised scores combined into one 0–100 composite score using weighted methodology</div>
+
+        <div class="formula-box full-w animate-in" style="max-width:900px;margin-bottom:18px">
+          <div class="formula-label">Composite Score Formula</div>
+          <div class="formula-text" style="font-size:13px;line-height:2">
+            composite_score =<br/>
+            &nbsp;&nbsp;(score_avg_rating &nbsp;&nbsp;&nbsp;× <b>0.30</b>) +<br/>
+            &nbsp;&nbsp;(score_recency_rtg &nbsp;× <b>0.20</b>) +<br/>
+            &nbsp;&nbsp;(score_trend &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <b>0.15</b>) +<br/>
+            &nbsp;&nbsp;(score_consistency &nbsp;× <b>0.15</b>) +<br/>
+            &nbsp;&nbsp;(score_exp &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <b>0.10</b>) +<br/>
+            &nbsp;&nbsp;(score_promotion &nbsp;&nbsp;&nbsp;× <b>0.05</b>) +<br/>
+            &nbsp;&nbsp;(score_progression &nbsp;× <b>0.05</b>)
+          </div>
+        </div>
+
+        <div class="card full-w animate-in delay-1" style="max-width:900px;margin-bottom:18px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Weight Distribution (Animated)</div>
+          <div id="weight-bars">
+            <div class="weight-bar-row">
+              <div class="weight-label">📊 Avg Rating (Level)</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" data-w="30"></div></div>
+              <div class="weight-pct">30%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">⏰ Recency-Weighted Rating</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" data-w="20"></div></div>
+              <div class="weight-pct">20%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">📈 Rating Trend (Direction)</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" data-w="15"></div></div>
+              <div class="weight-pct">15%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🎯 Rating Consistency</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill" data-w="15"></div></div>
+              <div class="weight-pct">15%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🏢 Reliance Experience</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill gold" data-w="10"></div></div>
+              <div class="weight-pct" style="color:var(--gold)">10%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🏅 Promotion Flag</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill gold" data-w="5"></div></div>
+              <div class="weight-pct" style="color:var(--gold)">5%</div>
+            </div>
+            <div class="weight-bar-row">
+              <div class="weight-label">🎖 Progression Flag</div>
+              <div class="weight-bar-bg"><div class="weight-bar-fill gold" data-w="5"></div></div>
+              <div class="weight-pct" style="color:var(--gold)">5%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-3 animate-in delay-3" style="max-width:900px">
+          <div class="card" style="text-align:center;border-top:3px solid var(--jio-blue)">
+            <div style="font-size:24px;font-weight:700;color:var(--jio-blue);font-family:'Space Grotesk'">50%</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">Rating Level</div>
+            <div style="font-size:11px;color:var(--mid)">Avg + Recency-weighted. The strongest predictor of performance quality.</div>
+          </div>
+          <div class="card" style="text-align:center;border-top:3px solid var(--jio-teal)">
+            <div style="font-size:24px;font-weight:700;color:var(--jio-teal);font-family:'Space Grotesk'">30%</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">Trajectory</div>
+            <div style="font-size:11px;color:var(--mid)">Trend + Consistency. Direction and stability of performance over time.</div>
+          </div>
+          <div class="card" style="text-align:center;border-top:3px solid var(--gold)">
+            <div style="font-size:24px;font-weight:700;color:var(--gold);font-family:'Space Grotesk'">20%</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px">Validation</div>
+            <div style="font-size:11px;color:var(--mid)">Experience + Promotion + Progression. Confirmatory signals from the org.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 8 — TOP PERFORMER DASHBOARD ═══════════ -->
+    <div class="slide" id="s8">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">05 — Methodology: Step 3</div>
+        <div class="slide-title">Top Performer <span class="accent">Dashboard</span></div>
+        <div class="slide-subtitle">How 184 top performers were identified using the composite scoring model — and how they'll inform Phase 2</div>
+
+        <div class="card-grid cols-5" style="max-width:900px;margin-bottom:20px">
+          <div class="card animate-in" style="text-align:center">
+            <div class="stat-big" style="color:var(--gold);font-size:36px">⭐</div>
+            <div class="stat-label" style="font-weight:600">Star Performer</div>
+            <div style="font-size:11px;color:var(--gold);font-weight:600">85–100</div>
+          </div>
+          <div class="card animate-in delay-1" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-teal);font-size:36px">📈</div>
+            <div class="stat-label" style="font-weight:600">Exceeds</div>
+            <div style="font-size:11px;color:var(--jio-teal);font-weight:600">70–84</div>
+          </div>
+          <div class="card animate-in delay-2" style="text-align:center">
+            <div class="stat-big" style="color:var(--jio-blue);font-size:36px">✅</div>
+            <div class="stat-label" style="font-weight:600">Meets</div>
+            <div style="font-size:11px;color:var(--jio-blue);font-weight:600">55–69</div>
+          </div>
+          <div class="card animate-in delay-3" style="text-align:center">
+            <div class="stat-big" style="color:var(--light);font-size:36px">🌱</div>
+            <div class="stat-label" style="font-weight:600">Developing</div>
+            <div style="font-size:11px;color:var(--light);font-weight:600">40–54</div>
+          </div>
+          <div class="card animate-in delay-4" style="text-align:center">
+            <div class="stat-big" style="color:var(--accent);font-size:36px">⚠️</div>
+            <div class="stat-label" style="font-weight:600">Below</div>
+            <div style="font-size:11px;color:var(--accent);font-weight:600">0–39</div>
+          </div>
+        </div>
+
+        <div class="two-col" style="max-width:900px">
+          <div class="card animate-in">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Performance Tier Classification</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              • <b>Top 20%</b> (≥80th percentile) = <span class="tag green">is_top_performer = 1</span><br/>
+              • 5-tier system: Star → Exceeds → Meets → Developing → Below<br/>
+              • <b>184 employees</b> flagged as top performers<br/>
+              • Interview pool: 10–15 top + 5 average (contrast group)<br/>
+              • Stratified by grade tier and cohort for breadth
+            </div>
+          </div>
+          <div class="card animate-in delay-1">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Key Finding</div>
+            <div style="font-size:13px;color:var(--mid);line-height:1.7">
+              <b>A* and A+ rated employees have distinctly different performance fingerprints</b> from A-rated employees on ALL engineered metrics — not just the rating column. This validates that our multi-factor weighting approach is more robust than single-year ratings alone.
+            </div>
+            <div class="inf-arrow" style="margin-top:10px">→ Top performers identified via composite score is scientifically stronger</div>
+          </div>
+        </div>
+
+        <div class="link-row animate-in delay-3">
+          <a href="/mnt/agents/upload/Jio_HR_Analytics_v2.html" class="btn btn-primary" target="_blank">📈 Open Full Interactive Dashboard</a>
+          <a href="/mnt/agents/upload/OLP_Scored_Model_FORMULAS.xlsx" class="btn btn-gold" target="_blank">📊 Download Scoring Model (Excel)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 9 — COMPETENCY CHALLENGE ═══════════ -->
+    <div class="slide" id="s9">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">06 — The Competency Gap</div>
+        <div class="slide-title">What the Numbers <span class="accent">Cannot</span> Tell Us</div>
+        <div class="slide-subtitle">Our OLP composite score identifies WHO is a top performer — but it cannot explain WHY they excel</div>
+
+        <div class="card full-w animate-in" style="max-width:900px;margin-bottom:20px">
+          <div style="display:flex;gap:24px;align-items:center">
+            <div style="flex:1;text-align:center;padding:20px;border-radius:12px;background:linear-gradient(135deg,#f0f4ff,#e8f7ff)">
+              <div style="font-size:36px;margin-bottom:8px">📊</div>
+              <div style="font-size:14px;font-weight:600;color:var(--jio-deep)">What We Have</div>
+              <div style="font-size:12px;color:var(--mid);margin-top:8px;line-height:1.6">
+                Composite Score (0–100)<br/>
+                Based on 7 weighted variables<br/>
+                across 920 employees
+              </div>
+              <div class="pill-row" style="justify-content:center">
+                <span class="tag blue">Objective</span>
+                <span class="tag green">Quantitative</span>
+              </div>
+            </div>
+            <div style="font-size:32px;color:var(--jio-teal);font-weight:700">➔</div>
+            <div style="flex:1;text-align:center;padding:20px;border-radius:12px;background:linear-gradient(135deg,#fde8ea,#fff3dc)">
+              <div style="font-size:36px;margin-bottom:8px">❓</div>
+              <div style="font-size:14px;font-weight:600;color:var(--accent)">The Black Box</div>
+              <div style="font-size:12px;color:var(--mid);margin-top:8px;line-height:1.6">
+                We know WHO scores high<br/>
+                but not WHAT behaviors<br/>
+                produce those scores
+              </div>
+              <div class="pill-row" style="justify-content:center">
+                <span class="tag red">Behavior Gap</span>
+                <span class="tag gold">Missing</span>
+              </div>
+            </div>
+            <div style="font-size:32px;color:var(--jio-teal);font-weight:700">➔</div>
+            <div style="flex:1;text-align:center;padding:20px;border-radius:12px;background:linear-gradient(135deg,#e6f9ed,#e0f7ff)">
+              <div style="font-size:36px;margin-bottom:8px">🔓</div>
+              <div style="font-size:14px;font-weight:600;color:#1a8a3d">The Solution</div>
+              <div style="font-size:12px;color:var(--mid);margin-top:8px;line-height:1.6">
+                Structured behavioral research<br/>
+                to identify competency drivers<br/>
+                of top performance
+              </div>
+              <div class="pill-row" style="justify-content:center">
+                <span class="tag teal">STAR Interviews</span>
+                <span class="tag green">Survey</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-2 animate-in delay-2" style="max-width:900px">
+          <div class="card" style="border-left:4px solid var(--accent)">
+            <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:10px">❌ What's Missing in Current Data</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              ✗ No behavioral competency data<br/>
+              ✗ No competency mapping to roles<br/>
+              ✗ No hiring predictors for new candidates<br/>
+              ✗ No development targets by tier<br/>
+              ✗ No qualitative insight into "why A* gets A*"
+            </div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--green)">
+            <div style="font-size:13px;font-weight:600;color:#1a8a3d;margin-bottom:10px">✅ What Our Competency Study Delivers</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              ✓ STAR-format behavioral interviews<br/>
+              ✓ Self-assessment survey (50+ respondents)<br/>
+              ✓ Manager perspective interviews<br/>
+              ✓ Behavioral coding against Lominger 67<br/>
+              ✓ Validated, weighted competency model
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 10 — SURVEY METHODOLOGY ═══════════ -->
+    <div class="slide" id="s10">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">07 — Survey Design</div>
+        <div class="slide-title">All-Employee Behavioral <span class="accent">Survey</span></div>
+        <div class="slide-subtitle">Multi-format, multi-section survey designed to capture quantitative scores, belief mapping, scenarios, and qualitative narratives</div>
+
+        <div class="accordion open animate-in" style="max-width:900px">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-icon">A</div>
+            <span><b>Section A:</b> Behavioral Frequency Scale (40 items)</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body">
+            <b>40 items</b> across 10 competency domains, rated on a 5-point frequency scale (1=Rarely to 5=Almost Always). Each domain has 4 behavioral statements. Generates <b>quantitative per-item scores</b> for statistical comparison between top and average performers.
+            <div class="pill-row">
+              <span class="tag blue">Execution Excellence</span>
+              <span class="tag teal">Strategic Thinking</span>
+              <span class="tag green">Learning Agility</span>
+              <span class="tag gold">Collaboration</span>
+              <span class="tag blue">Problem Solving</span>
+              <span class="tag teal">Drive & Initiative</span>
+              <span class="tag green">People Leadership</span>
+              <span class="tag gold">Communication</span>
+              <span class="tag blue">Resilience</span>
+              <span class="tag teal">Customer Orientation</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion animate-in delay-1" style="max-width:900px">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-icon">B</div>
+            <span><b>Section B:</b> Success Belief Mapping (10 items)</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body">
+            Respondents rate how important each competency is for success in their role (1=Not Important to 5=Critical), plus forced ranking of top 3. This reveals the <b>mental model of success</b> — top performers may weight competencies differently than average performers, and that gap is itself a predictive signal.
+          </div>
+        </div>
+
+        <div class="accordion animate-in delay-1" style="max-width:900px">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-icon">C</div>
+            <span><b>Section C:</b> Behavioral Scenarios (8 scenarios)</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body">
+            8 realistic workplace scenarios with 4 answer options each. No right or wrong answers — choice patterns between top vs. average performers reveal <b>specific behavioral tendencies</b>. This bypasses social desirability bias present in self-rating scales.
+          </div>
+        </div>
+
+        <div class="accordion animate-in delay-2" style="max-width:900px">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-icon">D</div>
+            <span><b>Section D:</b> Open-Ended Reflections (5 questions)</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body">
+            Richest qualitative source. Covers achievements, challenges, self-differentiation, growth gaps, and advice to new colleagues. Responses are <b>coded for competency themes</b> — top performer narrative patterns directly become STAR interview question stems.
+          </div>
+        </div>
+
+        <div class="accordion animate-in delay-2" style="max-width:900px;margin-bottom:0">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <div class="accordion-icon">E</div>
+            <span><b>Section E:</b> Contextual Demographics (6 items)</span>
+            <span class="accordion-arrow">▼</span>
+          </div>
+          <div class="accordion-body">
+            Function, grade, tenure, team size, cross-functional frequency. Enables <b>statistical controls</b> — ensuring like-for-like comparison between top and average performers at the same grade and function.
+          </div>
+        </div>
+
+        <div style="margin-top:14px;font-size:12px;color:var(--mid);text-align:center" class="animate-in delay-3">
+          💡 <b>Core Design Principle:</b> Each competency is measured in at least two ways (frequency + scenario or frequency + open-ended), improving reliability and reducing bias.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════ SLIDE 11 — ANALYSIS ROADMAP ═══════════ -->
+    <div class="slide" id="s11">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">08 — Analysis Roadmap</div>
+        <div class="slide-title">From Raw Data to <span class="accent">Validated</span> Model</div>
+        <div class="slide-subtitle">6-step procedure for converting survey responses into a final competency model and interview question bank</div>
+
+        <div class="card full-w animate-in" style="max-width:900px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">Triangulation Scoring Matrix</div>
+            <span class="tag teal">Only competencies confirmed by 2+ sources enter the final model</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Competency</th>
+                <th style="text-align:center">Section A<br/>Stats</th>
+                <th style="text-align:center">Section B<br/>Belief Gap</th>
+                <th style="text-align:center">Section C<br/>Scenarios</th>
+                <th style="text-align:center">Section D<br/>Narratives</th>
+                <th style="text-align:center">Total<br/>Score</th>
+                <th style="text-align:center">Classification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Execution Excellence</b></td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--jio-blue)">12</td>
+                <td style="text-align:center"><span class="tag green">Core — Anchor</span></td>
+              </tr>
+              <tr>
+                <td><b>Drive & Initiative</b></td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--jio-blue)">11</td>
+                <td style="text-align:center"><span class="tag green">Core — Strong</span></td>
+              </tr>
+              <tr>
+                <td><b>Learning Agility</b></td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--jio-teal)">11</td>
+                <td style="text-align:center"><span class="tag green">Core — Strong</span></td>
+              </tr>
+              <tr>
+                <td><b>Problem Solving</b></td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--jio-teal)">9</td>
+                <td style="text-align:center"><span class="tag blue">Core — Strong</span></td>
+              </tr>
+              <tr>
+                <td><b>Collaboration</b></td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--green);font-weight:700">3</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--gold)">9</td>
+                <td style="text-align:center"><span class="tag blue">Core — Strong</span></td>
+              </tr>
+              <tr>
+                <td><b>Communication</b></td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--gold);font-weight:600">1</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;color:var(--jio-teal);font-weight:600">2</td>
+                <td style="text-align:center;font-family:'Space Grotesk';font-weight:700;color:var(--gold)">7</td>
+                <td style="text-align:center"><span class="tag gold">Supporting</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-grid cols-3 animate-in delay-2" style="max-width:900px">
+          <div class="card" style="text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">2–3</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Anchor Core Competencies</div>
+            <div style="font-size:11px;color:var(--mid);margin-top:4px">Highest weight in scoring model. 2+ STAR questions each.</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">3–4</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Strong Core Competencies</div>
+            <div style="font-size:11px;color:var(--mid);margin-top:4px">Standard weighting. 1 STAR question each.</div>
+          </div>
+          <div class="card" style="text-align:center">
+            <div style="font-size:28px;margin-bottom:8px">2–3</div>
+            <div style="font-size:12px;font-weight:600;color:var(--ink)">Supporting Competencies</div>
+            <div style="font-size:11px;color:var(--mid);margin-top:4px">Lower weighting. Probed but not anchored.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 12 — CHALLENGES ═══════════ -->
+    <div class="slide" id="s12">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">09 — Challenges</div>
+        <div class="slide-title">Challenges We Are <span class="accent">Facing</span></div>
+        <div class="slide-subtitle">Current blockers and constraints in building the behavioral competency framework</div>
+
+        <div class="card full-w animate-in" style="max-width:900px;margin-bottom:14px">
+          <div class="challenge-card" style="margin-bottom:12px">
+            <div class="ch-title">🔒 Limited Historical Competency Data from HR</div>
+            <div class="ch-body">
+              It is significantly more difficult to design a precise, validated behavioral questionnaire without access to the organization's historical competency data. Past performance reviews, prior assessment tools, and existing competency frameworks would provide the baseline behavioral language and validated indicators specific to Jio's culture. Without this historical reference, we are building the survey instrument from external frameworks (Lominger 67, SHL OPQ) and must validate relevance through interviews before survey deployment.
+            </div>
+            <span class="ch-tag" style="background:var(--pill-red);color:var(--accent)">Data Access</span>
+          </div>
+
+          <div class="challenge-card" style="margin-bottom:12px">
+            <div class="ch-title">🔍 Scarce Public Research on Performance Predictor Models</div>
+            <div class="ch-body">
+              Companies do not publish their performance predictor models on the internet. Academic literature covers competency theory extensively, but organization-specific implementation details — especially the correlation between behavioral survey scores and actual performance ratings — are treated as proprietary. This makes it difficult to find benchmark validation studies that compare survey-derived competency scores against 5-year OLP performance data. Our model must break new ground in this space.
+            </div>
+            <span class="ch-tag" style="background:var(--pill-gold);color:#b87800">Research Gap</span>
+          </div>
+
+          <div class="challenge-card" style="margin-bottom:12px">
+            <div class="ch-title">🧠 Understanding the Behavioral Side of Employees</div>
+            <div class="ch-body">
+              Behavioral data is inherently more complex and subjective than quantitative performance ratings. Designing questions that surface authentic behaviors — not socially desirable responses — requires careful scenario construction, multi-format validation, and pilot testing. The 18–30 month tenure window has been identified as the critical attrition trigger, yet understanding the behavioral patterns that lead to staying vs. leaving requires qualitative depth that quantitative OLP data alone cannot provide.
+            </div>
+            <span class="ch-tag" style="background:var(--pill-blue);color:var(--jio-blue)">Behavioral Complexity</span>
+          </div>
+
+          <div class="challenge-card solved" style="margin-bottom:0">
+            <div class="ch-title">✅ Mitigation: Multi-Source Triangulation Design</div>
+            <div class="ch-body">
+              To address these challenges, we have designed a <b>3-source triangulation method</b> — only competencies confirmed by 2 or more independent sources (Top Performer interviews + Average Performer interviews + Manager interviews) will enter the final model. This compensates for the lack of historical data by generating primary behavioral evidence directly from the current workforce. Inter-rater reliability target: ≥0.80 (Cohen's kappa).
+            </div>
+            <span class="ch-tag" style="background:var(--pill-green);color:#1a8a3d">Mitigated</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 13 — OUTCOMES ═══════════ -->
+    <div class="slide" id="s13">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">10 — Proposed Outcomes</div>
+        <div class="slide-title">What This Project Will <span class="accent">Deliver</span></div>
+        <div class="slide-subtitle">Based on project charter commitments and Bharat's direction for a Success Profile Analytics framework</div>
+
+        <div class="two-col" style="max-width:900px">
+          <div>
+            <div class="deliverable-item animate-in">
+              <span class="del-check">📋</span>
+              <span class="del-text"><b>Stakeholder Interview / Survey Summary Report</b></span>
+              <span class="del-date">Jul 15–20</span>
+            </div>
+            <div class="deliverable-item animate-in delay-1">
+              <span class="del-check">📊</span>
+              <span class="del-text"><b>Performance Predictor Scoring Framework</b> (Excel-based)</span>
+              <span class="del-date">Jul 20–25</span>
+            </div>
+            <div class="deliverable-item animate-in delay-1">
+              <span class="del-check">📚</span>
+              <span class="del-text"><b>Competency & Literature Review Document</b> (3–5 frameworks)</span>
+              <span class="del-date">Jul 18–22</span>
+            </div>
+            <div class="deliverable-item animate-in delay-2">
+              <span class="del-check">🖥️</span>
+              <span class="del-text"><b>Visual HR Dashboard / Infographic</b> (Interactive HTML)</span>
+              <span class="del-date">Jul 22–28</span>
+            </div>
+            <div class="deliverable-item animate-in delay-2">
+              <span class="del-check">🗂️</span>
+              <span class="del-text"><b>Cleaned HR Dataset + EDA Report</b></span>
+              <span class="del-date">✅ Done</span>
+            </div>
+          </div>
+          <div>
+            <div class="deliverable-item animate-in delay-1">
+              <span class="del-check">📄</span>
+              <span class="del-text"><b>Success Profile Templates</b> (HR Manager + HRBP roles)</span>
+              <span class="del-date">Jul 25–30</span>
+            </div>
+            <div class="deliverable-item animate-in delay-2">
+              <span class="del-check">📝</span>
+              <span class="del-text"><b>Final Project Report</b> (Methodology + Findings)</span>
+              <span class="del-date">Jul 28–31</span>
+            </div>
+            <div class="deliverable-item animate-in delay-2">
+              <span class="del-check">🎯</span>
+              <span class="del-text"><b>Final Presentation Deck</b> (15–20 slides for HR Head)</span>
+              <span class="del-date" style="color:var(--accent);font-weight:700">Jul 3 (Bharat)</span>
+            </div>
+            <div class="deliverable-item animate-in delay-3">
+              <span class="del-check">🔮</span>
+              <span class="del-text"><b>Behavioral Interview Guide</b> (STAR-format, ready-to-use)</span>
+              <span class="del-date">Jul 15–20</span>
+            </div>
+            <div class="deliverable-item animate-in delay-3">
+              <span class="del-check">📋</span>
+              <span class="del-text"><b>Self-Assessment Survey Tool</b> (Reusable instrument)</span>
+              <span class="del-date">Jul 10–15</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card full-w animate-in delay-4" style="max-width:900px;margin-top:16px;background:linear-gradient(135deg,#f0f4ff,#e8f7ff);border-color:#c5d8f8">
+          <div style="text-align:center">
+            <div style="font-size:14px;font-weight:600;color:var(--jio-deep);margin-bottom:8px">🔄 The Closed-Loop Talent System</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              <b>OLP Data</b> (Identify top performers) → <b>Competency Study</b> (Understand what drives success) → <b>Success Profile</b> (Hire & develop to the model) → <b>Higher Performance</b> (More top performers emerge) → <b>Revalidate</b> (Continuous improvement)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 14 — KPIs ═══════════ -->
+    <div class="slide" id="s14">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">11 — KPIs & Success Metrics</div>
+        <div class="slide-title">How We'll Measure <span class="accent">Success</span></div>
+        <div class="slide-subtitle">Key performance indicators and validation criteria for the final deliverables</div>
+
+        <div class="card-grid cols-3" style="max-width:900px;margin-bottom:20px">
+          <div class="kpi-card animate-in">
+            <div class="kpi-icon">📊</div>
+            <div class="kpi-name">Model Accuracy</div>
+            <div class="kpi-desc">Competency survey scores must correlate with OLP composite scores at <b>r ≥ 0.50</b> for the model to have predictive validity.</div>
+          </div>
+          <div class="kpi-card animate-in delay-1">
+            <div class="kpi-icon">🎯</div>
+            <div class="kpi-name">Survey Response Rate</div>
+            <div class="kpi-desc">Target <b>≥60% response rate</b> across all functions. Below 50% triggers alternative distribution channels.</div>
+          </div>
+          <div class="kpi-card animate-in delay-2">
+            <div class="kpi-icon">✅</div>
+            <div class="kpi-name">Inter-Rater Reliability</div>
+            <div class="kpi-desc">Two independent coders must achieve <b>Cohen's kappa ≥ 0.80</b> on 20% of interview transcripts.</div>
+          </div>
+          <div class="kpi-card animate-in delay-1">
+            <div class="kpi-icon">🔬</div>
+            <div class="kpi-name">Statistical Significance</div>
+            <div class="kpi-desc">Mann-Whitney U test: <b>p &lt; 0.05 AND effect size r &gt; 0.30</b> for competency items to qualify as differentiators.</div>
+          </div>
+          <div class="kpi-card animate-in delay-2">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-name">Cronbach's Alpha</div>
+            <div class="kpi-desc">Internal consistency of each competency domain must exceed <b>α &gt; 0.70</b> for survey validation.</div>
+          </div>
+          <div class="kpi-card animate-in delay-3">
+            <div class="kpi-icon">🗣️</div>
+            <div class="kpi-name">Interview Coverage</div>
+            <div class="kpi-desc">Minimum <b>13–18 interviews</b> completed (10–15 top performers + 5 average contrast group) across ≥3 functions.</div>
+          </div>
+        </div>
+
+        <div class="card full-w animate-in delay-3" style="max-width:900px">
+          <div style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:14px">Validation Tests for Competencies</div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Test</th><th>How Applied</th><th>Pass Criteria</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>Frequency Test</b></td><td>Compare mention rates top vs. average performers</td><td>≥30% difference</td></tr>
+              <tr><td><b>Specificity Test</b></td><td>Behaviors described with concrete actions</td><td>"I did X" not "I am good at X"</td></tr>
+              <tr><td><b>Consistency Test</b></td><td>Competency appears across ≥2 survey sections</td><td>Yes — triangulation rule</td></tr>
+              <tr><td><b>Predictive Test</b></td><td>"Would this predict high performance?"</td><td>Unanimous mentor agreement</td></tr>
+              <tr><td><b>Measurability Test</b></td><td>Can be observed in structured interview</td><td>Clear STAR question possible</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 15 — NEXT STEPS ═══════════ -->
+    <div class="slide" id="s15">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">12 — Next Steps</div>
+        <div class="slide-title">What Happens <span class="accent">Next</span></div>
+        <div class="slide-subtitle">Immediate action items for Week 4–5 (June 21 – July 4, 2026)</div>
+
+        <div class="process-step animate-in" style="max-width:900px;margin-bottom:24px">
+          <div class="pstep">
+            <div class="pstep-icon" style="background:linear-gradient(135deg,var(--jio-blue),var(--jio-teal));animation:pulse 2s infinite">1</div>
+            <div class="pstep-num">THIS WEEK</div>
+            <div class="pstep-name">Pull Interview<br/>Shortlist</div>
+            <div class="pstep-desc">Export from master dataset, stratify by grade & cohort</div>
+          </div>
+          <div class="pstep-arrow">→</div>
+          <div class="pstep">
+            <div class="pstep-icon">2</div>
+            <div class="pstep-num">WEEK 4</div>
+            <div class="pstep-name">Pilot 2<br/>Interviews</div>
+            <div class="pstep-desc">STAR-format, test interview guide, refine questions</div>
+          </div>
+          <div class="pstep-arrow">→</div>
+          <div class="pstep">
+            <div class="pstep-icon">3</div>
+            <div class="pstep-num">WEEK 5</div>
+            <div class="pstep-name">Complete 6–8<br/>Interviews</div>
+            <div class="pstep-desc">Begin qualitative coding, share themes at check-in</div>
+          </div>
+          <div class="pstep-arrow">→</div>
+          <div class="pstep">
+            <div class="pstep-icon">4</div>
+            <div class="pstep-num">WEEK 5–6</div>
+            <div class="pstep-name">Design & Pilot<br/>Survey</div>
+            <div class="pstep-desc">Competency survey, 5 employees pilot, refine</div>
+          </div>
+        </div>
+
+        <div class="card-grid cols-2 animate-in delay-2" style="max-width:900px">
+          <div class="card" style="border-left:4px solid var(--jio-blue)">
+            <div style="font-size:13px;font-weight:600;color:var(--jio-blue);margin-bottom:10px">📋 Decisions Needed from Mentor</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              1. Interview access — direct manager contact or employee direct?<br/>
+              2. Interview format — in-person or Teams/video?<br/>
+              3. Contrast group comfort — including average performers?<br/>
+              4. Survey distribution channel — ZingHR, email, or Google Forms?<br/>
+              5. Role scope — separate profiles for HR Manager vs HRBP?
+            </div>
+          </div>
+          <div class="card" style="border-left:4px solid var(--green)">
+            <div style="font-size:13px;font-weight:600;color:#1a8a3d;margin-bottom:10px">✅ Immediate Deliverables Ready</div>
+            <div style="font-size:12px;color:var(--mid);line-height:1.8">
+              ✅ Revised employee database format<br/>
+              ✅ Top performer / A+ analysis draft<br/>
+              ✅ Survey questionnaire (this deck)<br/>
+              ✅ Role-wise competency framework draft<br/>
+              ✅ Psychometric assessment proposal<br/>
+              ✅ Human bias mitigation checklist
+            </div>
+          </div>
+        </div>
+
+        <div class="link-row animate-in delay-3">
+          <a href="/mnt/agents/upload/Behavioral_Survey_Complete_Design_Guide.docx" class="btn btn-outline" target="_blank">📄 View Complete Survey Design Guide</a>
+          <a href="/mnt/agents/upload/Competency%20Identification%20Toolkit.pptx" class="btn btn-outline" target="_blank">🧰 View Competency Toolkit</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 16 — THREE-LAYER ARCHITECTURE ═══════════ -->
+    <div class="slide" id="s16">
+      <div class="slide-inner">
+        <div class="slide-eyebrow">13 — Model Architecture</div>
+        <div class="slide-title">Three-Layer <span class="accent">Measurement</span> System</div>
+        <div class="slide-subtitle">How interview scores, survey scores, and HR data validation work together to predict performance</div>
+
+        <div class="card full-w animate-in" style="max-width:900px;margin-bottom:20px">
+          <div style="display:flex;gap:16px;align-items:stretch">
+            <div style="flex:1;background:linear-gradient(135deg,#f0f4ff,#e8f7ff);border-radius:12px;padding:20px;text-align:center;border:1px solid #c5d8f8">
+              <div style="font-size:32px;margin-bottom:8px">🗣️</div>
+              <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--jio-blue);margin-bottom:6px">Layer 1 — Interview Score</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.6;margin-bottom:8px">
+                Structured competency interview<br/>
+                STAR format, 5-point rubric<br/>
+                <b>Primary predictor</b>
+              </div>
+              <span class="tag blue">Behavioral Evidence</span>
+            </div>
+            <div style="display:flex;align-items:center;font-size:24px;color:var(--jio-teal);font-weight:700">+</div>
+            <div style="flex:1;background:linear-gradient(135deg,#e0f7ff,#e6f9ed);border-radius:12px;padding:20px;text-align:center;border:1px solid #b8e8d8">
+              <div style="font-size:32px;margin-bottom:8px">📋</div>
+              <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--jio-teal);margin-bottom:6px">Layer 2 — Survey Score</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.6;margin-bottom:8px">
+                Competency survey<br/>
+                Self + 360 manager rating<br/>
+                <b>Secondary predictor</b>
+              </div>
+              <span class="tag teal">Self-Perception</span>
+            </div>
+            <div style="display:flex;align-items:center;font-size:24px;color:var(--jio-teal);font-weight:700">+</div>
+            <div style="flex:1;background:linear-gradient(135deg,#fff3dc,#fde8ea);border-radius:12px;padding:20px;text-align:center;border:1px solid #f0d0a0">
+              <div style="font-size:32px;margin-bottom:8px">✅</div>
+              <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b87800;margin-bottom:6px">Layer 3 — HR Data</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.6;margin-bottom:8px">
+                OLP ratings, promotion history<br/>
+                Progression data<br/>
+                <b>Validation only</b>
+              </div>
+              <span class="tag gold">Objective Check</span>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--mid)">
+            <b>Success Score</b> = Interview Score per Competency + Survey Score per Competency + HR Data Validation = Likelihood of Success
+          </div>
+        </div>
+
+        <div class="card full-w animate-in delay-2" style="max-width:900px;background:linear-gradient(135deg,#e6f9ed,#e0f7ff);border-color:#b8e8d8">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-size:28px">💡</div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#1a8a3d;margin-bottom:4px">Key Design Principle</div>
+              <div style="font-size:12px;color:var(--mid);line-height:1.6">
+                HR data is used <b>exclusively for validation, NOT as a direct input</b> to the predictor score. This design preserves the framework's applicability to <b>new hires</b> who do not yet have internal HR performance history. The model predicts from competencies, not from past ratings.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SLIDE 17 — THANK YOU ═══════════ -->
+    <div class="slide" id="s17">
+      <div class="slide-inner" style="align-items:center;justify-content:center;height:100%;text-align:center">
+        <div class="cover-brand animate-in">
+          <div class="cover-logo">J</div>
+          <div class="cover-brand-text">
+            <div class="cover-brand-main">Jio Platforms Ltd</div>
+            <div class="cover-brand-sub">HR Analytics · Success Profile Project</div>
+          </div>
+        </div>
+
+        <div class="cover-title-big animate-in delay-1" style="font-size:clamp(32px,5vw,56px)">
+          Thank You<br/>
+          <span style="color:var(--jio-blue)">Open for Questions</span>
+        </div>
+        <div class="cover-divider animate-in delay-2"></div>
+        <div class="slide-subtitle animate-in delay-2" style="max-width:600px">
+          Performance Predictor & Success Profile Analysis<br/>
+          Moving from intuition-based talent decisions to data-driven performance prediction
+        </div>
+
+        <div class="meta-pills animate-in delay-3">
+          <span class="tag blue">📊 Phase 1: Complete</span>
+          <span class="tag teal">🔄 Phase 2: In Progress</span>
+          <span class="tag gold">📅 Final: July 31, 2026</span>
+        </div>
+
+        <div style="margin-top:32px" class="animate-in delay-4">
+          <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px">Vivek Kumar Kohli · HR Analytics Intern</div>
+          <div style="font-size:12px;color:var(--mid);line-height:1.8">
+            <b>Mentor:</b> Ms. Anisha Sharma · <b>Sponsor:</b> Mr. Bharat Bhushan · <b>Guide:</b> Ms. Arya Khamparia<br/>
+            m2025anl036@stud.tiss.ac.in · +91-7351063525
+          </div>
+        </div>
+
+        <div class="link-row animate-in delay-4">
+          <a href="/mnt/agents/upload/Jio_HR_Analytics_v2.html" class="btn btn-primary" target="_blank">📈 Open Dashboard</a>
+          <a href="/mnt/agents/upload/OLP_Scored_Model_FORMULAS.xlsx" class="btn btn-gold" target="_blank">📊 Open Excel Model</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
+  <div id="bottomnav">
+    <button class="nav-btn secondary" id="btn-prev" onclick="goTo(current-1)">
+      ◀ Previous
+    </button>
+    <div class="dot-nav" id="dot-nav"></div>
+    <button class="nav-btn primary" id="btn-next" onclick="goTo(current+1)">
+      Next ▶
+    </button>
+  </div>
+
+</div>
+
+<!-- ═══════════ SCRIPTS ═══════════ -->
+<script>
+  /* ── Slide management ── */
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+
+  const dotNav = document.getElementById('dot-nav');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotNav.appendChild(dot);
+  }
+
+  function goTo(index) {
+    if (index < 0 || index >= totalSlides) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit-left');
+    current = index;
+    slides[current].classList.remove('exit-left');
+    slides[current].classList.add('active');
+
+    // Update dots
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+
+    // Update progress bar
+    const pct = ((current + 1) / totalSlides) * 100;
+    document.getElementById('progress-bar-fill').style.width = pct + '%';
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + totalSlides;
+
+    // Update buttons
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === totalSlides - 1;
+
+    // Animate weight bars on slide 7 (index 6)
+    if (current === 6) {
+      setTimeout(() => {
+        document.querySelectorAll('.weight-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.w + '%';
+        });
+      }, 300);
+    } else {
+      document.querySelectorAll('.weight-bar-fill').forEach(bar => {
+        bar.style.width = '0%';
+      });
+    }
+
+    // Animate timeline progress on slide 4 (index 3)
+    const tl = document.getElementById('timeline-progress');
+    if (tl) {
+      if (current === 3) {
+        setTimeout(() => { tl.style.width = '38%'; }, 300);
+      } else {
+        tl.style.width = '0%';
+      }
+    }
+  }
+
+  /* ── Keyboard navigation ── */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); goTo(current + 1);
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); goTo(current - 1);
+    }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(totalSlides - 1); }
+  });
+
+  /* ── Accordion ── */
+  function toggleAccordion(header) {
+    const acc = header.parentElement;
+    acc.classList.toggle('open');
+  }
+
+  /* ── Particle background ── */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let W, H;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.r = Math.random() * 2 + 0.5;
+      this.alpha = Math.random() * 0.3 + 0.1;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,180,216,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => { p.update(); p.draw(); });
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(0,180,216,${0.08 * (1 - dist / 150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  /* ── Init ── */
+  goTo(0);
+</script>
+
+</body>
+</html>

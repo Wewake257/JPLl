@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Model – Interactive Explainer</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Mermaid -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <!-- MathJax -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* ... (styles unchanged for brevity, but keep everything from previous version) ... */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+            color: #0f172a;
+        }
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            padding: 30px 35px;
+        }
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0 30px 0;
+            position: relative;
+            background: #f8fafc;
+            padding: 16px 24px;
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #94a3b8;
+            transition: 0.3s;
+            cursor: default;
+            font-size: 0.9rem;
+        }
+        .step-item.active { color: #1e293b; }
+        .step-item.done { color: #3b82f6; }
+        .step-num {
+            background: #e2e8f0;
+            border-radius: 40px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+        .step-item.active .step-num { background: #3b82f6; color: white; }
+        .step-item.done .step-num { background: #3b82f6; color: white; }
+        .tooltip-trigger {
+            border-bottom: 1px dashed #94a3b8;
+            cursor: help;
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-trigger .tooltip-text {
+            visibility: hidden;
+            width: 280px;
+            background: #1e293b;
+            color: #f1f5f9;
+            text-align: left;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 400;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            position: absolute;
+            z-index: 100;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: 0.2s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            pointer-events: none;
+        }
+        .tooltip-trigger:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip-trigger .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-color: #1e293b transparent transparent transparent;
+            border-style: solid;
+        }
+        h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .subhead { color: #475569; font-size: 1.05rem; margin-bottom: 1.8rem; border-left: 4px solid #3b82f6; padding-left: 16px; background: #f8fafc; border-radius: 0 8px 8px 0; line-height: 1.6; }
+        h2 { font-size: 1.7rem; margin: 2.2rem 0 1rem 0; font-weight: 700; color: #0f172a; border-bottom: 3px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; margin: 1.5rem 0 0.6rem 0; font-weight: 600; color: #1e293b; }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 20px 24px;
+            margin: 16px 0;
+            border: 1px solid #e9edf2;
+            transition: 0.2s;
+        }
+        .card-highlight { border-left: 6px solid #3b82f6; background: #f8fafc; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+        .tag {
+            background: #dbeafe; color: #1e40af; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px; display: inline-block;
+        }
+        .badge-tier {
+            padding: 4px 14px; border-radius: 40px; font-weight: 700; font-size: 0.85rem;
+        }
+        .badge-star { background: #fef3c7; color: #b45309; }
+        .badge-exceeds { background: #d1fae5; color: #065f46; }
+        .badge-meets { background: #dbeafe; color: #1e40af; }
+        .badge-developing { background: #fef3c7; color: #92400e; }
+        .badge-below { background: #fee2e2; color: #991b1b; }
+        .formula-box {
+            background: #f1f5f9; border-radius: 10px; padding: 14px 18px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            margin: 10px 0; overflow-x: auto; border: 1px solid #d1d9e6;
+        }
+        .trace-box {
+            background: #fefce8; border: 1px solid #fde68a; border-radius: 10px;
+            padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            margin: 8px 0; line-height: 1.9;
+        }
+        .chart-container { position: relative; height: 260px; margin: 16px 0; }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+            flex-wrap: wrap;
+        }
+        .slider-container label { min-width: 110px; font-weight: 500; font-size: 0.9rem; }
+        .slider-container input[type="range"] { flex: 1; min-width: 120px; }
+        .slider-container .val { font-weight: 700; color: #0f172a; min-width: 40px; text-align: right; }
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-reset {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 30px;
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .btn-reset:hover { background: #cbd5e1; color: #0f172a; }
+        .glossary {
+            background: #f1f5f9; border-radius: 12px; padding: 16px 20px; max-height: 300px; overflow-y: auto;
+            margin: 12px 0; border: 1px solid #e2e8f0;
+        }
+        .glossary dt { font-weight: 700; color: #0f172a; margin-top: 6px; }
+        .glossary dd { margin-left: 20px; color: #475569; font-size: 0.9rem; }
+        .expandable-row { cursor: pointer; transition: 0.2s; }
+        .expandable-row:hover { background: #f1f5f9; }
+        .expand-detail { display: none; padding: 12px 16px; background: #f8fafc; border-radius: 8px; margin: 4px 0; }
+        .guide-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.7);
+            z-index: 999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+        }
+        .guide-box {
+            background: white; max-width: 500px; padding: 30px; border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .guide-box h3 { margin-top: 0; }
+        .guide-box .btn-group { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-end; }
+        .btn {
+            padding: 8px 20px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #475569; }
+        .btn-outline:hover { background: #f1f5f9; }
+        .highlight-section {
+            animation: pulse-border 1.2s ease-in-out 2;
+            border: 2px solid #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.2);
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
+            100% { box-shadow: 0 0 0 8px rgba(59,130,246,0); }
+        }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .container { padding: 16px; }
+            .stepper { flex-direction: column; gap: 8px; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- HEADER & STEpper -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+        <div>
+            <h1>📊 Performance Model · Interactive</h1>
+            <div class="subhead">Complete logic, step‑by‑step trace, and real‑time simulations for the rating model.</div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="startTour()">🚀 Start Tour</button>
+            <button class="btn btn-outline" onclick="location.reload()">🔄 Refresh Page</button>
+            <button class="btn btn-outline" onclick="resetAll()">↺ Reset All</button>
+            <button class="btn btn-outline" onclick="window.print()">🖨️ Export Report</button>
+        </div>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+        <div class="step-item active" data-step="1"><span class="step-num">1</span> Inputs</div>
+        <div class="step-item" data-step="2"><span class="step-num">2</span> Mapping</div>
+        <div class="step-item" data-step="3"><span class="step-num">3</span> Aggregates</div>
+        <div class="step-item" data-step="4"><span class="step-num">4</span> Normalize</div>
+        <div class="step-item" data-step="5"><span class="step-num">5</span> Composite</div>
+        <div class="step-item" data-step="6"><span class="step-num">6</span> Tiers</div>
+    </div>
+
+    <!-- Employee Selector & What-If -->
+    <div class="card" id="step-inputs">
+        <div class="grid-2">
+            <div>
+                <h3>👤 Select Employee</h3>
+                <select id="employeeSelect" onchange="updateAll()" style="width:100%; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:1rem; background:white;"></select>
+                <div style="margin-top:12px; display:flex; gap:20px; flex-wrap:wrap;">
+                    <div><span class="tag">Grade</span> <span id="empGrade">—</span></div>
+                    <div><span class="tag">Experience</span> <span id="empExp">—</span> yrs</div>
+                    <div><span class="tag">Promotion</span> <span id="empPromo">—</span></div>
+                    <div><span class="tag">Progression</span> <span id="empProg">—</span></div>
+                </div>
+            </div>
+            <div>
+                <h3>⚡ What‑If Simulator</h3>
+                <div class="slider-container">
+                    <label>RTG25‑26 (latest)</label>
+                    <input type="range" id="whatifSlider" min="1" max="4" step="1" value="4" oninput="updateAll()">
+                    <span class="val" id="whatifVal">A*</span>
+                    <button class="btn-reset" onclick="document.getElementById('whatifSlider').value=4; updateAll();">↺</button>
+                </div>
+                <p style="font-size:0.85rem; color:#64748b; margin-top:4px;">Slide to change the latest rating and see the impact on composite score &amp; tier.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glossary -->
+    <details style="margin: 10px 0;">
+        <summary style="font-weight:700; cursor:pointer; font-size:1.1rem;">📖 Glossary of All Metrics</summary>
+        <div class="glossary">
+            <dl>
+                <dt><span class="tooltip-trigger">RTG21‑22 … RTG25‑26 <span class="tooltip-text">Raw letter ratings from performance reviews.</span></span></dt>
+                <dd>Raw performance ratings (A*, A+, A, etc.) for 5 years.</dd>
+                <dt><span class="tooltip-trigger">avg_rating <span class="tooltip-text">Average of numeric ratings.</span></span></dt>
+                <dd>Simple average of the 5 numeric ratings.</dd>
+                <dt><span class="tooltip-trigger">rating_trend <span class="tooltip-text">Latest – First year.</span></span></dt>
+                <dd>Change in performance from first to last year.</dd>
+                <dt><span class="tooltip-trigger">rating_consistency <span class="tooltip-text">Standard deviation of ratings.</span></span></dt>
+                <dd>Stability of performance; lower is better.</dd>
+                <dt><span class="tooltip-trigger">recency_weighted_rtg <span class="tooltip-text">Weighted average giving more importance to recent years.</span></span></dt>
+                <dd>Weighted sum of ratings (latest year gets highest weight).</dd>
+                <dt><span class="tooltip-trigger">score_* <span class="tooltip-text">Min‑max normalized to 0‑100 across all employees.</span></span></dt>
+                <dd>Normalised versions of key metrics, enabling fair combination.</dd>
+                <dt><span class="tooltip-trigger">composite_score <span class="tooltip-text">Weighted sum of all normalized scores.</span></span></dt>
+                <dd>Single number summarising overall performance.</dd>
+                <dt><span class="tooltip-trigger">performance_tier <span class="tooltip-text">Categorical label based on composite score thresholds.</span></span></dt>
+                <dd>Star Performer, Exceeds, Meets, Developing, Below Expectation.</dd>
+            </dl>
+        </div>
+    </details>
+
+    <!-- 1️⃣ Rating Mapping -->
+    <h2 id="step-mapping">1️⃣ Rating Mapping</h2>
+    <div class="card">
+        <p>Letter ratings are converted to numeric values via a lookup table.</p>
+        <div class="formula-box">
+            <strong>Mapping:</strong> A* = 4, A+ = 3, A = 2, B = 1 (and others).
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:20px;">
+            <div>
+                <div><span class="tag">Raw Ratings</span> <span id="dispRaw">—</span></div>
+                <div style="margin-top:6px;"><span class="tag">Numeric</span> <span id="dispNum">—</span></div>
+            </div>
+            <div><canvas id="ratingBarChart" style="height:160px; width:300px;"></canvas></div>
+        </div>
+    </div>
+
+    <!-- 2️⃣ Aggregate Metrics -->
+    <h2 id="step-aggregates">2️⃣ Aggregate Metrics</h2>
+    <div class="grid-3">
+        <div class="card"><h4>📊 Average</h4><div id="aggAvg" class="formula-box">—</div></div>
+        <div class="card"><h4>📈 Trend</h4><div id="aggTrend" class="formula-box">—</div></div>
+        <div class="card"><h4>🎯 Consistency</h4><div id="aggCons" class="formula-box">—</div></div>
+        <div class="card"><h4>📅 Recency‑Weighted</h4><div id="aggRec" class="formula-box">—</div></div>
+    </div>
+
+    <!-- 3️⃣ Normalization -->
+    <h2 id="step-normalize">3️⃣ Normalization (Min‑Max)</h2>
+    <div class="card">
+        <p>Each metric is scaled to a 0‑100 range using global min/max across the dataset.</p>
+        <div class="grid-2">
+            <div>
+                <span class="tag">Raw vs Normalised</span>
+                <div class="chart-container" style="height:200px;"><canvas id="normChart"></canvas></div>
+            </div>
+            <div>
+                <span class="tag">Formulas &amp; Values</span>
+                <div id="normTrace" class="trace-box">Select an employee to see the trace.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4️⃣ Composite Score with Weight Sliders -->
+    <h2 id="step-composite">4️⃣ Composite Score (Adjustable Weights)</h2>
+    <div class="card card-highlight">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <p>Drag the sliders to adjust the importance of each component. The composite score updates instantly.</p>
+            <button class="btn-reset" onclick="resetWeights()">↺ Reset Weights</button>
+        </div>
+        <div class="grid-2">
+            <div>
+                <div class="slider-container"><label>Avg Rating</label><input type="range" id="w1" min="0" max="0.5" step="0.01" value="0.25" oninput="updateAll()"><span class="val" id="w1v">0.25</span></div>
+                <div class="slider-container"><label>Trend</label><input type="range" id="w2" min="0" max="0.5" step="0.01" value="0.15" oninput="updateAll()"><span class="val" id="w2v">0.15</span></div>
+                <div class="slider-container"><label>Consistency</label><input type="range" id="w3" min="0" max="0.5" step="0.01" value="0.10" oninput="updateAll()"><span class="val" id="w3v">0.10</span></div>
+                <div class="slider-container"><label>Experience</label><input type="range" id="w4" min="0" max="0.5" step="0.01" value="0.10" oninput="updateAll()"><span class="val" id="w4v">0.10</span></div>
+                <div class="slider-container"><label>Recency</label><input type="range" id="w5" min="0" max="0.5" step="0.01" value="0.25" oninput="updateAll()"><span class="val" id="w5v">0.25</span></div>
+                <div class="slider-container"><label>Promotion</label><input type="range" id="w6" min="0" max="0.5" step="0.01" value="0.10" oninput="updateAll()"><span class="val" id="w6v">0.10</span></div>
+                <div class="slider-container"><label>Progression</label><input type="range" id="w7" min="0" max="0.5" step="0.01" value="0.05" oninput="updateAll()"><span class="val" id="w7v">0.05</span></div>
+                <div style="margin-top:10px; font-weight:600;">Sum of weights = <span id="weightSum">1.00</span></div>
+            </div>
+            <div>
+                <div style="background:#f1f5f9; border-radius:12px; padding:16px; text-align:center;">
+                    <div style="font-size:2.8rem; font-weight:800; color:#0f172a;" id="compositeDisplay">—</div>
+                    <div style="font-size:1.2rem; font-weight:600; margin-top:6px;"><span id="tierDisplay" class="badge-tier">—</span></div>
+                    <div style="margin-top:12px; font-size:0.9rem; color:#475569;">
+                        <span class="tag">Formula</span> <span id="compositeFormula">Σ (score × weight)</span>
+                    </div>
+                </div>
+                <div class="trace-box" id="compositeTrace">Calculation trace will appear here.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5️⃣ Performance Tiers -->
+    <h2 id="step-tiers">5️⃣ Performance Tiers (Adjustable)</h2>
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <p>Drag thresholds to redefine what “Star Performer”, “Exceeds”, etc. mean. The histogram updates dynamically.</p>
+            <button class="btn-reset" onclick="resetThresholds()">↺ Reset Thresholds</button>
+        </div>
+        <div class="grid-2">
+            <div>
+                <div class="slider-container"><label>Star Performer ≥</label><input type="range" id="tStar" min="70" max="95" value="90" oninput="updateAll()"><span class="val" id="tStarV">90</span></div>
+                <div class="slider-container"><label>Exceeds ≥</label><input type="range" id="tExceeds" min="60" max="89" value="75" oninput="updateAll()"><span class="val" id="tExceedsV">75</span></div>
+                <div class="slider-container"><label>Meets ≥</label><input type="range" id="tMeets" min="40" max="74" value="60" oninput="updateAll()"><span class="val" id="tMeetsV">60</span></div>
+                <div class="slider-container"><label>Developing ≥</label><input type="range" id="tDeveloping" min="20" max="59" value="40" oninput="updateAll()"><span class="val" id="tDevelopingV">40</span></div>
+                <div style="margin-top:12px;"><span class="tag">Current Employee Tier</span> <span id="currentTierBadge" class="badge-tier">—</span></div>
+            </div>
+            <div>
+                <span class="tag">Distribution of all employees</span>
+                <div class="chart-container" style="height:200px;"><canvas id="histogramChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dependency Graph -->
+    <h2>🔗 Dependency Graph (Column Lineage)</h2>
+    <div class="card">
+        <div class="mermaid" style="background:white;">
+            graph TD
+            A[RTG21-22] --> B[RTG_num]
+            C[RTG22-23] --> B
+            D[RTG23-24] --> B
+            E[RTG24-25] --> B
+            F[RTG25-26] --> B
+            B --> G[avg_rating]
+            B --> H[rating_trend]
+            B --> I[rating_consistency]
+            B --> J[recency_weighted_rtg]
+            K[Experience] --> L[score_exp]
+            M[Promotion] --> N[score_promotion]
+            O[Progression] --> P[score_progression]
+            G --> Q[score_avg_rating]
+            H --> R[score_trend]
+            I --> S[score_consistency]
+            J --> T[score_recency_rtg]
+            Q --> U[Composite Score]
+            R --> U
+            S --> U
+            T --> U
+            L --> U
+            N --> U
+            P --> U
+            U --> V[Performance Tier]
+            U --> W[Top Performer]
+        </div>
+        <p style="text-align:center;color:#475569;font-size:0.9rem;">Click a node in the diagram to see its definition (mental simulation).</p>
+    </div>
+
+    <!-- Sample Data -->
+    <h2>📋 Sample Data (Expand for Trace)</h2>
+    <div class="card">
+        <p>Click any row to expand and see the full calculation trace for that employee.</p>
+        <div id="sampleTableContainer"></div>
+    </div>
+
+    <!-- Guided Tour Overlay -->
+    <div class="guide-overlay" id="guideOverlay">
+        <div class="guide-box" id="guideBox">
+            <h3 id="guideTitle">👋 Welcome!</h3>
+            <p id="guideDesc">This tour will walk you through the entire performance model step by step.</p>
+            <div style="background:#f1f5f9; border-radius:8px; padding:4px 12px; display:inline-block; margin-top:4px;">
+                <span id="guideProgress">1 / 6</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="closeTour()">Skip</button>
+                <button class="btn btn-outline" id="guidePrev" onclick="guideStep(-1)" style="display:none;">Back</button>
+                <button class="btn btn-primary" id="guideNext" onclick="guideStep(1)">Next</button>
+                <button class="btn btn-primary" id="guideFinish" onclick="closeTour()" style="display:none;">Finish</button>
+            </div>
+        </div>
+    </div>
+
+</div> <!-- container -->
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT -->
+<!-- ============================================================ -->
+<script>
+// --- SAMPLE DATA (based on provided entries) ---
+const sampleEmployees = [
+    { id: 26, name: "Mr. Arindam Banerjee", grade: "Sr.Vice President", exp: 34.0, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 30, name: "Mr. Rajesh P Sarda", grade: "Vice President", exp: 29.11, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 9, name: "Mr. Kamal Joshi", grade: "Vice President", exp: 31.9, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 10, name: "Mr. Vikramsingh V Mohite", grade: "Vice President", exp: 27.11, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 13, name: "Mr. Shashikant R Kadam", grade: "Asst. Vice President", exp: 25.7, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 45, name: "Mr. Saket Gadkari", grade: "Vice President", exp: 24.7, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 18, name: "Mr. Ajit S Parab", grade: "Vice President", exp: 34.9, promo: true, prog: false, ratings: [3,4,4,4,4] },
+    { id: 39, name: "Mr. Hardik Dave", grade: "Vice President", exp: 27.11, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 350, name: "Mr. Rajesh Shethia", grade: "Asst. Vice President", exp: 24.7, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 42, name: "Mr. Prashant Ayare", grade: "General Manager", exp: 25.0, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 359, name: "Mr. Bhavin K Acharya", grade: "Asst. Vice President", exp: 30.8, promo: true, prog: true, ratings: [4,4,4,4,4] },
+    { id: 441, name: "Mr. Jitendra Bhatia", grade: "Asst. Vice President", exp: 26.10, promo: false, prog: false, ratings: [4,4,4,4,4] },
+    { id: 25, name: "Mr. Ketan Jariwala", grade: "Asst. Vice President", exp: 28.8, promo: true, prog: true, ratings: [3,4,4,4,4] },
+    { id: 379, name: "Mr. Maneesh George", grade: "General Manager", exp: 18.9, promo: false, prog: true, ratings: [4,4,4,4,4] },
+    { id: 381, name: "Mr. Ashish Poojary", grade: "General Manager", exp: 17.11, promo: false, prog: true, ratings: [4,4,4,4,4] },
+];
+
+// --- HELPER FUNCTIONS ---
+function calcAvg(arr) { return arr.reduce((a,b)=>a+b,0)/arr.length; }
+function calcTrend(arr) { return arr[arr.length-1] - arr[0]; }
+function calcCons(arr) { 
+    if(arr.length < 2) return 0;
+    const avg = calcAvg(arr);
+    return Math.sqrt(arr.reduce((s,v)=>s+(v-avg)**2,0)/(arr.length-1));
+}
+function calcRecency(arr, weights) {
+    if(!weights) weights = [0.05, 0.10, 0.20, 0.30, 0.35];
+    return arr.reduce((s,v,i)=>s + v*weights[i], 0);
+}
+
+// Global min/max for normalization (computed from sample)
+let globalMinMax = {};
+
+function computeGlobalMinMax(emps) {
+    const metrics = {
+        avg: [], trend: [], cons: [], exp: [], rec: [], promo: [], prog: []
+    };
+    emps.forEach(e => {
+        const avg = calcAvg(e.ratings);
+        const trend = calcTrend(e.ratings);
+        const cons = calcCons(e.ratings);
+        const rec = calcRecency(e.ratings);
+        metrics.avg.push(avg);
+        metrics.trend.push(trend);
+        metrics.cons.push(cons);
+        metrics.exp.push(e.exp);
+        metrics.rec.push(rec);
+        metrics.promo.push(e.promo ? 1 : 0);
+        metrics.prog.push(e.prog ? 1 : 0);
+    });
+    const res = {};
+    for(let key in metrics) {
+        const arr = metrics[key];
+        res[key] = { min: Math.min(...arr), max: Math.max(...arr) };
+        // For consistency, lower is better -> invert
+        if(key === 'cons') {
+            res[key].min = Math.min(...arr);
+            res[key].max = Math.max(...arr);
+        }
+    }
+    return res;
+}
+
+function normalize(value, min, max, invert=false) {
+    if(max === min) return 50;
+    let v = (value - min) / (max - min);
+    if(invert) v = 1 - v;
+    return Math.round(v * 100);
+}
+
+globalMinMax = computeGlobalMinMax(sampleEmployees);
+
+function getEmployeeScores(emp, weights, thresholds, whatifRating) {
+    const ratings = [...emp.ratings];
+    if(whatifRating !== undefined && whatifRating !== null) {
+        ratings[ratings.length-1] = whatifRating;
+    }
+    const avg = calcAvg(ratings);
+    const trend = calcTrend(ratings);
+    const cons = calcCons(ratings);
+    const rec = calcRecency(ratings);
+    const exp = emp.exp;
+    const promo = emp.promo ? 1 : 0;
+    const prog = emp.prog ? 1 : 0;
+    
+    const mm = globalMinMax;
+    const sAvg = normalize(avg, mm.avg.min, mm.avg.max);
+    const sTrend = normalize(trend, mm.trend.min, mm.trend.max);
+    const sCons = normalize(cons, mm.cons.min, mm.cons.max, true);
+    const sExp = normalize(exp, mm.exp.min, mm.exp.max);
+    const sRec = normalize(rec, mm.rec.min, mm.rec.max);
+    const sPromo = normalize(promo, mm.promo.min, mm.promo.max);
+    const sProg = normalize(prog, mm.prog.min, mm.prog.max);
+    
+    const w = weights || {avg:0.25, trend:0.15, cons:0.10, exp:0.10, rec:0.25, promo:0.10, prog:0.05};
+    const comp = sAvg*w.avg + sTrend*w.trend + sCons*w.cons + sExp*w.exp + sRec*w.rec + sPromo*w.promo + sProg*w.prog;
+    
+    // Tier
+    let tier = "Below Expectation";
+    if(comp >= thresholds.star) tier = "Star Performer";
+    else if(comp >= thresholds.exceeds) tier = "Exceeds";
+    else if(comp >= thresholds.meets) tier = "Meets Expectation";
+    else if(comp >= thresholds.developing) tier = "Developing";
+    return { avg, trend, cons, rec, exp, promo, prog, sAvg, sTrend, sCons, sExp, sRec, sPromo, sProg, comp, tier, ratings };
+}
+
+// --- UI UPDATE ---
+let selectedId = 26;
+let charts = {};
+
+function initCharts() {
+    const ctx1 = document.getElementById('ratingBarChart').getContext('2d');
+    charts.ratingBar = new Chart(ctx1, {
+        type: 'bar',
+        data: { labels: ['Y1','Y2','Y3','Y4','Y5'], datasets: [{ label: 'Numeric Rating', data: [4,4,4,4,4], backgroundColor: '#3b82f6' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min:0, max:4 } } }
+    });
+    const ctx2 = document.getElementById('normChart').getContext('2d');
+    charts.norm = new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: ['Avg','Trend','Cons','Exp','Rec','Promo','Prog'], datasets: [{ label: 'Normalised (0-100)', data: [0,0,0,0,0,0,0], backgroundColor: '#60a5fa' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+    const ctx3 = document.getElementById('histogramChart').getContext('2d');
+    charts.hist = new Chart(ctx3, {
+        type: 'bar',
+        data: { labels: ['Below','Developing','Meets','Exceeds','Star'], datasets: [{ label: 'Count', data: [0,0,0,0,0], backgroundColor: ['#fca5a5','#fcd34d','#93c5fd','#6ee7b7','#fbbf24'] }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+    });
+}
+
+function updateAll() {
+    const emp = sampleEmployees.find(e => e.id === selectedId);
+    if(!emp) return;
+    const whatif = parseInt(document.getElementById('whatifSlider').value);
+    document.getElementById('whatifVal').textContent = ['B','A','A+','A*'][whatif-1] || 'A*';
+    
+    const w = {
+        avg: parseFloat(document.getElementById('w1').value),
+        trend: parseFloat(document.getElementById('w2').value),
+        cons: parseFloat(document.getElementById('w3').value),
+        exp: parseFloat(document.getElementById('w4').value),
+        rec: parseFloat(document.getElementById('w5').value),
+        promo: parseFloat(document.getElementById('w6').value),
+        prog: parseFloat(document.getElementById('w7').value)
+    };
+    document.getElementById('w1v').textContent = w.avg.toFixed(2);
+    document.getElementById('w2v').textContent = w.trend.toFixed(2);
+    document.getElementById('w3v').textContent = w.cons.toFixed(2);
+    document.getElementById('w4v').textContent = w.exp.toFixed(2);
+    document.getElementById('w5v').textContent = w.rec.toFixed(2);
+    document.getElementById('w6v').textContent = w.promo.toFixed(2);
+    document.getElementById('w7v').textContent = w.prog.toFixed(2);
+    document.getElementById('weightSum').textContent = (w.avg+w.trend+w.cons+w.exp+w.rec+w.promo+w.prog).toFixed(2);
+    
+    const thresholds = {
+        star: parseFloat(document.getElementById('tStar').value),
+        exceeds: parseFloat(document.getElementById('tExceeds').value),
+        meets: parseFloat(document.getElementById('tMeets').value),
+        developing: parseFloat(document.getElementById('tDeveloping').value)
+    };
+    document.getElementById('tStarV').textContent = thresholds.star;
+    document.getElementById('tExceedsV').textContent = thresholds.exceeds;
+    document.getElementById('tMeetsV').textContent = thresholds.meets;
+    document.getElementById('tDevelopingV').textContent = thresholds.developing;
+    
+    const res = getEmployeeScores(emp, w, thresholds, whatif);
+    
+    // --- Update displays ---
+    document.getElementById('empGrade').textContent = emp.grade;
+    document.getElementById('empExp').textContent = emp.exp.toFixed(1);
+    document.getElementById('empPromo').textContent = emp.promo ? '✅ Yes' : '❌ No';
+    document.getElementById('empProg').textContent = emp.prog ? '✅ Yes' : '❌ No';
+    
+    document.getElementById('dispRaw').textContent = emp.ratings.map(r => ['B','A','A+','A*'][r-1]).join(', ');
+    document.getElementById('dispNum').textContent = res.ratings.join(', ');
+    
+    // Bar chart update
+    charts.ratingBar.data.datasets[0].data = res.ratings;
+    charts.ratingBar.update();
+    
+    // Aggregates
+    document.getElementById('aggAvg').innerHTML = `<strong>${res.avg.toFixed(2)}</strong> &nbsp; (${res.ratings.join(' + ')}) / 5`;
+    document.getElementById('aggTrend').innerHTML = `<strong>${res.trend.toFixed(2)}</strong> &nbsp; (${res.ratings[res.ratings.length-1]} - ${res.ratings[0]})`;
+    document.getElementById('aggCons').innerHTML = `<strong>${res.cons.toFixed(3)}</strong> &nbsp; (std dev of ${res.ratings.join(', ')})`;
+    document.getElementById('aggRec').innerHTML = `<strong>${res.rec.toFixed(2)}</strong> &nbsp; (weighted sum)`;
+    
+    // Normalization trace
+    const mm = globalMinMax;
+    document.getElementById('normTrace').innerHTML = `
+        avg: (${res.avg} - ${mm.avg.min})/(${mm.avg.max} - ${mm.avg.min})*100 = ${res.sAvg}<br>
+        trend: (${res.trend} - ${mm.trend.min})/(${mm.trend.max} - ${mm.trend.min})*100 = ${res.sTrend}<br>
+        cons: 1 - ((${res.cons} - ${mm.cons.min})/(${mm.cons.max} - ${mm.cons.min}))*100 = ${res.sCons}<br>
+        exp: (${res.exp} - ${mm.exp.min})/(${mm.exp.max} - ${mm.exp.min})*100 = ${res.sExp}<br>
+        rec: (${res.rec} - ${mm.rec.min})/(${mm.rec.max} - ${mm.rec.min})*100 = ${res.sRec}<br>
+        promo: (${res.promo} - ${mm.promo.min})/(${mm.promo.max} - ${mm.promo.min})*100 = ${res.sPromo}<br>
+        prog: (${res.prog} - ${mm.prog.min})/(${mm.prog.max} - ${mm.prog.min})*100 = ${res.sProg}
+    `;
+    // Norm chart
+    charts.norm.data.datasets[0].data = [res.sAvg, res.sTrend, res.sCons, res.sExp, res.sRec, res.sPromo, res.sProg];
+    charts.norm.update();
+    
+    // Composite
+    const comp = res.comp;
+    document.getElementById('compositeDisplay').textContent = comp.toFixed(1);
+    const tier = res.tier;
+    let cls = 'badge-tier';
+    if(tier === 'Star Performer') cls += ' badge-star';
+    else if(tier === 'Exceeds') cls += ' badge-exceeds';
+    else if(tier === 'Meets Expectation') cls += ' badge-meets';
+    else if(tier === 'Developing') cls += ' badge-developing';
+    else cls += ' badge-below';
+    document.getElementById('tierDisplay').textContent = tier;
+    document.getElementById('tierDisplay').className = cls;
+    document.getElementById('currentTierBadge').textContent = tier;
+    document.getElementById('currentTierBadge').className = cls;
+    
+    document.getElementById('compositeTrace').innerHTML = `
+        ${res.sAvg}×${w.avg.toFixed(2)} + ${res.sTrend}×${w.trend.toFixed(2)} + ${res.sCons}×${w.cons.toFixed(2)} + 
+        ${res.sExp}×${w.exp.toFixed(2)} + ${res.sRec}×${w.rec.toFixed(2)} + ${res.sPromo}×${w.promo.toFixed(2)} + ${res.sProg}×${w.prog.toFixed(2)} 
+        = <strong>${comp.toFixed(1)}</strong>
+    `;
+    
+    // Histogram
+    const allComps = sampleEmployees.map(e => {
+        const r = getEmployeeScores(e, w, thresholds, null);
+        return r.comp;
+    });
+    const counts = [0,0,0,0,0];
+    allComps.forEach(c => {
+        if(c >= thresholds.star) counts[4]++;
+        else if(c >= thresholds.exceeds) counts[3]++;
+        else if(c >= thresholds.meets) counts[2]++;
+        else if(c >= thresholds.developing) counts[1]++;
+        else counts[0]++;
+    });
+    charts.hist.data.datasets[0].data = counts;
+    charts.hist.update();
+    
+    // Update sample table
+    renderSampleTable(w, thresholds);
+}
+
+function renderSampleTable(w, thresholds) {
+    const container = document.getElementById('sampleTableContainer');
+    let html = `<table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+        <thead><tr style="background:#f1f5f9;"><th>Name</th><th>Grade</th><th>Composite</th><th>Tier</th><th>Trace</th></tr></thead><tbody>`;
+    sampleEmployees.forEach((e, idx) => {
+        const res = getEmployeeScores(e, w, thresholds, null);
+        const tierCls = res.tier === 'Star Performer' ? 'badge-star' : (res.tier === 'Exceeds' ? 'badge-exceeds' : (res.tier === 'Meets Expectation' ? 'badge-meets' : (res.tier === 'Developing' ? 'badge-developing' : 'badge-below')));
+        html += `<tr class="expandable-row" onclick="toggleTrace(${idx})">
+            <td><strong>${e.name}</strong></td>
+            <td>${e.grade}</td>
+            <td>${res.comp.toFixed(1)}</td>
+            <td><span class="badge-tier ${tierCls}">${res.tier}</span></td>
+            <td><span style="color:#3b82f6;">▶ Expand</span></td>
+        </tr>
+        <tr id="traceRow${idx}" style="display:none; background:#f8fafc;">
+            <td colspan="5">
+                <div style="padding:12px; font-size:0.8rem; font-family: monospace; line-height:1.8;">
+                    Ratings: ${res.ratings.join(', ')}<br>
+                    Avg: ${res.avg.toFixed(2)} | Trend: ${res.trend.toFixed(2)} | Cons: ${res.cons.toFixed(3)} | Rec: ${res.rec.toFixed(2)}<br>
+                    Scores: Avg=${res.sAvg}, Trend=${res.sTrend}, Cons=${res.sCons}, Exp=${res.sExp}, Rec=${res.sRec}, Promo=${res.sPromo}, Prog=${res.sProg}<br>
+                    <strong>Composite: ${res.comp.toFixed(1)} → ${res.tier}</strong>
+                </div>
+            </td>
+        </tr>`;
+    });
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+}
+
+function toggleTrace(idx) {
+    const row = document.getElementById(`traceRow${idx}`);
+    if(row.style.display === 'none') {
+        row.style.display = 'table-row';
+    } else {
+        row.style.display = 'none';
+    }
+}
+
+// --- RESET FUNCTIONS ---
+function resetWeights() {
+    document.getElementById('w1').value = 0.25;
+    document.getElementById('w2').value = 0.15;
+    document.getElementById('w3').value = 0.10;
+    document.getElementById('w4').value = 0.10;
+    document.getElementById('w5').value = 0.25;
+    document.getElementById('w6').value = 0.10;
+    document.getElementById('w7').value = 0.05;
+    updateAll();
+}
+
+function resetThresholds() {
+    document.getElementById('tStar').value = 90;
+    document.getElementById('tExceeds').value = 75;
+    document.getElementById('tMeets').value = 60;
+    document.getElementById('tDeveloping').value = 40;
+    updateAll();
+}
+
+function resetAll() {
+    resetWeights();
+    resetThresholds();
+    // Also reset what-if slider to default (4 = A*)
+    document.getElementById('whatifSlider').value = 4;
+    // Reset employee selection to first (optional)
+    // document.getElementById('employeeSelect').value = 26;
+    // selectedId = 26;
+    updateAll();
+}
+
+// --- POPULATE DROPDOWN ---
+function populateDropdown() {
+    const sel = document.getElementById('employeeSelect');
+    sel.innerHTML = '';
+    sampleEmployees.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id;
+        opt.textContent = `${e.name} (${e.grade})`;
+        sel.appendChild(opt);
+    });
+    sel.value = 26;
+    selectedId = 26;
+}
+
+// --- GUIDED TOUR ---
+let tourStep = 0;
+const tourSteps = [
+    { id: 'step-inputs', title: '1. Select Employee & What‑If', desc: 'Pick an employee to analyse. Use the slider to change their latest rating and see how it affects everything downstream.' },
+    { id: 'step-mapping', title: '2. Rating Mapping', desc: 'Letter grades (A*, A+, A, B) are converted to numbers (4,3,2,1) so we can calculate averages and trends.' },
+    { id: 'step-aggregates', title: '3. Aggregate Metrics', desc: 'From the numeric ratings, we compute average, trend (change over time), consistency (stability), and a recency‑weighted score.' },
+    { id: 'step-normalize', title: '4. Normalization', desc: 'Each metric is scaled to a 0‑100 range using min‑max across all employees. This makes them comparable.' },
+    { id: 'step-composite', title: '5. Composite Score', desc: 'The seven normalized scores are combined using weighted sum. Drag the sliders to adjust the importance of each factor.' },
+    { id: 'step-tiers', title: '6. Performance Tiers', desc: 'Based on the composite score, employees are classified into tiers. You can drag the thresholds to redefine the categories.' }
+];
+
+function startTour() {
+    tourStep = 0;
+    document.getElementById('guideOverlay').style.display = 'flex';
+    document.getElementById('guidePrev').style.display = 'none';
+    document.getElementById('guideFinish').style.display = 'none';
+    document.getElementById('guideNext').style.display = 'inline-block';
+    showTourStep();
+}
+
+function closeTour() {
+    document.getElementById('guideOverlay').style.display = 'none';
+    document.querySelectorAll('.highlight-section').forEach(el => el.classList.remove('highlight-section'));
+}
+
+function guideStep(dir) {
+    tourStep += dir;
+    if(tourStep < 0) tourStep = 0;
+    if(tourStep >= tourSteps.length) {
+        closeTour();
+        return;
+    }
+    showTourStep();
+}
+
+function showTourStep() {
+    const step = tourSteps[tourStep];
+    document.getElementById('guideTitle').textContent = step.title;
+    document.getElementById('guideDesc').textContent = step.desc;
+    document.getElementById('guideProgress').textContent = `${tourStep+1} / ${tourSteps.length}`;
+    document.getElementById('guidePrev').style.display = (tourStep === 0) ? 'none' : 'inline-block';
+    if(tourStep === tourSteps.length - 1) {
+        document.getElementById('guideNext').style.display = 'none';
+        document.getElementById('guideFinish').style.display = 'inline-block';
+    } else {
+        document.getElementById('guideNext').style.display = 'inline-block';
+        document.getElementById('guideFinish').style.display = 'none';
+    }
+    document.querySelectorAll('.highlight-section').forEach(el => el.classList.remove('highlight-section'));
+    const target = document.getElementById(step.id);
+    if(target) {
+        target.classList.add('highlight-section');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    document.querySelectorAll('.step-item').forEach((el, i) => {
+        el.classList.remove('active', 'done');
+        if(i === tourStep) el.classList.add('active');
+        else if(i < tourStep) el.classList.add('done');
+    });
+}
+
+// --- INIT ---
+populateDropdown();
+initCharts();
+updateAll();
+
+// Optional: auto-start tour after delay
+// setTimeout(() => { startTour(); }, 1000);
+</script>
+</body>
+</html>
