@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JioCX Competency Survey v2 – MS Forms Ready</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f4fb;
+            padding: 30px 20px;
+            color: #1e293b;
+            line-height: 1.65;
+        }
+        .page-header {
+            max-width: 1300px;
+            margin: 0 auto 28px auto;
+            background: linear-gradient(135deg, #0b2a44 0%, #1a4b7a 100%);
+            border-radius: 18px;
+            padding: 36px 48px;
+            color: #fff;
+        }
+        .page-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+        .page-header .sub { font-size: 15px; opacity: 0.8; margin-top: 6px; }
+        .page-header .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .page-header .badge {
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.22);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .how-to-use {
+            max-width: 1300px;
+            margin: 0 auto 24px auto;
+            background: #fff8e7;
+            border: 1px solid #f0d080;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 14px;
+            color: #7a5a20;
+        }
+        .how-to-use strong { color: #5a3e10; }
+        .section-wrap {
+            max-width: 1300px;
+            margin: 0 auto 32px auto;
+        }
+        .section-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #0b2a44;
+            padding: 16px 24px;
+            background: #fff;
+            border-radius: 14px 14px 0 0;
+            border-bottom: 3px solid #dbeafe;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .section-title .stag {
+            font-size: 12px;
+            font-weight: 700;
+            background: #dbeafe;
+            color: #1a56db;
+            padding: 3px 14px;
+            border-radius: 30px;
+        }
+        .section-title .sdesc {
+            font-size: 13px;
+            font-weight: 400;
+            color: #3e5778;
+        }
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+            border: 1px solid #dde6f0;
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .col-level {
+            border-right: 1px solid #dde6f0;
+            padding: 20px 20px 24px 20px;
+        }
+        .col-level:last-child { border-right: none; }
+        .col-level .col-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            background: #0b2a44;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+        }
+        .col-level.manager .col-header { background: #1a56db; }
+        .col-level.leader .col-header { background: #1a7a4a; }
+        .qblock {
+            background: #fafcff;
+            border: 1px solid #e6edf5;
+            border-radius: 10px;
+            padding: 13px 15px;
+            margin-bottom: 10px;
+        }
+        .qblock .qnum {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a56db;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .qblock .qnum .comp-tag {
+            background: #ede7f6;
+            color: #5e2e8e;
+            padding: 1px 9px;
+            border-radius: 30px;
+            font-size: 10px;
+        }
+        .qblock .qnum .ac-tag {
+            background: #fff3dc;
+            color: #b87800;
+            padding: 1px 9px;
+            border-radius: 30px;
+            font-size: 10px;
+        }
+        .qblock .qtext {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #0b2a44;
+            margin-bottom: 8px;
+            line-height: 1.55;
+        }
+        .qblock .qoptions {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            margin-top: 6px;
+        }
+        .qblock .qoptions .opt {
+            font-size: 12px;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .qblock .qoptions .opt .score {
+            background: #e6edf5;
+            color: #0b2a44;
+            font-weight: 700;
+            padding: 0px 7px;
+            border-radius: 20px;
+            font-size: 11px;
+            min-width: 28px;
+            text-align: center;
+        }
+        .qblock .qoptions .opt .score.neg { background: #fde8ea; color: #c81e1e; }
+        .qblock .qoptions .opt .score.zero { background: #f1f5f9; color: #64748b; }
+        .qblock .qoptions .opt .score.pos1 { background: #e6f9ed; color: #1a7a4a; }
+        .qblock .qoptions .opt .score.pos2 { background: #dbeafe; color: #1a56db; }
+        .qblock.attention {
+            background: #fff8e7;
+            border-color: #f0d080;
+        }
+        .qblock.attention .qtext { color: #7a5a20; }
+        .scale-box {
+            background: #f0f6fe;
+            border: 1px solid #c7daf5;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: #1e3a5f;
+        }
+        .scale-box .scale-title { font-weight: 700; margin-bottom: 8px; font-size: 13px; color: #0b2a44; }
+        .scale-box .scale-row { display: flex; flex-direction: column; gap: 4px; }
+        .scale-box .scale-item { display: flex; align-items: flex-start; gap: 8px; }
+        .scale-box .scale-item .sc { font-weight: 700; min-width: 26px; font-size: 13px; }
+        .scale-box .scale-item .sc.neg { color: #c81e1e; }
+        .scale-box .scale-item .sc.zero { color: #64748b; }
+        .scale-box .scale-item .sc.p1 { color: #1a7a4a; }
+        .scale-box .scale-item .sc.p2 { color: #1a56db; }
+        .copy-btn {
+            background: #0b2a44;
+            color: #fff;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .copy-btn:hover { background: #1a4a6a; transform: scale(1.02); }
+        .copy-btn.green { background: #1a7a4a; }
+        .copy-btn.green:hover { background: #0f5f3a; }
+        .copy-btn.blue { background: #1a56db; }
+        .copy-btn.blue:hover { background: #0f3ea0; }
+        .single-col-body {
+            border: 1px solid #dde6f0;
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+            background: #fff;
+            padding: 24px 28px;
+        }
+        .comp-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 11px 14px;
+            border: 1px solid #e6edf5;
+            border-radius: 10px;
+            background: #fafcff;
+            margin-bottom: 8px;
+        }
+        .comp-row .comp-num {
+            font-size: 20px;
+            font-weight: 800;
+            color: #dbeafe;
+            min-width: 32px;
+            line-height: 1;
+            margin-top: 3px;
+        }
+        .comp-row .comp-info { flex: 1; }
+        .comp-row .comp-name { font-weight: 700; font-size: 14px; color: #0b2a44; }
+        .comp-row .comp-desc { font-size: 12.5px; color: #4a5b6e; margin-top: 2px; }
+        .comp-row .comp-score { background: #e6edf5; padding: 4px 14px; border-radius: 30px; font-size: 12px; font-weight: 600; color: #1a4a6a; white-space: nowrap; align-self: center; }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 6px;
+        }
+        .demo-field {
+            background: #fafcff;
+            border: 1px solid #e6edf5;
+            border-radius: 9px;
+            padding: 11px 14px;
+        }
+        .demo-field .fname { font-weight: 700; font-size: 13.5px; color: #0b2a44; }
+        .demo-field .ftype { font-size: 11px; color: #6f8aa8; margin-top: 3px; }
+        .demo-field .fopts { font-size: 12px; color: #334155; margin-top: 5px; }
+        .scenario-block {
+            border: 1px solid #e6edf5;
+            border-left: 4px solid #1a56db;
+            border-radius: 10px;
+            background: #fafcff;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+        .scenario-block .sc-title { font-weight: 700; font-size: 13.5px; color: #0b2a44; margin-bottom: 6px; }
+        .scenario-block .sc-text { font-size: 13px; color: #334155; margin-bottom: 8px; line-height: 1.55; }
+        .scenario-block .sc-opt { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid #eef4fa; font-size: 12.5px; color: #1e293b; }
+        .scenario-block .sc-opt:last-of-type { border-bottom: none; }
+        .scenario-block .sc-opt .ol { font-weight: 700; color: #1a56db; min-width: 18px; }
+        .scenario-block .sc-note { font-size: 11px; color: #6f8aa8; margin-top: 8px; font-style: italic; border-top: 1px solid #eef4fa; padding-top: 6px; }
+        .d-qblock {
+            background: #fafcff;
+            border: 1px solid #e6edf5;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+        }
+        .d-qblock .dlabel { font-size: 11px; font-weight: 700; color: #1a56db; margin-bottom: 5px; }
+        .d-qblock .dtext { font-size: 13.5px; font-weight: 500; color: #0b2a44; line-height: 1.55; }
+        .d-qblock .dmeta { font-size: 11.5px; color: #6f8aa8; margin-top: 8px; font-style: italic; }
+        .inst-box {
+            background: #f7faff;
+            border-left: 4px solid #1a56db;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #1e3a5f;
+            margin-bottom: 16px;
+        }
+        .toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: #0b2a44; color: #fff;
+            padding: 12px 24px; border-radius: 12px;
+            font-size: 13px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            opacity: 0; transform: translateY(30px);
+            transition: 0.3s ease; z-index: 999;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        @media (max-width: 900px) {
+            .three-col { grid-template-columns: 1fr; }
+            .col-level { border-right: none; border-bottom: 1px solid #dde6f0; }
+            .demo-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <h1>📋 JioCX Workplace Competency Survey 2026 — Version 2</h1>
+    <div class="sub">MS Forms Ready · Revised Design · Simple English · Copy-Paste by Seniority Level</div>
+    <div class="badges">
+        <span class="badge">✅ 10 Likert Items (Section A)</span>
+        <span class="badge">✅ 4-Point Self-Description Scale (−1 / 0 / +1 / +2)</span>
+        <span class="badge">✅ 2 Attention Checks</span>
+        <span class="badge">✅ Section B – Competency Ranking (unchanged)</span>
+        <span class="badge">✅ Section C – Behavioral Scenarios (3 per level)</span>
+        <span class="badge">✅ Section D – 2 Open-Ended Questions (30-word min)</span>
+        <span class="badge">✅ Junior / Manager / Leader side-by-side</span>
+        <span class="badge">✅ Named + Employee ID (Linked)</span>
+    </div>
+</div>
+
+<div class="how-to-use">
+    💡 <strong>How to use this page in Microsoft Forms:</strong>
+    Each section shows <strong>Junior / Manager / Leader</strong> side-by-side.
+    Use the <strong>Copy</strong> buttons to copy the relevant column and paste into MS Forms.
+    Use <strong>branching / conditional logic</strong> in MS Forms based on the "Job Level" dropdown from Demographics to show the right version.
+    <br>Sections A, C and D are <strong>level-adapted</strong>. Section B and Demographics are <strong>the same for all levels</strong>.
+</div>
+
+<!-- ══════ DEMOGRAPHICS ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        📌 Demographics
+        <span class="stag">Common – All Levels</span>
+        <span class="sdesc">Complete this section first. "Job Level" is used for branching in MS Forms.</span>
+        <button class="copy-btn green" onclick="copyDemographics()" style="margin-left:auto;">📋 Copy Demographics</button>
+    </div>
+    <div class="single-col-body">
+        <div class="demo-grid">
+            <div class="demo-field">
+                <div class="fname">1. Full Name</div>
+                <div class="ftype">📝 Text input · Required</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">2. Employee ID</div>
+                <div class="ftype">📝 Text input · Required</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">3. Job Level</div>
+                <div class="ftype">📋 Dropdown · Required · Used for branching</div>
+                <div class="fopts">Junior / Executive &nbsp;|&nbsp; Manager / Team Lead &nbsp;|&nbsp; Leader / VP+</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">4. Average Weekly Work Hours</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">Less than 40 &nbsp;|&nbsp; 40–45 &nbsp;|&nbsp; 46–50 &nbsp;|&nbsp; 51–55 &nbsp;|&nbsp; More than 55</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">5. Number of Direct Reports</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">0 (Individual Contributor) &nbsp;|&nbsp; 1–3 &nbsp;|&nbsp; 4–7 &nbsp;|&nbsp; 8–12 &nbsp;|&nbsp; More than 12</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">6. Cross-Team Project Involvement</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">Rarely (&lt;20% of my time) &nbsp;|&nbsp; Sometimes (20–40%) &nbsp;|&nbsp; Often (40–60%) &nbsp;|&nbsp; Very often (&gt;60%)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ SECTION A ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        📊 Section A – Work Style Profile
+        <span class="stag">10 Items + 2 Attention Checks · Level-Adapted</span>
+        <span class="sdesc">1 question per competency · 4-point self-description scale · Scores: −1 / 0 / +1 / +2</span>
+    </div>
+    <div class="three-col">
+
+        <!-- JUNIOR -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How much does each statement sound like you?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Not at all like me</strong> — I almost never do this</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Somewhat like me</strong> — I do this sometimes, not always</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Mostly like me</strong> — I do this most of the time</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Completely like me</strong> — This is exactly how I work, every time</div>
+                </div>
+            </div>
+            <div class="inst-box">📌 Select what best describes YOU — not the "right" answer. There are no wrong choices.</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">I finish my work on time and the quality is what my team expects from me.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">When I work on a task, I think about how it helps the bigger goal of the team or organization.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">When someone gives me feedback, I actually use it to change how I work.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I build good working relationships with people in other teams — not just in my own group.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">Before I fix a problem, I take time to understand why it happened — not just what happened.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I take action or start things on my own, without waiting for someone to tell me to do it.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">I help my colleagues grow — I give them honest feedback and support them when they are stuck.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">When I explain something, people understand me the first time — I do not need to repeat myself.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">When things go wrong or I am under pressure, I stay focused and keep moving forward.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">I try to understand what the person I am helping actually needs — not just what they asked for on paper.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Mostly like me"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> ✔ Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Not at all like me"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <button class="copy-btn green" onclick="copyJuniorA()">📋 Copy Junior – Section A</button>
+        </div>
+
+        <!-- MANAGER -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How much does each statement sound like you as a manager?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Not at all like me</strong> — I almost never do this with my team</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Somewhat like me</strong> — I do this sometimes, not regularly</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Mostly like me</strong> — I do this most of the time as a manager</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Completely like me</strong> — This is exactly how I manage, every time</div>
+                </div>
+            </div>
+            <div class="inst-box">📌 Think about how you manage your team day-to-day. Select what best describes YOU — be honest, not aspirational.</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">My team delivers work on time and at the quality level the organization expects.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">I help my team see how their daily work connects to the bigger goals of the organization.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">When I get feedback about my leadership style, I actually change how I manage my team.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I actively build relationships with other teams and use those connections to get better results for my team and the organization.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">When my team faces a problem, I guide them to find the root cause before jumping to a fix.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I proactively look for ways to improve my team's performance — without waiting for someone above me to ask.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">I regularly invest time in developing my direct reports — I give honest feedback and support their career growth.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">When I communicate a decision or direction to my team, they understand it clearly without needing clarification later.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">During high-pressure periods or setbacks, I stay composed and keep my team focused and motivated.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">I help my team look beyond what stakeholders ask for and understand what they actually need.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Mostly like me"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> ✔ Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Not at all like me"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <button class="copy-btn blue" onclick="copyManagerA()">📋 Copy Manager – Section A</button>
+        </div>
+
+        <!-- LEADER -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How much does each statement sound like you as a senior leader?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Not at all like me</strong> — I rarely do this at the org level</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Somewhat like me</strong> — I do this inconsistently or only sometimes</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Mostly like me</strong> — I do this most of the time across my area</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Completely like me</strong> — This is consistently how I lead, without exception</div>
+                </div>
+            </div>
+            <div class="inst-box">📌 Think about how you lead at the organizational level. Select what truly describes how you lead — not how you aspire to lead.</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">I have put in place clear systems and standards that ensure my teams consistently deliver high-quality results — even when I am not directly involved.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">My major decisions are grounded in the long-term strategic direction of the organization — not just the immediate situation.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">I actively seek outside perspectives and use them to evolve my leadership approach and organizational strategy.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I build relationships across the organization and use them to align different teams toward shared goals — not through formal authority alone.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">When I face complex organizational challenges, I structure the problem carefully and look at multiple options before I decide.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I regularly drive initiatives that go beyond my formal role — I do not wait for signals from above before pushing the organization forward.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">Building the next generation of leaders is a personal priority for me — I make deliberate time for it, not just when I have a spare moment.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">My communications land differently at different levels — I know how to speak to the board, to managers, and to frontline teams in a way each audience understands.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">During major crises or organizational stress, I stay composed, make clear decisions, and keep the long-term direction visible to my teams.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">My organization regularly anticipates and addresses what stakeholders need — before they even ask.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Mostly like me"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> ✔ Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Not at all like me"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Not at all like me</div><div class="opt"><span class="score zero">&nbsp;0</span> Somewhat like me</div><div class="opt"><span class="score pos1">+1</span> Mostly like me</div><div class="opt"><span class="score pos2">+2</span> Completely like me</div></div></div>
+
+            <button class="copy-btn green" onclick="copyLeaderA()">📋 Copy Leader – Section A</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════ SECTION B ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🏆 Section B – Theory of Success
+        <span class="stag">Common – All Levels</span>
+        <span class="sdesc">Rank 10 competencies · Then select exactly Top 3</span>
+        <button class="copy-btn green" onclick="copySectionB()" style="margin-left:auto;">📋 Copy Section B</button>
+    </div>
+    <div class="single-col-body">
+        <div class="inst-box">
+            📋 <strong>Instructions for MS Forms:</strong>
+            Below are 10 skills that matter for doing well at JioCX.<br>
+            <strong>Step 1:</strong> Rank them from 1 (most important for success in YOUR role) to 10 (least important). Use each number only once.<br>
+            <strong>Step 2:</strong> From the same list, tick exactly 3 that are your top personal priorities right now.
+        </div>
+        <div class="comp-row"><div class="comp-num">1</div><div class="comp-info"><div class="comp-name">Execution Excellence (EE)</div><div class="comp-desc">Finishing your work on time, at the quality level expected — and owning the result.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">2</div><div class="comp-info"><div class="comp-name">Strategic Thinking (ST)</div><div class="comp-desc">Connecting your daily work to the bigger goals of the team or organization.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">3</div><div class="comp-info"><div class="comp-name">Learning Agility (LA)</div><div class="comp-desc">Picking up new skills quickly and changing how you work when the situation calls for it.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">4</div><div class="comp-info"><div class="comp-name">Collaboration &amp; Influence (CI)</div><div class="comp-desc">Building strong working relationships across teams and getting things done even without formal authority.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">5</div><div class="comp-info"><div class="comp-name">Problem Solving (PS)</div><div class="comp-desc">Breaking down complex problems and making well-thought-out decisions using available information.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">6</div><div class="comp-info"><div class="comp-name">Drive &amp; Initiative (DI)</div><div class="comp-desc">Taking action on your own, setting high personal standards, and going beyond what is formally expected.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">7</div><div class="comp-info"><div class="comp-name">People Leadership (PL)</div><div class="comp-desc">Helping others grow, giving honest feedback, and enabling the people around you to perform at their best.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">8</div><div class="comp-info"><div class="comp-name">Communication (CM)</div><div class="comp-desc">Expressing your ideas clearly and adjusting how you communicate depending on who you are talking to.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">9</div><div class="comp-info"><div class="comp-name">Resilience (RE)</div><div class="comp-desc">Staying focused and performing well under pressure, setbacks, or difficult situations.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row"><div class="comp-num">10</div><div class="comp-info"><div class="comp-name">Stakeholder Orientation (CO)</div><div class="comp-desc">Understanding what the people you serve truly need — and delivering reliably for them.</div></div><div class="comp-score">Rank 1–10 (dropdown)</div></div>
+        <div class="comp-row" style="border:2px solid #1a56db; background:#f0f6fe; margin-top:12px;">
+            <div class="comp-num" style="color:#1a56db;">★</div>
+            <div class="comp-info">
+                <div class="comp-name" style="color:#1a56db;">Cross-Check: Your Top 3 Priorities</div>
+                <div class="comp-desc">From the 10 skills above, select exactly <strong>3</strong> that are your most important personal priorities in your current role right now.</div>
+            </div>
+            <div class="comp-score" style="background:#dbeafe;color:#1a56db;">Checkbox · Exactly 3</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ SECTION C ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🧩 Section C – Behavioral Scenarios
+        <span class="stag">3 Scenarios per Level · Level-Adapted</span>
+        <span class="sdesc">Rank options from 1 (most effective) to 4 (least effective)</span>
+    </div>
+    <div class="three-col">
+
+        <!-- JUNIOR C -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive – Scenarios</div>
+            <div class="inst-box" style="font-size:12px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank exactly once. Choose what YOU would actually do — not the "textbook" answer.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Report Error</div>
+                <div class="sc-text">You are finishing a report due tomorrow morning. At 6 PM you find a big data error that affects the whole analysis. Your manager has already left.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Fix only the parts you are confident about and submit on time.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Contact your manager right away — explain the problem and agree on the best next step.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Submit as-is tonight and plan to fix the error in the next version.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Stay as long as it takes, fix the full report, and send your manager a clear summary of changes.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Each option gets a rank 1–4. All ranks must be used once.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Helping a Colleague</div>
+                <div class="sc-text">A close colleague is behind on a big deliverable due tomorrow and asks for your help. You also have deadlines, but yours are tight — not impossible.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Help your colleague fully — team success matters more right now.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Finish your own work first, then help with whatever time is left.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Help with the most critical parts and reduce the scope of your own deliverable to compensate.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Suggest your colleague speak to your manager to get extra support.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Feedback You Disagree With</div>
+                <div class="sc-text">Your manager tells you that you work too independently and do not communicate with the team enough. You partly disagree.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Calmly explain your side and why the feedback may not be accurate.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Listen carefully, ask for specific examples, genuinely reflect on whether there is truth in it, then share your perspective.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Nod along to avoid conflict and continue working the same way.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Ask a trusted colleague privately if they agree before responding to your manager.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+            <button class="copy-btn green" onclick="copyJuniorC()">📋 Copy Junior – Section C</button>
+        </div>
+
+        <!-- MANAGER C -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead – Scenarios</div>
+            <div class="inst-box" style="font-size:12px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank exactly once. Choose what YOU would actually do as a manager.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Team Member Struggling</div>
+                <div class="sc-text">A team member who was doing well has recently become disengaged — missing deadlines, going quiet in meetings, and looking withdrawn. This has been going on for about three weeks.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Watch for another two to three weeks to see if things improve on their own.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Have a private, honest conversation — understand what changed, listen without judging, and build a plan together.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Escalate to HR immediately and formally document the performance concern.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Quietly reassign their work to other team members while the situation resolves.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Promotion Decision</div>
+                <div class="sc-text">Two of your best team members are both ready for the only promotion available this cycle. Their performance records are almost equal.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Promote the one with the slightly higher rating — let the data decide.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Promote the one who is more of a team player — culture fit matters more long-term.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Give both a stretch project for 90 days before deciding — let the assignment show the difference.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Ask HR or your manager to make the final call — keeping it objective protects everyone.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Team Resisting Change</div>
+                <div class="sc-text">A new organization-wide initiative requires your team to replace a process they have used successfully for two years. Your team is openly against the change.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Push through firmly — the organization has decided and you cannot wait any longer.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Break the initiative into clear steps and run a session with the team to address concerns and build the plan together.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Delay implementation until the team's resistance fades on its own.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Let each person implement the change in their own way and time to protect morale.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+            <button class="copy-btn blue" onclick="copyManagerC()">📋 Copy Manager – Section C</button>
+        </div>
+
+        <!-- LEADER C -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+ – Scenarios</div>
+            <div class="inst-box" style="font-size:12px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank exactly once. Choose what YOU would actually do as a senior leader.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Teams Working in Silos</div>
+                <div class="sc-text">A critical project milestone was missed because two teams operated independently with different assumptions about who owned a key decision.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Identify who was mainly responsible and hold them formally accountable.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Bring both teams together immediately, find the root cause, and redesign how they coordinate going forward.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Accept the delay, update the timeline, and monitor more closely — without changing the structure.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Bring in external consultants to review and redesign the cross-team operating model.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Cost Reduction Decision</div>
+                <div class="sc-text">You must cut costs by 15% this quarter. Option A: Targeted headcount cuts in lower-priority areas. Option B: Proportional cuts across all teams equally.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Make targeted cuts in lower-priority areas to protect your highest-value capabilities.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Apply proportional cuts equally across all teams to protect morale and culture.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Delay by 60 days to gather more data before committing.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Present both options transparently to the leadership team and make the decision together.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Unrealistic Stakeholder Pressure</div>
+                <div class="sc-text">A key external stakeholder is pushing you to commit to a project outcome your internal data clearly shows is not achievable within the current timeline and resources.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Agree to the commitment to protect the relationship and negotiate scope privately later.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Present your data clearly, explain what is realistically achievable, and offer an alternative that addresses the stakeholder's actual goal.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Escalate to your own manager — agreeing could set a bad organizational precedent.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Commit publicly and push the team hard to try to deliver.</div>
+                <div class="sc-note">MS Forms: Add as a Ranking question. Ranks 1–4, used exactly once each.</div>
+            </div>
+            <button class="copy-btn green" onclick="copyLeaderC()">📋 Copy Leader – Section C</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════ SECTION D ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        ✍️ Section D – Personal Reflection
+        <span class="stag">2 Open-Ended Questions · Level-Adapted · 30-Word Minimum</span>
+        <span class="sdesc">Most important section — captures what structured questions cannot</span>
+    </div>
+    <div class="three-col">
+
+        <!-- JUNIOR D -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive</div>
+            <div class="inst-box" style="font-size:12.5px;">Answer both questions in your own words. Write at least 30 words per answer. Be specific — describe what <strong>you personally</strong> did, not what the team did.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Achievement &amp; Impact</div>
+                <div class="dtext">Tell us about one piece of work you are genuinely proud of. What did you do specifically, and what changed because of it?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Focus on YOUR actions and the result</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Growth &amp; Self-Awareness</div>
+                <div class="dtext">What is one thing you are actively working to get better at right now? What are you actually doing about it?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Be honest — there are no wrong answers here</div>
+            </div>
+            <button class="copy-btn green" onclick="copyJuniorD()">📋 Copy Junior – Section D</button>
+        </div>
+
+        <!-- MANAGER D -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead</div>
+            <div class="inst-box" style="font-size:12.5px;">Answer both questions in your own words. Write at least 30 words per answer. Be specific — describe what <strong>you personally</strong> did as a manager, not what your team did.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Team Impact</div>
+                <div class="dtext">Tell us about a time when something you did as a manager made a real positive difference for your team or a direct report. What did you do, and what changed?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Focus on YOUR actions as a manager and the outcome</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Leadership Growth</div>
+                <div class="dtext">What is one area where you know your management style needs to improve? What are you actively doing to work on it?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Be candid — this helps us understand your self-awareness as a leader</div>
+            </div>
+            <button class="copy-btn blue" onclick="copyManagerD()">📋 Copy Manager – Section D</button>
+        </div>
+
+        <!-- LEADER D -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+</div>
+            <div class="inst-box" style="font-size:12.5px;">Answer both questions in your own words. Write at least 30 words per answer. Think at the organizational level — describe decisions or initiatives that had broad impact.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Organizational Impact</div>
+                <div class="dtext">Tell us about a leadership decision or initiative you are proud of that had a meaningful impact beyond your immediate team. What did you decide or do, and what was the result?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Focus on organizational-level impact, not just team-level outcomes</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Leadership Evolution</div>
+                <div class="dtext">What is one way you have had to change your leadership approach in the last 12 months — and what drove that change?</div>
+                <div class="dmeta">📝 Open text · Minimum 30 words · Be reflective — this shows how you learn and adapt as a leader</div>
+            </div>
+            <button class="copy-btn green" onclick="copyLeaderD()">📋 Copy Leader – Section D</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════ SCORING REFERENCE ══════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🔢 Scoring Reference — Section A
+        <span class="stag">HR Admin Use Only · Do Not Show in MS Forms</span>
+    </div>
+    <div class="single-col-body">
+        <div class="inst-box">Use this table when scoring Section A responses. Do not share with respondents.</div>
+        <table style="width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; border-radius:10px; overflow:hidden; border:1px solid #dde6f0;">
+            <thead>
+                <tr style="background:#0b2a44; color:#fff;">
+                    <th style="padding:9px 14px; text-align:left;">Scale Option</th>
+                    <th style="padding:9px 14px; text-align:center;">Score</th>
+                    <th style="padding:9px 14px; text-align:left;">What It Means for HR Analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background:#fde8ea;"><td style="padding:9px 14px; font-weight:600;">Not at all like me</td><td style="padding:9px 14px; text-align:center; font-weight:700; color:#c81e1e;">−1</td><td style="padding:9px 14px; color:#4a5b6e;">Competency is clearly absent or underdeveloped. Flags a development need.</td></tr>
+                <tr style="background:#fafcff;"><td style="padding:9px 14px; font-weight:600;">Somewhat like me</td><td style="padding:9px 14px; text-align:center; font-weight:700; color:#64748b;">0</td><td style="padding:9px 14px; color:#4a5b6e;">Inconsistent — competency exists but is not reliable. Moderate development area.</td></tr>
+                <tr style="background:#e8f5ee;"><td style="padding:9px 14px; font-weight:600;">Mostly like me</td><td style="padding:9px 14px; text-align:center; font-weight:700; color:#1a7a4a;">+1</td><td style="padding:9px 14px; color:#4a5b6e;">Competency is present and reliable. Meets expectations. Positive signal.</td></tr>
+                <tr style="background:#dbeafe;"><td style="padding:9px 14px; font-weight:600;">Completely like me</td><td style="padding:9px 14px; text-align:center; font-weight:700; color:#1a56db;">+2</td><td style="padding:9px 14px; color:#4a5b6e;">Competency is a clear strength. Strong positive predictor of performance.</td></tr>
+            </tbody>
+        </table>
+        <div style="margin-top:14px; font-size:13px; color:#4a5b6e; background:#f7faff; padding:12px 16px; border-radius:8px; border-left:4px solid #1a56db;">
+            <strong>Attention Check Scoring:</strong> AC1 expected answer = +1 (Mostly like me). AC2 expected answer = −1 (Not at all like me).<br>
+            Flag and exclude any response where AC1 ≠ +1 or AC2 ≠ −1 before analysis.<br><br>
+            <strong>Total Section A Score Range:</strong> Min = −10 (all "Not at all like me") · Max = +20 (all "Completely like me").<br>
+            Per-competency score: 1 item × (−1 to +2) = score between −1 and +2.
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+}
+function copyText(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showToast('✅ Copied to clipboard!'));
+    } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('✅ Copied to clipboard!');
+    }
+}
+
+function copyDemographics() {
+    copyText(`DEMOGRAPHICS (Common for all levels)\n\nQ1. Full Name\n[Text input - Required]\n\nQ2. Employee ID\n[Text input - Required]\n\nQ3. Job Level\n[Dropdown - Required - Used for MS Forms branching/logic]\nOptions: Junior / Executive | Manager / Team Lead | Leader / VP+\n\nQ4. Average Weekly Work Hours\n[Dropdown]\nOptions: Less than 40 | 40-45 | 46-50 | 51-55 | More than 55\n\nQ5. Number of Direct Reports\n[Dropdown]\nOptions: 0 (Individual Contributor) | 1-3 | 4-7 | 8-12 | More than 12\n\nQ6. Cross-Team Project Involvement\n[Dropdown]\nOptions: Rarely (<20% of my time) | Sometimes (20-40%) | Often (40-60%) | Very often (>60%)`);
+}
+
+const scaleText = `\n\nScale:\n  -1 = Not at all like me (I almost never do this)\n   0 = Somewhat like me (I do this sometimes, not always)\n  +1 = Mostly like me (I do this most of the time)\n  +2 = Completely like me (This is exactly how I work, every time)\n\nInstructions: Select what best describes YOU - not the "right" answer. There are no wrong choices.\n\n`;
+
+const juniorItems = [
+    ['EE', 'Execution Excellence', 'I finish my work on time and the quality is what my team expects from me.'],
+    ['ST', 'Strategic Thinking', 'When I work on a task, I think about how it helps the bigger goal of the team or organization.'],
+    ['LA', 'Learning Agility', 'When someone gives me feedback, I actually use it to change how I work.'],
+    ['CI', 'Collaboration & Influence', 'I build good working relationships with people in other teams - not just in my own group.'],
+    ['PS', 'Problem Solving', 'Before I fix a problem, I take time to understand why it happened - not just what happened.'],
+    ['DI', 'Drive & Initiative', 'I take action or start things on my own, without waiting for someone to tell me to do it.'],
+    ['PL', 'People Leadership', 'I help my colleagues grow - I give them honest feedback and support them when they are stuck.'],
+    ['CM', 'Communication', 'When I explain something, people understand me the first time - I do not need to repeat myself.'],
+    ['RE', 'Resilience', 'When things go wrong or I am under pressure, I stay focused and keep moving forward.'],
+    ['CO', 'Stakeholder Orientation', 'I try to understand what the person I am helping actually needs - not just what they asked for on paper.']
+];
+const managerItems = [
+    ['EE', 'Execution Excellence', 'My team delivers work on time and at the quality level the organization expects.'],
+    ['ST', 'Strategic Thinking', 'I help my team see how their daily work connects to the bigger goals of the organization.'],
+    ['LA', 'Learning Agility', 'When I get feedback about my leadership style, I actually change how I manage my team.'],
+    ['CI', 'Collaboration & Influence', 'I actively build relationships with other teams and use those connections to get better results for my team and the organization.'],
+    ['PS', 'Problem Solving', 'When my team faces a problem, I guide them to find the root cause before jumping to a fix.'],
+    ['DI', 'Drive & Initiative', "I proactively look for ways to improve my team's performance - without waiting for someone above me to ask."],
+    ['PL', 'People Leadership', 'I regularly invest time in developing my direct reports - I give honest feedback and support their career growth.'],
+    ['CM', 'Communication', 'When I communicate a decision or direction to my team, they understand it clearly without needing clarification later.'],
+    ['RE', 'Resilience', 'During high-pressure periods or setbacks, I stay composed and keep my team focused and motivated.'],
+    ['CO', 'Stakeholder Orientation', 'I help my team look beyond what stakeholders ask for and understand what they actually need.']
+];
+const leaderItems = [
+    ['EE', 'Execution Excellence', 'I have put in place clear systems and standards that ensure my teams consistently deliver high-quality results - even when I am not directly involved.'],
+    ['ST', 'Strategic Thinking', 'My major decisions are grounded in the long-term strategic direction of the organization - not just the immediate situation.'],
+    ['LA', 'Learning Agility', 'I actively seek outside perspectives and use them to evolve my leadership approach and organizational strategy.'],
+    ['CI', 'Collaboration & Influence', 'I build relationships across the organization and use them to align different teams toward shared goals - not through formal authority alone.'],
+    ['PS', 'Problem Solving', 'When I face complex organizational challenges, I structure the problem carefully and look at multiple options before I decide.'],
+    ['DI', 'Drive & Initiative', 'I regularly drive initiatives that go beyond my formal role - I do not wait for signals from above before pushing the organization forward.'],
+    ['PL', 'People Leadership', 'Building the next generation of leaders is a personal priority for me - I make deliberate time for it, not just when I have a spare moment.'],
+    ['CM', 'Communication', 'My communications land differently at different levels - I know how to speak to the board, to managers, and to frontline teams in a way each audience understands.'],
+    ['RE', 'Resilience', 'During major crises or organizational stress, I stay composed, make clear decisions, and keep the long-term direction visible to my teams.'],
+    ['CO', 'Stakeholder Orientation', 'My organization regularly anticipates and addresses what stakeholders need - before they even ask.']
+];
+
+function buildSectionA(levelName, items) {
+    let t = `SECTION A - Work Style Profile (${levelName})\n`;
+    t += scaleText;
+    items.forEach(([code, name, text], i) => {
+        t += `Q${i+1}. [${code} - ${name}]\n${text}\nOptions: Not at all like me (-1) | Somewhat like me (0) | Mostly like me (+1) | Completely like me (+2)\n\n`;
+    });
+    t += `AC1. [ATTENTION CHECK]\nData quality check - please read carefully. For this item only, select "Mostly like me" (+1).\nOptions: Not at all like me (-1) | Somewhat like me (0) | Mostly like me (+1) - SELECT THIS | Completely like me (+2)\n\n`;
+    t += `AC2. [ATTENTION CHECK]\nData quality check. For this item only, select "Not at all like me" (-1).\nOptions: Not at all like me (-1) - SELECT THIS | Somewhat like me (0) | Mostly like me (+1) | Completely like me (+2)`;
+    return t;
+}
+
+function copyJuniorA() { copyText(buildSectionA('Junior / Executive', juniorItems)); }
+function copyManagerA() { copyText(buildSectionA('Manager / Team Lead', managerItems)); }
+function copyLeaderA() { copyText(buildSectionA('Leader / VP+', leaderItems)); }
+
+function copySectionB() {
+    copyText(`SECTION B - Theory of Success (All Levels - Same questions)\n\nInstructions:\nBelow are 10 skills that matter for doing well at JioCX.\nStep 1: Rank them from 1 (most important for success in YOUR role) to 10 (least important). Use each number only once.\nStep 2: From the same list, tick exactly 3 that are your top personal priorities right now.\n\nRANKING QUESTIONS (add one dropdown per competency in MS Forms):\n\nB1. Execution Excellence (EE)\nFinishing your work on time, at the quality level expected - and owning the result.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB2. Strategic Thinking (ST)\nConnecting your daily work to the bigger goals of the team or organization.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB3. Learning Agility (LA)\nPicking up new skills quickly and changing how you work when the situation calls for it.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB4. Collaboration & Influence (CI)\nBuilding strong working relationships across teams and getting things done even without formal authority.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB5. Problem Solving (PS)\nBreaking down complex problems and making well-thought-out decisions using available information.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB6. Drive & Initiative (DI)\nTaking action on your own, setting high personal standards, and going beyond what is formally expected.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB7. People Leadership (PL)\nHelping others grow, giving honest feedback, and enabling the people around you to perform at their best.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB8. Communication (CM)\nExpressing your ideas clearly and adjusting how you communicate depending on who you are talking to.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB9. Resilience (RE)\nStaying focused and performing well under pressure, setbacks, or difficult situations.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nB10. Stakeholder Orientation (CO)\nUnderstanding what the people you serve truly need - and delivering reliably for them.\n[Dropdown: Rank 1 | Rank 2 | Rank 3 | Rank 4 | Rank 5 | Rank 6 | Rank 7 | Rank 8 | Rank 9 | Rank 10]\n\nCROSS-CHECK (Checkbox question - limit exactly 3 selections):\nB11. Your Top 3 Priorities\nFrom the 10 skills above, select exactly 3 that are your most important personal priorities in your current role right now.\n[Checkbox: Execution Excellence | Strategic Thinking | Learning Agility | Collaboration & Influence | Problem Solving | Drive & Initiative | People Leadership | Communication | Resilience | Stakeholder Orientation]\n[MS Forms admin note: Set max selections = 3, min selections = 3]`);
+}
+
+const jScenarios = [
+    ['Report Error', 'You are finishing a report due tomorrow morning. At 6 PM you find a big data error that affects the whole analysis. Your manager has already left.', ['Fix only the parts you are confident about and submit on time.', 'Contact your manager right away - explain the problem and agree on the best next step.', 'Submit as-is tonight and plan to fix the error in the next version.', 'Stay as long as it takes, fix the full report, and send your manager a clear summary of changes.']],
+    ['Helping a Colleague', 'A close colleague is behind on a big deliverable due tomorrow and asks for your help. You also have deadlines, but yours are tight - not impossible.', ['Help your colleague fully - team success matters more right now.', 'Finish your own work first, then help with whatever time is left.', "Help with the most critical parts and reduce the scope of your own deliverable to compensate.", 'Suggest your colleague speak to your manager to get extra support.']],
+    ['Feedback You Disagree With', "Your manager tells you that you work too independently and do not communicate with the team enough. You partly disagree.", ['Calmly explain your side and why the feedback may not be accurate.', 'Listen carefully, ask for specific examples, genuinely reflect on whether there is truth in it, then share your perspective.', 'Nod along to avoid conflict and continue working the same way.', 'Ask a trusted colleague privately if they agree before responding to your manager.']]
+];
+const mScenarios = [
+    ['Team Member Struggling', 'A team member who was doing well has recently become disengaged - missing deadlines, going quiet in meetings, and looking withdrawn. This has been going on for about three weeks.', ['Watch for another two to three weeks to see if things improve on their own.', 'Have a private, honest conversation - understand what changed, listen without judging, and build a plan together.', 'Escalate to HR immediately and formally document the performance concern.', 'Quietly reassign their work to other team members while the situation resolves.']],
+    ['Promotion Decision', 'Two of your best team members are both ready for the only promotion available this cycle. Their performance records are almost equal.', ['Promote the one with the slightly higher rating - let the data decide.', 'Promote the one who is more of a team player - culture fit matters more long-term.', 'Give both a stretch project for 90 days before deciding - let the assignment show the difference.', 'Ask HR or your manager to make the final call - keeping it objective protects everyone.']],
+    ['Team Resisting Change', "A new organization-wide initiative requires your team to replace a process they have used successfully for two years. Your team is openly against the change.", ['Push through firmly - the organization has decided and you cannot wait any longer.', 'Break the initiative into clear steps and run a session with the team to address concerns and build the plan together.', "Delay implementation until the team's resistance fades on its own.", 'Let each person implement the change in their own way and time to protect morale.']]
+];
+const lScenarios = [
+    ['Teams Working in Silos', 'A critical project milestone was missed because two teams operated independently with different assumptions about who owned a key decision.', ['Identify who was mainly responsible and hold them formally accountable.', 'Bring both teams together immediately, find the root cause, and redesign how they coordinate going forward.', 'Accept the delay, update the timeline, and monitor more closely - without changing the structure.', 'Bring in external consultants to review and redesign the cross-team operating model.']],
+    ['Cost Reduction Decision', 'You must cut costs by 15% this quarter. Option A: Targeted headcount cuts in lower-priority areas. Option B: Proportional cuts across all teams equally.', ['Make targeted cuts in lower-priority areas to protect your highest-value capabilities.', 'Apply proportional cuts equally across all teams to protect morale and culture.', 'Delay by 60 days to gather more data before committing.', 'Present both options transparently to the leadership team and make the decision together.']],
+    ['Unrealistic Stakeholder Pressure', "A key external stakeholder is pushing you to commit to a project outcome your internal data clearly shows is not achievable within the current timeline and resources.", ['Agree to the commitment to protect the relationship and negotiate scope privately later.', "Present your data clearly, explain what is realistically achievable, and offer an alternative that addresses the stakeholder's actual goal.", 'Escalate to your own manager - agreeing could set a bad organizational precedent.', 'Commit publicly and push the team hard to try to deliver.']]
+];
+
+function buildSectionC(levelName, scenarios) {
+    let t = `SECTION C - Behavioral Scenarios (${levelName})\n\nInstructions: For each situation, rank the 4 options from 1 (most effective) to 4 (least effective). Use each rank exactly once. Choose what YOU would actually do.\n\n`;
+    scenarios.forEach(([title, text, opts], i) => {
+        t += `Scenario ${i+1}: ${title}\n${text}\n\nRank from 1 (most effective) to 4 (least effective):\n`;
+        opts.forEach((o, j) => { t += `  ${String.fromCharCode(65+j)}. ${o}\n`; });
+        t += `[MS Forms: Add as Ranking question. All 4 options must each get a unique rank 1-4.]\n\n`;
+    });
+    return t;
+}
+function copyJuniorC() { copyText(buildSectionC('Junior / Executive', jScenarios)); }
+function copyManagerC() { copyText(buildSectionC('Manager / Team Lead', mScenarios)); }
+function copyLeaderC() { copyText(buildSectionC('Leader / VP+', lScenarios)); }
+
+function copyJuniorD() {
+    copyText(`SECTION D - Personal Reflection (Junior / Executive)\n2 open-ended questions - Minimum 30 words per answer\n\nInstructions: Answer both questions in your own words. Write at least 30 words per answer. Be specific - describe what YOU personally did, not what the team did.\n\nD1. Achievement & Impact\nTell us about one piece of work you are genuinely proud of. What did you do specifically, and what changed because of it?\n[MS Forms: Long answer text field]\n\nD2. Growth & Self-Awareness\nWhat is one thing you are actively working to get better at right now? What are you actually doing about it?\n[MS Forms: Long answer text field]\n\n--- HR Coding Notes (internal, not shown to respondent) ---\nD1: Code for achievement motive, quality of execution, attribution (internal vs external), ownership of outcomes.\nD2: Code for self-awareness, growth mindset, learning agility, honesty vs social desirability bias.`);
+}
+function copyManagerD() {
+    copyText(`SECTION D - Personal Reflection (Manager / Team Lead)\n2 open-ended questions - Minimum 30 words per answer\n\nInstructions: Answer both questions in your own words. Write at least 30 words per answer. Be specific - describe what YOU personally did as a manager, not what your team did.\n\nD1. Team Impact\nTell us about a time when something you did as a manager made a real positive difference for your team or a direct report. What did you do, and what changed?\n[MS Forms: Long answer text field]\n\nD2. Leadership Growth\nWhat is one area where you know your management style needs to improve? What are you actively doing to work on it?\n[MS Forms: Long answer text field]\n\n--- HR Coding Notes (internal, not shown to respondent) ---\nD1: Code for people leadership behavior, specificity of action, attribution style, empathy, coaching orientation.\nD2: Code for leadership self-awareness, growth mindset, candor vs social desirability bias, initiative in development.`);
+}
+function copyLeaderD() {
+    copyText(`SECTION D - Personal Reflection (Leader / VP+)\n2 open-ended questions - Minimum 30 words per answer\n\nInstructions: Answer both questions in your own words. Write at least 30 words per answer. Think at the organizational level - describe decisions or initiatives that had broad impact.\n\nD1. Organizational Impact\nTell us about a leadership decision or initiative you are proud of that had a meaningful impact beyond your immediate team. What did you decide or do, and what was the result?\n[MS Forms: Long answer text field]\n\nD2. Leadership Evolution\nWhat is one way you have had to change your leadership approach in the last 12 months - and what drove that change?\n[MS Forms: Long answer text field]\n\n--- HR Coding Notes (internal, not shown to respondent) ---\nD1: Code for strategic impact, ownership, decision quality, scope of thinking (team vs org), achievement motive.\nD2: Code for adaptive leadership, learning agility, self-awareness, candor, external vs internal attribution of change.`);
+}
+</script>
+</body>
+</html>

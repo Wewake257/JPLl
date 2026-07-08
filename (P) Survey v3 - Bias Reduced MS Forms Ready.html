@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JioCX Competency Survey v3 – Bias-Reduced | MS Forms Ready</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#eef2f9;padding:28px 18px;color:#1e293b;line-height:1.65}
+
+/* ── PAGE HEADER ── */
+.page-header{max-width:1340px;margin:0 auto 24px;background:linear-gradient(135deg,#0b2a44 0%,#1a4b7a 60%,#1a56db 100%);border-radius:20px;padding:36px 48px;color:#fff}
+.page-header h1{font-size:25px;font-weight:800;letter-spacing:-.01em}
+.page-header .sub{font-size:14px;opacity:.8;margin-top:5px}
+.page-header .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.page-header .badge{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);padding:3px 14px;border-radius:30px;font-size:11px;font-weight:600}
+.page-header .fix-badge{background:rgba(255,180,0,.2);border:1px solid rgba(255,180,0,.4);padding:3px 14px;border-radius:30px;font-size:11px;font-weight:700;color:#ffe08a}
+
+/* ── WHAT CHANGED BOX ── */
+.changes-bar{max-width:1340px;margin:0 auto 22px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.change-card{background:#fff;border-radius:12px;padding:14px 16px;border-top:4px solid #1a56db;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.change-card.fixed{border-top-color:#1a7a4a}
+.change-card.warn{border-top-color:#d4a030}
+.change-card .cc-title{font-size:11px;font-weight:700;color:#0b2a44;margin-bottom:4px}
+.change-card .cc-text{font-size:11px;color:#4a5b6e;line-height:1.5}
+
+/* ── HOW TO USE ── */
+.how-to-use{max-width:1340px;margin:0 auto 22px;background:#fff8e7;border:1px solid #f0d080;border-radius:12px;padding:14px 22px;font-size:13px;color:#7a5a20}
+.how-to-use strong{color:#5a3e10}
+
+/* ── SECTION WRAP ── */
+.section-wrap{max-width:1340px;margin:0 auto 28px}
+.section-title{font-size:17px;font-weight:800;color:#0b2a44;padding:14px 22px;background:#fff;border-radius:14px 14px 0 0;border-bottom:3px solid #dbeafe;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.section-title .stag{font-size:11px;font-weight:700;background:#dbeafe;color:#1a56db;padding:3px 12px;border-radius:30px}
+.section-title .snew{font-size:11px;font-weight:700;background:#e6f9ed;color:#1a7a4a;padding:3px 12px;border-radius:30px}
+.section-title .swarn{font-size:11px;font-weight:700;background:#fff3dc;color:#b87800;padding:3px 12px;border-radius:30px}
+.section-title .sdesc{font-size:12px;font-weight:400;color:#3e5778}
+
+/* ── THREE COLUMN ── */
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #dde6f0;border-top:none;border-radius:0 0 14px 14px;overflow:hidden;background:#fff}
+.col-level{border-right:1px solid #dde6f0;padding:18px 18px 22px}
+.col-level:last-child{border-right:none}
+.col-level .col-header{font-size:13px;font-weight:700;color:#fff;background:#0b2a44;padding:7px 14px;border-radius:8px;margin-bottom:12px}
+.col-level.manager .col-header{background:#1a56db}
+.col-level.leader .col-header{background:#1a7a4a}
+
+/* ── SINGLE COL ── */
+.single-col-body{border:1px solid #dde6f0;border-top:none;border-radius:0 0 14px 14px;background:#fff;padding:22px 26px}
+
+/* ── QUESTION BLOCKS ── */
+.qblock{background:#fafcff;border:1px solid #e6edf5;border-radius:10px;padding:12px 14px;margin-bottom:9px}
+.qblock.attention{background:#fff8e7;border-color:#f0d080}
+.qblock.new-q{background:#f0fbf4;border-color:#a7e3bc}
+.qblock.criterion{background:#fdf0ff;border-color:#d4b0e8}
+.qblock .qnum{font-size:10px;font-weight:700;color:#1a56db;margin-bottom:3px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.qblock .qnum .comp-tag{background:#ede7f6;color:#5e2e8e;padding:1px 8px;border-radius:30px;font-size:9px}
+.qblock .qnum .ac-tag{background:#fff3dc;color:#b87800;padding:1px 8px;border-radius:30px;font-size:9px}
+.qblock .qnum .new-tag{background:#e6f9ed;color:#1a7a4a;padding:1px 8px;border-radius:30px;font-size:9px;font-weight:700}
+.qblock .qnum .hr-tag{background:#fde8ea;color:#c81e1e;padding:1px 8px;border-radius:30px;font-size:9px;font-weight:700}
+.qblock .qnum .crit-tag{background:#ede0f7;color:#6a0dad;padding:1px 8px;border-radius:30px;font-size:9px;font-weight:700}
+.qblock .qtext{font-size:13px;font-weight:500;color:#0b2a44;margin-bottom:7px;line-height:1.55}
+.qblock .qsub{font-size:11.5px;color:#3e5778;margin-bottom:7px;font-style:italic;line-height:1.4}
+.qblock .qoptions{display:flex;flex-direction:column;gap:3px;margin-top:5px}
+.qblock .qoptions .opt{font-size:11.5px;color:#334155;display:flex;align-items:flex-start;gap:6px}
+.qblock .qoptions .opt .score{font-weight:700;padding:0 6px;border-radius:16px;font-size:10px;min-width:26px;text-align:center;line-height:1.6;flex-shrink:0}
+.qblock .qoptions .opt .score.neg{background:#fde8ea;color:#c81e1e}
+.qblock .qoptions .opt .score.zero{background:#f1f5f9;color:#64748b}
+.qblock .qoptions .opt .score.pos1{background:#e6f9ed;color:#1a7a4a}
+.qblock .qoptions .opt .score.pos2{background:#dbeafe;color:#1a56db}
+.qblock .qoptions .opt .score.crit{background:#ede0f7;color:#6a0dad}
+
+/* ── SCALE BOX ── */
+.scale-box{background:#f0f6fe;border:1px solid #c7daf5;border-radius:9px;padding:12px 15px;margin-bottom:12px;font-size:12px;color:#1e3a5f}
+.scale-box .scale-title{font-weight:700;margin-bottom:7px;font-size:12px;color:#0b2a44}
+.scale-box .scale-row{display:flex;flex-direction:column;gap:4px}
+.scale-box .scale-item{display:flex;align-items:flex-start;gap:7px}
+.scale-box .scale-item .sc{font-weight:700;min-width:24px;font-size:12px}
+.scale-box .scale-item .sc.neg{color:#c81e1e}
+.scale-box .scale-item .sc.zero{color:#64748b}
+.scale-box .scale-item .sc.p1{color:#1a7a4a}
+.scale-box .scale-item .sc.p2{color:#1a56db}
+
+/* ── BIAS NOTE ── */
+.bias-note{background:#fdf0ff;border:1px solid #d4b0e8;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:11.5px;color:#5a0a7a}
+.bias-note strong{color:#3d006e}
+
+/* ── INST BOX ── */
+.inst-box{background:#f7faff;border-left:4px solid #1a56db;border-radius:7px;padding:10px 14px;font-size:12px;color:#1e3a5f;margin-bottom:14px}
+.inst-box.green{border-left-color:#1a7a4a;background:#f0fbf4}
+.inst-box.warn{border-left-color:#d4a030;background:#fff8e7}
+
+/* ── COPY BUTTON ── */
+.copy-btn{background:#0b2a44;color:#fff;border:none;padding:6px 16px;border-radius:30px;font-size:11px;font-weight:600;cursor:pointer;margin-top:8px;transition:.2s;display:inline-flex;align-items:center;gap:5px}
+.copy-btn:hover{background:#1a4a6a;transform:scale(1.02)}
+.copy-btn.green{background:#1a7a4a}
+.copy-btn.green:hover{background:#0f5f3a}
+.copy-btn.blue{background:#1a56db}
+.copy-btn.blue:hover{background:#0f3ea0}
+.copy-btn.purple{background:#6a0dad}
+.copy-btn.purple:hover{background:#5a009d}
+
+/* ── DEMO GRID ── */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:5px}
+.demo-field{background:#fafcff;border:1px solid #e6edf5;border-radius:8px;padding:10px 13px}
+.demo-field.new-field{background:#f0fbf4;border-color:#a7e3bc}
+.demo-field .fname{font-weight:700;font-size:13px;color:#0b2a44}
+.demo-field .ftype{font-size:10px;color:#6f8aa8;margin-top:2px}
+.demo-field .fopts{font-size:11.5px;color:#334155;margin-top:4px;line-height:1.5}
+
+/* ── COMP ROW ── */
+.comp-row{display:flex;align-items:flex-start;gap:12px;padding:10px 13px;border:1px solid #e6edf5;border-radius:9px;background:#fafcff;margin-bottom:7px}
+.comp-row .comp-num{font-size:18px;font-weight:800;color:#dbeafe;min-width:28px;line-height:1;margin-top:3px}
+.comp-row .comp-info{flex:1}
+.comp-row .comp-name{font-weight:700;font-size:13px;color:#0b2a44}
+.comp-row .comp-desc{font-size:11.5px;color:#4a5b6e;margin-top:2px}
+.comp-row .comp-score{background:#e6edf5;padding:3px 12px;border-radius:30px;font-size:11px;font-weight:600;color:#1a4a6a;white-space:nowrap;align-self:center}
+
+/* ── SCENARIO ── */
+.scenario-block{border:1px solid #e6edf5;border-left:4px solid #1a56db;border-radius:9px;background:#fafcff;padding:13px 15px;margin-bottom:11px}
+.scenario-block .sc-title{font-weight:700;font-size:13px;color:#0b2a44;margin-bottom:5px}
+.scenario-block .sc-text{font-size:12.5px;color:#334155;margin-bottom:7px;line-height:1.5}
+.scenario-block .sc-opt{display:flex;align-items:flex-start;gap:7px;padding:4px 0;border-bottom:1px solid #eef4fa;font-size:12px;color:#1e293b}
+.scenario-block .sc-opt:last-of-type{border-bottom:none}
+.scenario-block .sc-opt .ol{font-weight:700;color:#1a56db;min-width:16px}
+.scenario-block .sc-note{font-size:10.5px;color:#6f8aa8;margin-top:7px;font-style:italic;border-top:1px solid #eef4fa;padding-top:5px}
+
+/* ── SCENARIO FOLLOWUP (NEW) ── */
+.sc-followup{background:#f0fbf4;border:1px solid #a7e3bc;border-radius:8px;padding:10px 13px;margin-top:8px}
+.sc-followup .sf-label{font-size:10px;font-weight:700;color:#1a7a4a;margin-bottom:5px}
+.sc-followup .sf-text{font-size:12.5px;font-weight:500;color:#1e3a2a;margin-bottom:5px}
+.sc-followup .sf-opts{display:flex;flex-direction:column;gap:3px}
+.sc-followup .sf-opts .sfo{font-size:11px;color:#2a5a3a;display:flex;align-items:center;gap:5px}
+.sc-followup .sf-opts .sfo::before{content:'›';color:#1a7a4a;font-weight:700}
+
+/* ── D BLOCK ── */
+.d-qblock{background:#fafcff;border:1px solid #e6edf5;border-radius:9px;padding:13px 15px;margin-bottom:9px}
+.d-qblock .dlabel{font-size:10px;font-weight:700;color:#1a56db;margin-bottom:4px}
+.d-qblock .dtext{font-size:13px;font-weight:500;color:#0b2a44;line-height:1.55;margin-bottom:6px}
+.d-qblock .d-anchor{background:#f0f6fe;border-left:3px solid #1a56db;border-radius:5px;padding:7px 10px;font-size:11.5px;color:#1e3a5f;margin-top:6px}
+.d-qblock .d-anchor strong{color:#0b2a44}
+.d-qblock .dmeta{font-size:10.5px;color:#6f8aa8;margin-top:7px;font-style:italic}
+
+/* ── CRITERION TABLE ── */
+.crit-table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 16px;border-radius:9px;overflow:hidden;border:1px solid #d4b0e8}
+.crit-table th{background:#6a0dad;color:#fff;font-weight:600;padding:8px 12px;text-align:left}
+.crit-table td{padding:8px 12px;border-bottom:1px solid #e8d0f5;background:#fdf5ff;vertical-align:top}
+.crit-table tr:last-child td{border-bottom:none}
+
+/* ── SCORING TABLE ── */
+.score-table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0 14px;border-radius:9px;overflow:hidden;border:1px solid #dde6f0}
+.score-table th{background:#0b2a44;color:#fff;font-weight:600;padding:8px 12px;text-align:left}
+.score-table td{padding:8px 12px;border-bottom:1px solid #e9eff6;background:#fafcff;vertical-align:top}
+.score-table tr:last-child td{border-bottom:none}
+
+/* ── ANALYSIS GUIDE ── */
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.analysis-card{background:#fafcff;border:1px solid #e6edf5;border-radius:9px;padding:14px 16px}
+.analysis-card .ac-title{font-weight:700;font-size:13px;color:#0b2a44;margin-bottom:6px}
+.analysis-card .ac-text{font-size:12px;color:#4a5b6e;line-height:1.55}
+.analysis-card.green{border-top:3px solid #1a7a4a}
+.analysis-card.blue{border-top:3px solid #1a56db}
+.analysis-card.purple{border-top:3px solid #6a0dad}
+.analysis-card.gold{border-top:3px solid #d4a030}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:#0b2a44;color:#fff;padding:10px 22px;border-radius:12px;font-size:12px;box-shadow:0 8px 30px rgba(0,0,0,.15);opacity:0;transform:translateY(30px);transition:.3s ease;z-index:999;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+
+@media(max-width:950px){
+    .three-col,.changes-bar{grid-template-columns:1fr}
+    .col-level{border-right:none;border-bottom:1px solid #dde6f0}
+    .demo-grid{grid-template-columns:1fr}
+    .analysis-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE HEADER
+═══════════════════════════════════════════════════════ -->
+<div class="page-header">
+    <h1>📋 JioCX Competency Survey 2026 — Version 3 · Bias-Reduced</h1>
+    <div class="sub">Success Profile Study · All 5 Limitations from v2 Addressed · MS Forms Ready · Copy-Paste by Level</div>
+    <div class="badges">
+        <span class="fix-badge">🔧 FIX 1: Behavioral Frequency Scale (not self-description)</span>
+        <span class="fix-badge">🔧 FIX 2: Relative Self-Rating Added (criterion variable)</span>
+        <span class="fix-badge">🔧 FIX 3: Manager Nomination Field (HR-only)</span>
+        <span class="fix-badge">🔧 FIX 4: Scenario Reasoning Follow-up (reduces random ranking)</span>
+        <span class="fix-badge">🔧 FIX 5: Time-Anchored Section D (forces real events)</span>
+        <span class="badge">✅ 10 Behavioral Items + 2 Attention Checks</span>
+        <span class="badge">✅ Scale: Never / Sometimes / Often / Almost Always</span>
+        <span class="badge">✅ Section B Ranking Kept</span>
+        <span class="badge">✅ 3 Scenarios + Why Follow-up per Level</span>
+        <span class="badge">✅ 2 Time-Anchored Open-Ended (Section D)</span>
+        <span class="badge">✅ Junior / Manager / Leader Side-by-Side</span>
+    </div>
+</div>
+
+<!-- ═══ WHAT CHANGED CARDS ═══ -->
+<div class="changes-bar">
+    <div class="change-card fixed">
+        <div class="cc-title">🔧 FIX 1 — Self-Report Bias</div>
+        <div class="cc-text">Scale changed from "like me" (self-description) to behavioral frequency — "How often do you actually do this?" Harder to inflate, easier to differentiate top vs. average performers.</div>
+    </div>
+    <div class="change-card fixed">
+        <div class="cc-title">🔧 FIX 2 — No Criterion Variable</div>
+        <div class="cc-text">New Section E added: Relative Self-Rating vs. peers (5-point) + Tenure in Role. Links to external performance data by Employee ID. This IS the benchmark variable for success profiling.</div>
+    </div>
+    <div class="change-card fixed">
+        <div class="cc-title">🔧 FIX 3 — Manager Nomination</div>
+        <div class="cc-text">HR fills a hidden Manager Nomination tag before sharing the form link. Never visible to respondent. Creates a second criterion variable for top/average/below segmentation.</div>
+    </div>
+    <div class="change-card fixed">
+        <div class="cc-title">🔧 FIX 4 — Scenario Reasoning</div>
+        <div class="cc-text">Each Section C scenario now has a "Why did you rank it that way?" follow-up dropdown. Captures the decision-making motive behind the ranking — reveals values, not just choices.</div>
+    </div>
+    <div class="change-card fixed">
+        <div class="cc-title">🔧 FIX 5 — Reference Mismatch (Section D)</div>
+        <div class="cc-text">Section D now requires respondents to anchor their answers to a specific real event with an approximate timeframe. Prevents vague, aspirational responses. Forces behavioral evidence.</div>
+    </div>
+</div>
+
+<div class="how-to-use">
+    💡 <strong>MS Forms Setup:</strong> Use the "Job Level" dropdown for branching — Junior/Manager/Leader versions appear in separate columns below.
+    <strong>Section E and Section B are common for all levels.</strong> Sections A, C, D are level-adapted.
+    HR admin: Fill the Manager Nomination field (E3) before distributing each form link — respondents do NOT see it.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION E — PERFORMANCE CALIBRATION (NEW)
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🎯 Section E — Performance Calibration
+        <span class="snew">NEW · Common – All Levels</span>
+        <span class="swarn">Critical for Success Profile Analysis</span>
+        <span class="sdesc">Placed AFTER demographics, BEFORE Section A · Fixes the criterion variable gap</span>
+        <button class="copy-btn purple" onclick="copySectionE()" style="margin-left:auto;">📋 Copy Section E</button>
+    </div>
+    <div class="single-col-body">
+        <div class="inst-box warn">⚠️ <strong>Why this section exists:</strong> Without a performance anchor, all respondents look the same on paper. Section E creates the benchmark that lets us separate top performers from average performers in the data. It must be the first thing respondents answer after demographics.</div>
+
+        <div class="demo-grid" style="grid-template-columns:1fr 1fr 1fr;">
+
+            <!-- E1: Relative Self-Rating -->
+            <div class="demo-field new-field" style="grid-column:1/3;">
+                <div class="fname">E1. Compared to people at the same job level as you at JioCX, how would you honestly rate your overall work performance?</div>
+                <div class="ftype">📋 Dropdown · Required · CRITERION VARIABLE — link to Employee ID in analysis</div>
+                <div class="fopts" style="margin-top:8px;">
+                    <div style="padding:3px 0; border-bottom:1px solid #eef4fa;">⬛ I am in the bottom 20% — most colleagues at my level perform better than me</div>
+                    <div style="padding:3px 0; border-bottom:1px solid #eef4fa;">🟦 I am below average — I perform below most of my peers at this level</div>
+                    <div style="padding:3px 0; border-bottom:1px solid #eef4fa;">🟩 I am about average — I perform similarly to most of my peers</div>
+                    <div style="padding:3px 0; border-bottom:1px solid #eef4fa;">🟧 I am above average — I perform better than most of my peers at this level</div>
+                    <div style="padding:3px 0;">⭐ I am among the top 20% — I consistently outperform most colleagues at this level</div>
+                </div>
+                <div class="ftype" style="margin-top:7px;color:#6a0dad;font-weight:600;">📊 Analytics Note: This field + Employee ID enables top/average/below segmentation without external data dependency.</div>
+            </div>
+
+            <!-- E2: Tenure in Role -->
+            <div class="demo-field new-field">
+                <div class="fname">E2. How long have you been in your current role at JioCX?</div>
+                <div class="ftype">📋 Dropdown · Required · Controls for role tenure effect on competency scores</div>
+                <div class="fopts" style="margin-top:6px;">
+                    Less than 6 months | 6–12 months | 1–2 years | 2–4 years | More than 4 years
+                </div>
+                <div class="ftype" style="margin-top:5px;color:#1a7a4a;font-weight:600;">📊 Analytics Note: Newer employees rate themselves lower on EE/DI. Control for tenure in regression.</div>
+            </div>
+
+            <!-- E3: Manager Nomination (HR ONLY) -->
+            <div class="demo-field" style="background:#fff5f5;border-color:#e8a0a0;grid-column:1/4;">
+                <div class="fname" style="color:#c81e1e;">🔒 E3. Manager Nomination — HR ADMIN ONLY (Do NOT show to respondent)</div>
+                <div class="ftype" style="color:#c81e1e;">HR fills this field. Respondent never sees it. Add as a hidden pre-filled field or separate HR tracking sheet.</div>
+                <div class="fopts" style="margin-top:7px;color:#7a2a2a;">
+                    <strong>How to use in MS Forms:</strong> Create a separate HR-side spreadsheet with columns: [Employee ID] | [Manager Nomination Code]<br>
+                    Match by Employee ID after data collection.<br><br>
+                    <strong>Nomination Codes:</strong><br>
+                    🏆 <strong>T</strong> = Top Performer (nominated by manager as top 20%)<br>
+                    📊 <strong>A</strong> = Average Performer (solid, consistent, meets expectations)<br>
+                    📉 <strong>D</strong> = Development Case (below expectations or on PIP)<br>
+                    🆕 <strong>N</strong> = New Employee (less than 6 months, exclude from main analysis)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     DEMOGRAPHICS
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        📌 Demographics
+        <span class="stag">Common – All Levels · Fill First</span>
+        <span class="sdesc">"Job Level" used for MS Forms branching · Employee ID links to performance data</span>
+        <button class="copy-btn green" onclick="copyDemographics()" style="margin-left:auto;">📋 Copy Demographics</button>
+    </div>
+    <div class="single-col-body">
+        <div class="demo-grid">
+            <div class="demo-field"><div class="fname">1. Full Name</div><div class="ftype">📝 Text input · Required</div></div>
+            <div class="demo-field"><div class="fname">2. Employee ID</div><div class="ftype">📝 Text input · Required · PRIMARY LINK KEY for performance data merge</div></div>
+            <div class="demo-field">
+                <div class="fname">3. Job Level</div>
+                <div class="ftype">📋 Dropdown · Required · Used for MS Forms branching</div>
+                <div class="fopts">Junior / Executive &nbsp;|&nbsp; Manager / Team Lead &nbsp;|&nbsp; Leader / VP+</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">4. Average Weekly Work Hours</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">Less than 40 | 40–45 | 46–50 | 51–55 | More than 55</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">5. Number of Direct Reports</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">0 (Individual Contributor) | 1–3 | 4–7 | 8–12 | More than 12</div>
+            </div>
+            <div class="demo-field">
+                <div class="fname">6. Cross-Team Project Involvement</div>
+                <div class="ftype">📋 Dropdown</div>
+                <div class="fopts">Rarely (&lt;20%) | Sometimes (20–40%) | Often (40–60%) | Very often (&gt;60%)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION A — BEHAVIORAL FREQUENCY (REDESIGNED)
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        📊 Section A — Behavioral Frequency Profile
+        <span class="stag">10 Items + 2 Attention Checks · Level-Adapted</span>
+        <span class="snew">FIX 1: Frequency scale replaces self-description</span>
+        <span class="sdesc">How often do you ACTUALLY do this? — not "does this sound like me?"</span>
+    </div>
+    <div class="three-col">
+
+        <!-- ─── JUNIOR ─── -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How often do you actually do this in your work?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Never / Almost Never</strong> — I rarely or never do this</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Sometimes</strong> — I do this less than half the time</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Often</strong> — I do this more than half the time</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Almost Always</strong> — I do this consistently, it is a reliable habit</div>
+                </div>
+            </div>
+            <div class="bias-note">⚡ <strong>Bias note for HR:</strong> Frequency questions are harder to inflate than "agree/disagree" items. Respondents who answer "Almost Always" to everything should be flagged — check AC results and cross-reference with performance ratings.</div>
+            <div class="inst-box">📌 Think about the last 3 months of your actual work. How often did you ACTUALLY do each of these things — not how often you think you should?</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">I submit my work by the agreed deadline without being reminded.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">Before starting a task, I ask how it fits into a larger team or business goal — not just what needs to get done.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">After receiving feedback from a manager or colleague, I make a visible change in how I work — not just agree and continue the same way.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I initiate contact or collaboration with someone outside my immediate team — not just when a process requires it.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">Before I suggest or act on a solution, I look for at least two possible reasons the problem happened.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I spot an improvement or gap in my work and act on it — without waiting for someone to tell me to.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">When a colleague is struggling, I offer specific, practical help — not just general encouragement or sympathy.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">After I explain something — in a meeting, message, or email — people act on it correctly without coming back with basic clarification questions.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">During busy or stressful periods, my work quality and output stay roughly the same as during normal periods.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">After completing a task for someone, I check back to make sure my output actually solved their real problem — not just what they asked for on paper.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Often"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> ✔ Often — select this</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Never / Almost Never"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Never / Almost Never — select this</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+            <button class="copy-btn green" onclick="copyJuniorA()">📋 Copy Junior – Section A</button>
+        </div>
+
+        <!-- ─── MANAGER ─── -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How often do you actually do this as a manager?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Never / Almost Never</strong> — I rarely or never do this with my team</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Sometimes</strong> — I do this less than half the time</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Often</strong> — I do this more than half the time</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Almost Always</strong> — I do this consistently across my team, every week</div>
+                </div>
+            </div>
+            <div class="bias-note">⚡ <strong>Bias note for HR:</strong> Manager items use team-outcome framing, not personal trait framing. "My team does X" is harder to claim falsely than "I believe in X." Cross-reference with team performance ratings.</div>
+            <div class="inst-box">📌 Think about the last 3 months of how you actually managed your team — not your intentions or what you believe in. How often did you ACTUALLY do each of these things?</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">My team's work is delivered by the committed deadline — without me needing to chase or micromanage each output.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">In my 1:1s or team meetings, I explicitly connect my team's current work to an organizational priority or long-term goal.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">When I receive feedback about my management style — from my manager, HR, or my team — I make a specific visible change in how I lead.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I proactively build or use relationships with other teams to create better results for my team — not just when a project formally requires it.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">When a team problem comes up, I guide my team to diagnose the root cause before jumping to a fix — even under time pressure.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I identify and act on ways to improve my team's performance or processes — without being asked to by senior management.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">I give each direct report specific, actionable feedback on their work — not just general praise or generic guidance.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">When I communicate a decision or direction to my team, they act on it correctly the first time — without a follow-up for basic clarification.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">During high-pressure weeks or organizational changes, my team stays focused and productive — because of how I lead them through it.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">After my team delivers work for a stakeholder, I follow up to confirm the output actually addressed the underlying need — not just what was requested.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Often"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> ✔ Often — select this</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Never / Almost Never"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Never / Almost Never — select this</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+            <button class="copy-btn blue" onclick="copyManagerA()">📋 Copy Manager – Section A</button>
+        </div>
+
+        <!-- ─── LEADER ─── -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+</div>
+            <div class="scale-box">
+                <div class="scale-title">📏 Scale — How often do you actually do this as a senior leader?</div>
+                <div class="scale-row">
+                    <div class="scale-item"><span class="sc neg">−1</span> <strong>Never / Almost Never</strong> — I rarely or never do this at org level</div>
+                    <div class="scale-item"><span class="sc zero">&nbsp;0</span> <strong>Sometimes</strong> — I do this in some situations, not consistently</div>
+                    <div class="scale-item"><span class="sc p1">+1</span> <strong>Often</strong> — I do this more than half the time across my area</div>
+                    <div class="scale-item"><span class="sc p2">+2</span> <strong>Almost Always</strong> — This is a consistent, observable pattern in my leadership</div>
+                </div>
+            </div>
+            <div class="bias-note">⚡ <strong>Bias note for HR:</strong> Leader items focus on org-level behaviors and systems — not intentions. "I have built systems that do X" is much harder to claim falsely than "I believe in X." Cross-reference with 360 data where available.</div>
+            <div class="inst-box">📌 Think about the last 3 months of how you actually led at the organizational level. How often did these things actually happen as a direct result of your leadership actions?</div>
+
+            <div class="qblock"><div class="qnum">Q1 <span class="comp-tag">Execution Excellence</span></div><div class="qtext">The teams under my leadership meet their committed delivery timelines — without requiring my direct intervention on individual outputs.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q2 <span class="comp-tag">Strategic Thinking</span></div><div class="qtext">The decisions I make — resource allocation, prioritization, team structure — are explicitly anchored to the long-term strategic direction, not just immediate pressures.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q3 <span class="comp-tag">Learning Agility</span></div><div class="qtext">I deliberately seek out perspectives from outside my team or domain — and use what I learn to change something specific about my leadership approach or strategy.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q4 <span class="comp-tag">Collaboration &amp; Influence</span></div><div class="qtext">I use my relationships with peers and stakeholders to align teams toward a shared outcome — without relying on formal authority or position to get things done.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q5 <span class="comp-tag">Problem Solving</span></div><div class="qtext">When I face a major organizational decision, I structure the problem and evaluate at least two or three strategic options before choosing a path.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q6 <span class="comp-tag">Drive &amp; Initiative</span></div><div class="qtext">I launch or champion organizational initiatives that go beyond my defined mandate — without waiting for direction from above.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q7 <span class="comp-tag">People Leadership</span></div><div class="qtext">I create specific, deliberate opportunities to develop the leaders below me — not just during performance reviews or when a problem forces it.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q8 <span class="comp-tag">Communication</span></div><div class="qtext">Communications I lead — town halls, memos, strategic updates — are understood clearly across different levels of the organization without needing follow-up clarification or reframing.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q9 <span class="comp-tag">Resilience</span></div><div class="qtext">During organizational crises or high-stakes situations, my teams remain aligned and productive — because my leadership provides clarity and direction, not anxiety.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock"><div class="qnum">Q10 <span class="comp-tag">Stakeholder Orientation</span></div><div class="qtext">My organization proactively surfaces and addresses what stakeholders need — before formal requests arrive — as a standard operating practice, not an exception.</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC1 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check — please read carefully. For this item only, select <strong>"Often"</strong> (+1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> Never / Almost Never</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> ✔ Often — select this</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+
+            <div class="qblock attention"><div class="qnum">AC2 <span class="ac-tag">⚠️ Attention Check</span></div><div class="qtext">Data quality check. For this item only, select <strong>"Never / Almost Never"</strong> (−1).</div><div class="qoptions"><div class="opt"><span class="score neg">−1</span> ✔ Never / Almost Never — select this</div><div class="opt"><span class="score zero">&nbsp;0</span> Sometimes</div><div class="opt"><span class="score pos1">+1</span> Often</div><div class="opt"><span class="score pos2">+2</span> Almost Always</div></div></div>
+            <button class="copy-btn green" onclick="copyLeaderA()">📋 Copy Leader – Section A</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION B — COMPETENCY RANKING (unchanged)
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🏆 Section B — Theory of Success
+        <span class="stag">Common – All Levels · Unchanged from v2</span>
+        <span class="sdesc">Rank 10 competencies · Select Top 3 · Reveals implicit mental model of success</span>
+        <button class="copy-btn green" onclick="copySectionB()" style="margin-left:auto;">📋 Copy Section B</button>
+    </div>
+    <div class="single-col-body">
+        <div class="inst-box">
+            📋 <strong>Instructions for MS Forms:</strong>
+            Below are 10 skills that matter for doing well at JioCX. Think about what <em>actually</em> drives results here — not what sounds best on paper.<br>
+            <strong>Step 1:</strong> Rank them from 1 (most important for success in YOUR role) to 10 (least important). Each number used only once.<br>
+            <strong>Step 2:</strong> From the same list, tick exactly 3 that are your top personal priorities right now — things you actively work on.
+        </div>
+        <div class="comp-row"><div class="comp-num">1</div><div class="comp-info"><div class="comp-name">Execution Excellence (EE)</div><div class="comp-desc">Finishing your work on time, at the quality expected — and owning the result without being chased.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">2</div><div class="comp-info"><div class="comp-name">Strategic Thinking (ST)</div><div class="comp-desc">Connecting your daily work to the bigger goals of the team or organization.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">3</div><div class="comp-info"><div class="comp-name">Learning Agility (LA)</div><div class="comp-desc">Picking up new skills quickly and actually changing how you work when the situation calls for it.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">4</div><div class="comp-info"><div class="comp-name">Collaboration &amp; Influence (CI)</div><div class="comp-desc">Building strong relationships across teams and getting things done even without formal authority.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">5</div><div class="comp-info"><div class="comp-name">Problem Solving (PS)</div><div class="comp-desc">Breaking down complex problems and making well-reasoned decisions using available information.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">6</div><div class="comp-info"><div class="comp-name">Drive &amp; Initiative (DI)</div><div class="comp-desc">Taking action on your own, setting high standards, and going beyond what is formally required.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">7</div><div class="comp-info"><div class="comp-name">People Leadership (PL)</div><div class="comp-desc">Helping others grow, giving direct feedback, and enabling the people around you to perform their best.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">8</div><div class="comp-info"><div class="comp-name">Communication (CM)</div><div class="comp-desc">Expressing ideas clearly and adjusting how you communicate depending on who you are talking to.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">9</div><div class="comp-info"><div class="comp-name">Resilience (RE)</div><div class="comp-desc">Staying focused and performing well under pressure, setbacks, or difficult situations.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row"><div class="comp-num">10</div><div class="comp-info"><div class="comp-name">Stakeholder Orientation (CO)</div><div class="comp-desc">Understanding what the people you serve truly need — and delivering reliably for them.</div></div><div class="comp-score">Rank 1–10</div></div>
+        <div class="comp-row" style="border:2px solid #1a56db;background:#f0f6fe;margin-top:10px;">
+            <div class="comp-num" style="color:#1a56db;">★</div>
+            <div class="comp-info"><div class="comp-name" style="color:#1a56db;">Cross-Check: Your Top 3 Priorities</div><div class="comp-desc">From the 10 skills above, select exactly <strong>3</strong> that are your most important personal priorities in your current role right now.</div></div>
+            <div class="comp-score" style="background:#dbeafe;color:#1a56db;">Checkbox · Exactly 3</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION C — BEHAVIORAL SCENARIOS + REASONING FOLLOW-UP
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🧩 Section C — Behavioral Scenarios
+        <span class="stag">3 Scenarios per Level · Level-Adapted</span>
+        <span class="snew">FIX 4: Reasoning follow-up added to each scenario</span>
+        <span class="sdesc">Rank options 1→4 · Then answer WHY — reveals decision-making values</span>
+    </div>
+    <div class="three-col">
+
+        <!-- ─── JUNIOR SCENARIOS ─── -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive – Scenarios</div>
+            <div class="inst-box" style="font-size:11.5px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank once. Then answer the follow-up "Why?" question — this is the most important part.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Report Error</div>
+                <div class="sc-text">You are finishing a report due tomorrow morning. At 6 PM you find a big data error that affects the whole analysis. Your manager has already left.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Fix only the parts you are confident about and submit on time.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Contact your manager right away — explain the problem and agree on the next step.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Submit as-is tonight and fix the error in the next version.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Stay as long as it takes, fix everything, and send your manager a clear summary of changes.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP (NEW · FIX 4) — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Delivering on time matters most — quality can be corrected later</div>
+                        <div class="sfo">Transparency and involving my manager is always the right move</div>
+                        <div class="sfo">Getting the work 100% right matters more than the deadline</div>
+                        <div class="sfo">Protecting the relationship with the stakeholder who receives the report</div>
+                        <div class="sfo">My own accountability and professional reputation</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question for A–D. (2) Separate single-choice question for the follow-up. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Helping a Colleague</div>
+                <div class="sc-text">A close colleague is behind on a big deliverable due tomorrow. They ask for your help. Your own deadlines are tight but manageable.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Help your colleague fully — team success matters more right now.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Finish your own work first, then help with whatever time remains.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Help with the most critical parts and reduce scope of your own deliverable to compensate.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Suggest your colleague speak to your manager for extra support.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Team outcomes matter more than individual deliverables</div>
+                        <div class="sfo">I need to protect my own work first — I can't let my output slip</div>
+                        <div class="sfo">Finding a balanced solution that protects both of us</div>
+                        <div class="sfo">Escalating is more efficient than individuals trying to solve it alone</div>
+                        <div class="sfo">Helping colleagues builds trust and long-term relationships</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question for A–D. (2) Separate single-choice follow-up. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Feedback You Disagree With</div>
+                <div class="sc-text">Your manager says you work too independently and don't communicate enough. You partly disagree.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Calmly explain your side and why the feedback may not be accurate.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Listen carefully, ask for examples, reflect genuinely, then share your perspective.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Nod along to avoid conflict and continue as before.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Check with a trusted colleague privately before responding to your manager.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Honesty matters — I should share my view even if it creates tension</div>
+                        <div class="sfo">Understanding the full picture before responding leads to better outcomes</div>
+                        <div class="sfo">Avoiding conflict protects the working relationship</div>
+                        <div class="sfo">Seeking a second opinion reduces my own bias before reacting</div>
+                        <div class="sfo">Feedback should always be accepted even if I disagree — respect for hierarchy</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question for A–D. (2) Separate single-choice follow-up. Both required.</div>
+            </div>
+            <button class="copy-btn green" onclick="copyJuniorC()">📋 Copy Junior – Section C</button>
+        </div>
+
+        <!-- ─── MANAGER SCENARIOS ─── -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead – Scenarios</div>
+            <div class="inst-box" style="font-size:11.5px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank once. Then answer the follow-up "Why?" — this reveals your actual management philosophy.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Team Member Struggling</div>
+                <div class="sc-text">A previously strong team member has been disengaged for 3 weeks — missing deadlines, going quiet in meetings, looking withdrawn.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Watch for two to three more weeks — see if it resolves on its own.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Have a private, honest conversation — understand what changed, listen without judging, build a plan together.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Escalate to HR immediately and formally document the performance concern.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Quietly redistribute their work to protect delivery while the situation resolves.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">People issues resolve themselves — intervening too early can make it worse</div>
+                        <div class="sfo">Understanding the person first leads to the most effective and fair response</div>
+                        <div class="sfo">HR involvement ensures the process is documented and legally protected</div>
+                        <div class="sfo">Team delivery must be protected — individual issues are secondary in the short term</div>
+                        <div class="sfo">A combination approach depending on severity is always better</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Promotion Decision</div>
+                <div class="sc-text">Two strong team members are equally qualified for the only promotion available this cycle.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Promote the one with the slightly higher rating — let the data decide.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Promote the one who is a stronger team player — culture fit matters long-term.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Give both a 90-day stretch project before deciding — let performance differentiate them.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Ask HR or your manager to make the final call — keeps it objective.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Data-based decisions are always the most defensible and fair</div>
+                        <div class="sfo">Culture and team dynamics are stronger long-term predictors than ratings</div>
+                        <div class="sfo">More evidence leads to better decisions — a stretch assignment reveals real potential</div>
+                        <div class="sfo">Avoiding personal bias by delegating the final call protects relationships</div>
+                        <div class="sfo">Promoting either one is fine — the process of deciding matters more than the outcome</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Team Resisting Change</div>
+                <div class="sc-text">A new org-wide initiative requires your team to replace a process they have used successfully for two years. The team is openly resistant.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Push through firmly — the organization has decided, you cannot wait.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Break it into steps, run a session to address concerns, build the transition plan together.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Delay implementation until the resistance fades on its own.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Let each person implement it in their own way and time to protect morale.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Speed of implementation matters — delays compound resistance</div>
+                        <div class="sfo">Co-ownership of the plan reduces resistance and improves long-term adoption</div>
+                        <div class="sfo">Forcing change without readiness causes more harm than a short delay</div>
+                        <div class="sfo">Flexibility in implementation respects individual working styles</div>
+                        <div class="sfo">Resistance is a signal the initiative itself may need to be challenged upward</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+            <button class="copy-btn blue" onclick="copyManagerC()">📋 Copy Manager – Section C</button>
+        </div>
+
+        <!-- ─── LEADER SCENARIOS ─── -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+ – Scenarios</div>
+            <div class="inst-box" style="font-size:11.5px;">For each situation, rank the 4 options from <strong>1 = most effective</strong> to <strong>4 = least effective</strong>. Use each rank once. The follow-up "Why?" is the most important data point for the success profile.</div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 1 · Teams in Silos</div>
+                <div class="sc-text">A critical milestone was missed because two teams operated with completely different assumptions about who owned a key decision.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Identify who was mainly responsible and hold them formally accountable.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Bring both teams together, diagnose the root misalignment, redesign the coordination model going forward.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Accept the delay, update the timeline, monitor more closely without structural change.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Bring in external consultants to review and redesign the cross-team operating model.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Accountability must be clear — without it, the behavior repeats</div>
+                        <div class="sfo">System redesign prevents recurrence — accountability alone doesn't fix the root cause</div>
+                        <div class="sfo">Accepting the delay is honest — restructuring in a crisis often causes more damage</div>
+                        <div class="sfo">External objectivity reduces internal politics and speeds up the right solution</div>
+                        <div class="sfo">The missed milestone is a symptom — the strategy itself needs to be reviewed first</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 2 · Cost Reduction</div>
+                <div class="sc-text">You must cut costs by 15% this quarter: (A) targeted headcount cuts in lower-priority areas, or (B) proportional cuts across all teams.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Targeted cuts in lower-priority areas to protect highest-value capabilities.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Proportional cuts across all teams to protect morale and culture.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Delay by 60 days to gather more data before committing.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Present both options to the leadership team and make the decision together.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Protecting strategic capability is always more important than equal treatment</div>
+                        <div class="sfo">Morale and perceived fairness are critical for surviving a cost cut as an organization</div>
+                        <div class="sfo">Decisions of this magnitude need more data — speed is the enemy of good decisions here</div>
+                        <div class="sfo">Shared leadership accountability on hard decisions builds better long-term trust</div>
+                        <div class="sfo">Neither option alone is right — the right answer is a creative third path</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+
+            <div class="scenario-block">
+                <div class="sc-title">Scenario 3 · Unrealistic Stakeholder Pressure</div>
+                <div class="sc-text">A key external stakeholder is pushing you to commit to a project outcome your internal data shows is not achievable in the current timeline.</div>
+                <div class="sc-opt"><span class="ol">A.</span> Agree to protect the relationship and negotiate scope privately later.</div>
+                <div class="sc-opt"><span class="ol">B.</span> Present your data, explain what is achievable, and offer an alternative that addresses their actual goal.</div>
+                <div class="sc-opt"><span class="ol">C.</span> Escalate to your own manager — agreeing could set a bad precedent.</div>
+                <div class="sc-opt"><span class="ol">D.</span> Commit publicly and push the team hard to try to deliver.</div>
+                <div class="sc-followup">
+                    <div class="sf-label">⚡ FOLLOW-UP — Why did you rank Option #1 as most effective?</div>
+                    <div class="sf-text">What was the main reason behind your top choice?</div>
+                    <div class="sf-opts">
+                        <div class="sfo">Relationship preservation with key stakeholders is always the top priority</div>
+                        <div class="sfo">Honest, evidence-based communication builds more trust long-term than overpromising</div>
+                        <div class="sfo">This decision is above my level — escalating is the responsible choice</div>
+                        <div class="sfo">Teams rise to challenging commitments — the pressure can unlock hidden capacity</div>
+                        <div class="sfo">The right approach is to negotiate hard now rather than agree or escalate</div>
+                    </div>
+                </div>
+                <div class="sc-note">MS Forms: (1) Ranking question. (2) Follow-up single-choice. Both required.</div>
+            </div>
+            <button class="copy-btn green" onclick="copyLeaderC()">📋 Copy Leader – Section C</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION D — TIME-ANCHORED OPEN-ENDED
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        ✍️ Section D — Personal Reflection
+        <span class="stag">2 Open-Ended Questions · Level-Adapted</span>
+        <span class="snew">FIX 5: Time anchor added — forces real events, not aspirations</span>
+        <span class="sdesc">Most important section for success profiling · 30-word minimum</span>
+    </div>
+    <div class="three-col">
+
+        <!-- JUNIOR D -->
+        <div class="col-level junior">
+            <div class="col-header">👤 Junior / Executive</div>
+            <div class="bias-note">⚡ <strong>Why time anchors matter:</strong> Without "when did this happen?", respondents write aspirational stories, not real events. The time anchor forces behavioral evidence from actual recent experience.</div>
+            <div class="inst-box" style="font-size:12px;">Answer both questions in your own words. Write at least 30 words. <strong>You must mention a specific real event from the last 12 months</strong> — not a general statement about how you work.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Achievement &amp; Impact</div>
+                <div class="dtext">Tell us about one specific piece of work from the last 12 months that you are genuinely proud of. What exactly did YOU do, and what changed because of it?</div>
+                <div class="d-anchor"><strong>Before you write:</strong> Identify the specific event first. Approximately when did it happen? (You don't need to write this — just use it to anchor your answer to a real memory, not a general pattern.)</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: YOUR specific action + the measurable or visible result</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Growth Edge</div>
+                <div class="dtext">Name one skill or behavior you know you need to improve. Then describe one specific thing you have actually done in the last 3 months to work on it — not what you plan to do.</div>
+                <div class="d-anchor"><strong>Key:</strong> We are asking what you have already done — not what you intend to do. If you haven't done anything specific yet, be honest about that.</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: Specific development action already taken + what changed</div>
+            </div>
+            <button class="copy-btn green" onclick="copyJuniorD()">📋 Copy Junior – Section D</button>
+        </div>
+
+        <!-- MANAGER D -->
+        <div class="col-level manager">
+            <div class="col-header">👥 Manager / Team Lead</div>
+            <div class="bias-note">⚡ <strong>Bias reduction:</strong> Manager questions ask for team or individual impact — not just personal feelings. "What changed for your team or colleague" forces external evidence, not self-evaluation.</div>
+            <div class="inst-box" style="font-size:12px;">Answer both questions in your own words. Write at least 30 words. <strong>Describe specific real events from the last 12 months</strong> — not general statements about your management philosophy.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Leadership Impact</div>
+                <div class="dtext">Think of a specific moment in the last 12 months when something you did as a manager made a real, positive difference for a direct report or your team. What exactly did you do — and what changed for them as a result?</div>
+                <div class="d-anchor"><strong>Before you write:</strong> Picture the specific person and situation. Was it a conversation, a decision, a piece of feedback, removing a blocker? Start there — then describe what you did and what changed for them.</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: YOUR specific action as a manager + the change it created in another person or in the team</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Leadership Growth Edge</div>
+                <div class="dtext">Name one specific area where your management style needs to improve — something you've received feedback on, noticed yourself, or know is holding you or your team back. What have you actually done in the last 3 months to work on it?</div>
+                <div class="d-anchor"><strong>Key:</strong> Honest self-assessment of a real gap — not a polished "area for growth" answer. The more specific and candid you are, the more useful this is for your own development.</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: Specific gap + specific action taken + what changed (even if the change is small)</div>
+            </div>
+            <button class="copy-btn blue" onclick="copyManagerD()">📋 Copy Manager – Section D</button>
+        </div>
+
+        <!-- LEADER D -->
+        <div class="col-level leader">
+            <div class="col-header">🏛️ Leader / VP+</div>
+            <div class="bias-note">⚡ <strong>Bias reduction:</strong> Leader questions focus on decisions and their organizational consequences — not on personal leadership traits. "What did you decide, and what happened?" is harder to inflate than "I am a strategic leader."</div>
+            <div class="inst-box" style="font-size:12px;">Answer both questions in your own words. Write at least 30 words. <strong>Anchor to specific real decisions or initiatives from the last 12 months</strong> — not general leadership philosophy statements.</div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D1 · Organizational Decision</div>
+                <div class="dtext">Describe one significant decision or initiative you led in the last 12 months that had impact beyond your immediate team. What exactly did you decide or do — and what was the measurable or observable outcome for the organization?</div>
+                <div class="d-anchor"><strong>Before you write:</strong> Identify the specific decision. What were the options you considered? What did you choose? What happened? Be concrete — avoid general statements about vision or strategy.</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: The actual decision + org-level impact + what you would do differently if you had to do it again</div>
+            </div>
+
+            <div class="d-qblock">
+                <div class="dlabel">D2 · Leadership Adaptation</div>
+                <div class="dtext">Describe one specific way your leadership approach has changed in the last 12 months. What situation or feedback drove the change — and what have you actually done differently as a result?</div>
+                <div class="d-anchor"><strong>Key:</strong> We are asking about a real, observable change in what you do — not a change in your thinking or beliefs. "I now do X instead of Y" is the kind of answer that is most useful here.</div>
+                <div class="dmeta">📝 Open text · Min 30 words · Focus: Specific trigger → specific behavioral change → observable result</div>
+            </div>
+            <button class="copy-btn green" onclick="copyLeaderD()">📋 Copy Leader – Section D</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCORING + ANALYSIS GUIDE (HR ADMIN)
+═══════════════════════════════════════════════════════ -->
+<div class="section-wrap">
+    <div class="section-title">
+        🔢 Scoring Reference &amp; Success Profile Analysis Guide
+        <span class="swarn">HR Admin Use Only · Do Not Show in MS Forms</span>
+        <span class="sdesc">How to turn survey data into a success profile</span>
+    </div>
+    <div class="single-col-body">
+
+        <div class="inst-box warn">⚠️ <strong>Critical setup step:</strong> Before analysis, create a merged dataset by joining survey responses to your existing <strong>(G) Employee Rating Analysis.xlsx</strong> using Employee ID as the key. This gives you external performance ratings to validate against the self-reported data.</div>
+
+        <h3 style="color:#0b2a44;font-size:15px;margin:18px 0 10px;border-bottom:2px solid #eef4fa;padding-bottom:6px;">1. Section A — Behavioral Frequency Scoring</h3>
+        <table class="score-table">
+            <thead><tr><th>Scale Option</th><th style="text-align:center">Score</th><th>HR Meaning</th></tr></thead>
+            <tbody>
+                <tr style="background:#fde8ea"><td><strong>Never / Almost Never</strong></td><td style="text-align:center;font-weight:700;color:#c81e1e">−1</td><td>Competency behavior is absent. High-priority development flag.</td></tr>
+                <tr><td><strong>Sometimes</strong></td><td style="text-align:center;font-weight:700;color:#64748b">0</td><td>Behavior exists but is inconsistent. Moderate development area.</td></tr>
+                <tr style="background:#e8f5ee"><td><strong>Often</strong></td><td style="text-align:center;font-weight:700;color:#1a7a4a">+1</td><td>Behavior is reliable and present. Meets expectations.</td></tr>
+                <tr style="background:#dbeafe"><td><strong>Almost Always</strong></td><td style="text-align:center;font-weight:700;color:#1a56db">+2</td><td>Behavior is a consistent habit. Strong strength signal.</td></tr>
+            </tbody>
+        </table>
+        <div style="font-size:12px;color:#4a5b6e;background:#f7faff;padding:10px 14px;border-radius:7px;border-left:3px solid #1a56db;margin-bottom:16px;">
+            <strong>AC Flags:</strong> AC1 expected = +1 (Often) · AC2 expected = −1 (Never/Almost Never). Exclude flagged responses from analysis.<br>
+            <strong>Ceiling effect watch:</strong> Flag any respondent with 8+ items scored +2. Cross-validate against E1 (relative self-rating) and manager nomination code.
+        </div>
+
+        <h3 style="color:#0b2a44;font-size:15px;margin:18px 0 10px;border-bottom:2px solid #eef4fa;padding-bottom:6px;">2. Section E — Performance Calibration (Criterion Variable)</h3>
+        <table class="crit-table">
+            <thead><tr><th>Variable</th><th>How to Use in Analysis</th></tr></thead>
+            <tbody>
+                <tr><td><strong>E1 · Relative Self-Rating</strong></td><td>Use as internal criterion: compare avg Section A scores by E1 rating group. Top performers (E1 = "top 20%") should score higher on specific competencies — this reveals which competencies differentiate.</td></tr>
+                <tr><td><strong>E2 · Tenure in Role</strong></td><td>Control variable in regression. New employees (&lt;6 months) typically score lower on EE, DI, CI. Exclude or control in main analysis.</td></tr>
+                <tr><td><strong>E3 · Manager Nomination Code (T/A/D/N)</strong></td><td>PRIMARY SEGMENTATION VARIABLE. Split all data by T (Top) vs A (Average) vs D (Development). Competency score differences between T and A groups = Success Profile differentiators.</td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color:#0b2a44;font-size:15px;margin:18px 0 10px;border-bottom:2px solid #eef4fa;padding-bottom:6px;">3. How to Build the Success Profile</h3>
+        <div class="analysis-grid">
+            <div class="analysis-card blue">
+                <div class="ac-title">Step 1: Segment respondents</div>
+                <div class="ac-text">Split all responses into 3 groups using Manager Nomination (E3): Top (T), Average (A), Development (D). If E3 is unavailable, use E1 relative self-rating as a proxy. Exclude N (new employees).</div>
+            </div>
+            <div class="analysis-card green">
+                <div class="ac-title">Step 2: Compare Section A by group</div>
+                <div class="ac-text">Calculate mean Section A score per competency for T vs A groups. Competencies where Top performers score ≥0.5 points higher than Average = SUCCESS DIFFERENTIATORS. These go into the success profile.</div>
+            </div>
+            <div class="analysis-card purple">
+                <div class="ac-title">Step 3: Analyze Section B rankings</div>
+                <div class="ac-text">Look at which competencies Top performers rank in their Top 3 — vs. what Average performers rank. This reveals what high performers believe matters (their mental model of success), not just what they do.</div>
+            </div>
+            <div class="analysis-card gold">
+                <div class="ac-title">Step 4: Code Section C follow-ups</div>
+                <div class="ac-text">For each scenario's "Why?" follow-up, look at which rationale Top performers chose vs Average. This reveals the underlying VALUE SYSTEM driving behavior — the deepest layer of the success profile.</div>
+            </div>
+            <div class="analysis-card blue">
+                <div class="ac-title">Step 5: Qualitatively code Section D</div>
+                <div class="ac-text">Read D responses and tag each with: (a) competency it demonstrates, (b) whether it shows internal attribution ("I did X") vs external ("my team did X"), (c) specificity (real event vs vague statement). Top performers will show more internal attribution and specificity.</div>
+            </div>
+            <div class="analysis-card green">
+                <div class="ac-title">Step 6: Validate against performance data</div>
+                <div class="ac-text">Join to (G) Employee Rating Analysis.xlsx by Employee ID. Run correlation between Section A competency scores and external performance ratings. r &gt; 0.3 for a competency = validated predictor. Include in success profile.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function copyText(t){if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>showToast('✅ Copied!'))}else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ Copied!')}}
+
+const scale = `\n\nSCALE:\n  -1 = Never / Almost Never (I rarely or never do this)\n   0 = Sometimes (I do this less than half the time)\n  +1 = Often (I do this more than half the time)\n  +2 = Almost Always (I do this consistently — it is a reliable habit)\n\nINSTRUCTIONS: Think about the last 3 months of your actual work. How often did you ACTUALLY do each of these things — not how often you think you should?\n\n`;
+
+const jItems=[
+    ['EE','Execution Excellence','I submit my work by the agreed deadline without being reminded.'],
+    ['ST','Strategic Thinking','Before starting a task, I ask how it fits into a larger team or business goal — not just what needs to get done.'],
+    ['LA','Learning Agility','After receiving feedback from a manager or colleague, I make a visible change in how I work — not just agree and continue the same way.'],
+    ['CI','Collaboration & Influence','I initiate contact or collaboration with someone outside my immediate team — not just when a process requires it.'],
+    ['PS','Problem Solving','Before I suggest or act on a solution, I look for at least two possible reasons the problem happened.'],
+    ['DI','Drive & Initiative','I spot an improvement or gap in my work and act on it — without waiting for someone to tell me to.'],
+    ['PL','People Leadership','When a colleague is struggling, I offer specific, practical help — not just general encouragement or sympathy.'],
+    ['CM','Communication','After I explain something — in a meeting, message, or email — people act on it correctly without coming back with basic clarification questions.'],
+    ['RE','Resilience','During busy or stressful periods, my work quality and output stay roughly the same as during normal periods.'],
+    ['CO','Stakeholder Orientation','After completing a task for someone, I check back to make sure my output actually solved their real problem — not just what they asked for on paper.']
+];
+const mItems=[
+    ['EE','Execution Excellence',"My team's work is delivered by the committed deadline — without me needing to chase or micromanage each output."],
+    ['ST','Strategic Thinking','In my 1:1s or team meetings, I explicitly connect my team\'s current work to an organizational priority or long-term goal.'],
+    ['LA','Learning Agility','When I receive feedback about my management style — from my manager, HR, or my team — I make a specific visible change in how I lead.'],
+    ['CI','Collaboration & Influence','I proactively build or use relationships with other teams to create better results for my team — not just when a project formally requires it.'],
+    ['PS','Problem Solving','When a team problem comes up, I guide my team to diagnose the root cause before jumping to a fix — even under time pressure.'],
+    ['DI','Drive & Initiative',"I identify and act on ways to improve my team's performance or processes — without being asked to by senior management."],
+    ['PL','People Leadership','I give each direct report specific, actionable feedback on their work — not just general praise or generic guidance.'],
+    ['CM','Communication','When I communicate a decision or direction to my team, they act on it correctly the first time — without a follow-up for basic clarification.'],
+    ['RE','Resilience','During high-pressure weeks or organizational changes, my team stays focused and productive — because of how I lead them through it.'],
+    ['CO','Stakeholder Orientation','After my team delivers work for a stakeholder, I follow up to confirm the output actually addressed the underlying need — not just what was requested.']
+];
+const lItems=[
+    ['EE','Execution Excellence','The teams under my leadership meet their committed delivery timelines — without requiring my direct intervention on individual outputs.'],
+    ['ST','Strategic Thinking','The decisions I make — resource allocation, prioritization, team structure — are explicitly anchored to the long-term strategic direction, not just immediate pressures.'],
+    ['LA','Learning Agility','I deliberately seek out perspectives from outside my team or domain — and use what I learn to change something specific about my leadership approach or strategy.'],
+    ['CI','Collaboration & Influence','I use my relationships with peers and stakeholders to align teams toward a shared outcome — without relying on formal authority or position to get things done.'],
+    ['PS','Problem Solving','When I face a major organizational decision, I structure the problem and evaluate at least two or three strategic options before choosing a path.'],
+    ['DI','Drive & Initiative','I launch or champion organizational initiatives that go beyond my defined mandate — without waiting for direction from above.'],
+    ['PL','People Leadership','I create specific, deliberate opportunities to develop the leaders below me — not just during performance reviews or when a problem forces it.'],
+    ['CM','Communication','Communications I lead — town halls, memos, strategic updates — are understood clearly across different levels of the organization without needing follow-up clarification or reframing.'],
+    ['RE','Resilience','During organizational crises or high-stakes situations, my teams remain aligned and productive — because my leadership provides clarity and direction, not anxiety.'],
+    ['CO','Stakeholder Orientation','My organization proactively surfaces and addresses what stakeholders need — before formal requests arrive — as a standard operating practice, not an exception.']
+];
+
+function buildSectionA(levelName,items){
+    let t=`SECTION A - Behavioral Frequency Profile (${levelName})\n[REDESIGNED IN V3: Frequency scale replaces self-description scale to reduce self-report bias]\n`;
+    t+=scale;
+    items.forEach(([code,name,text],i)=>{
+        t+=`Q${i+1}. [${code} - ${name}]\n${text}\nOptions: Never / Almost Never (-1) | Sometimes (0) | Often (+1) | Almost Always (+2)\n\n`;
+    });
+    t+=`AC1. [ATTENTION CHECK - DATA QUALITY]\nFor this item only, select "Often" (+1).\nOptions: Never / Almost Never (-1) | Sometimes (0) | Often (+1) [SELECT THIS] | Almost Always (+2)\n\nAC2. [ATTENTION CHECK - DATA QUALITY]\nFor this item only, select "Never / Almost Never" (-1).\nOptions: Never / Almost Never (-1) [SELECT THIS] | Sometimes (0) | Often (+1) | Almost Always (+2)`;
+    return t;
+}
+
+function copyJuniorA(){copyText(buildSectionA('Junior / Executive',jItems))}
+function copyManagerA(){copyText(buildSectionA('Manager / Team Lead',mItems))}
+function copyLeaderA(){copyText(buildSectionA('Leader / VP+',lItems))}
+
+function copySectionE(){
+    copyText(`SECTION E - Performance Calibration [NEW IN V3]
+[Place AFTER Demographics, BEFORE Section A in MS Forms]
+[Critical for success profile analysis - creates the criterion variable]
+
+E1. Compared to people at the same job level as you at JioCX, how would you honestly rate your overall work performance?
+[Dropdown - Required]
+Options:
+  - I am in the bottom 20% — most colleagues at my level perform better than me
+  - I am below average — I perform below most of my peers at this level
+  - I am about average — I perform similarly to most of my peers
+  - I am above average — I perform better than most of my peers at this level
+  - I am among the top 20% — I consistently outperform most colleagues at this level
+[Analytics: This field + Employee ID enables top/average/below segmentation]
+
+E2. How long have you been in your current role at JioCX?
+[Dropdown - Required]
+Options: Less than 6 months | 6-12 months | 1-2 years | 2-4 years | More than 4 years
+[Analytics: Control variable for tenure effect in regression analysis]
+
+--- HR ADMIN ONLY - DO NOT SHOW TO RESPONDENT ---
+E3. Manager Nomination Code [Fill separately in HR tracking sheet, match by Employee ID]
+T = Top Performer (manager-nominated top 20%)
+A = Average Performer (solid, consistent, meets expectations)
+D = Development Case (below expectations or on PIP)
+N = New Employee (less than 6 months - exclude from main analysis)
+---`);
+}
+
+function copySectionB(){
+    copyText(`SECTION B - Theory of Success (All Levels - Same questions)
+
+Instructions:
+Below are 10 skills that matter for doing well at JioCX.
+Think about what ACTUALLY drives results here — not what sounds best on paper.
+Step 1: Rank them from 1 (most important in YOUR role) to 10 (least important). Use each number once.
+Step 2: From the same list, tick exactly 3 that are your top personal priorities right now.
+
+B1. Execution Excellence (EE) - Finishing your work on time, at the quality expected — and owning the result without being chased.
+[Dropdown: Rank 1-10]
+
+B2. Strategic Thinking (ST) - Connecting your daily work to the bigger goals of the team or organization.
+[Dropdown: Rank 1-10]
+
+B3. Learning Agility (LA) - Picking up new skills quickly and actually changing how you work when the situation calls for it.
+[Dropdown: Rank 1-10]
+
+B4. Collaboration & Influence (CI) - Building strong relationships across teams and getting things done even without formal authority.
+[Dropdown: Rank 1-10]
+
+B5. Problem Solving (PS) - Breaking down complex problems and making well-reasoned decisions using available information.
+[Dropdown: Rank 1-10]
+
+B6. Drive & Initiative (DI) - Taking action on your own, setting high standards, and going beyond what is formally required.
+[Dropdown: Rank 1-10]
+
+B7. People Leadership (PL) - Helping others grow, giving direct feedback, and enabling the people around you to perform their best.
+[Dropdown: Rank 1-10]
+
+B8. Communication (CM) - Expressing ideas clearly and adjusting how you communicate depending on who you are talking to.
+[Dropdown: Rank 1-10]
+
+B9. Resilience (RE) - Staying focused and performing well under pressure, setbacks, or difficult situations.
+[Dropdown: Rank 1-10]
+
+B10. Stakeholder Orientation (CO) - Understanding what the people you serve truly need — and delivering reliably for them.
+[Dropdown: Rank 1-10]
+
+CROSS-CHECK - B11. Your Top 3 Priorities
+From the 10 skills above, select exactly 3 that are your most important personal priorities right now.
+[Checkbox - max 3 selections: EE | ST | LA | CI | PS | DI | PL | CM | RE | CO]`);
+}
+
+const jScenarios=[
+    {title:'Scenario 1 · Report Error',text:'You are finishing a report due tomorrow morning. At 6 PM you find a big data error that affects the whole analysis. Your manager has already left.',opts:['Fix only the parts you are confident about and submit on time.','Contact your manager right away — explain the problem and agree on the next step.','Submit as-is tonight and fix the error in the next version.','Stay as long as it takes, fix everything, and send your manager a clear summary of changes.'],followup:'What was the main reason behind your top choice?',fOpts:['Delivering on time matters most — quality can be corrected later','Transparency and involving my manager is always the right move','Getting the work 100% right matters more than the deadline','Protecting the relationship with the stakeholder who receives the report','My own accountability and professional reputation']},
+    {title:'Scenario 2 · Helping a Colleague',text:"A close colleague is behind on a big deliverable due tomorrow. They ask for your help. Your own deadlines are tight but manageable.",opts:['Help your colleague fully — team success matters more right now.','Finish your own work first, then help with whatever time remains.','Help with the most critical parts and reduce scope of your own deliverable to compensate.','Suggest your colleague speak to your manager for extra support.'],followup:'What was the main reason behind your top choice?',fOpts:['Team outcomes matter more than individual deliverables','I need to protect my own work first — I cannot let my output slip','Finding a balanced solution that protects both of us','Escalating is more efficient than individuals trying to solve it alone','Helping colleagues builds trust and long-term relationships']},
+    {title:"Scenario 3 · Feedback You Disagree With",text:"Your manager says you work too independently and don't communicate enough. You partly disagree.",opts:['Calmly explain your side and why the feedback may not be accurate.','Listen carefully, ask for examples, reflect genuinely, then share your perspective.','Nod along to avoid conflict and continue as before.','Check with a trusted colleague privately before responding to your manager.'],followup:'What was the main reason behind your top choice?',fOpts:['Honesty matters — I should share my view even if it creates tension','Understanding the full picture before responding leads to better outcomes','Avoiding conflict protects the working relationship','Seeking a second opinion reduces my own bias before reacting','Feedback should always be accepted — respect for hierarchy']}
+];
+const mScenarios=[
+    {title:'Scenario 1 · Team Member Struggling',text:'A previously strong team member has been disengaged for 3 weeks — missing deadlines, going quiet, looking withdrawn.',opts:['Watch for two to three more weeks — see if it resolves on its own.','Have a private, honest conversation — understand what changed, listen without judging, build a plan together.','Escalate to HR immediately and formally document the performance concern.','Quietly redistribute their work to protect delivery while the situation resolves.'],followup:'What was the main reason behind your top choice?',fOpts:['People issues resolve themselves — intervening too early can make it worse','Understanding the person first leads to the most effective and fair response','HR involvement ensures the process is documented and legally protected','Team delivery must be protected — individual issues are secondary in the short term','A combination approach depending on severity is always better']},
+    {title:'Scenario 2 · Promotion Decision',text:'Two strong team members are equally qualified for the only promotion available this cycle.',opts:['Promote the one with the slightly higher rating — let the data decide.','Promote the one who is a stronger team player — culture fit matters long-term.','Give both a 90-day stretch project before deciding — let performance differentiate them.','Ask HR or your manager to make the final call — keeps it objective.'],followup:'What was the main reason behind your top choice?',fOpts:['Data-based decisions are always the most defensible and fair','Culture and team dynamics are stronger long-term predictors than ratings','More evidence leads to better decisions — a stretch assignment reveals real potential','Avoiding personal bias by delegating the final call protects relationships','The process of deciding matters more than the outcome']},
+    {title:'Scenario 3 · Team Resisting Change',text:'A new org-wide initiative requires your team to replace a process they have used successfully for two years. The team is openly resistant.',opts:['Push through firmly — the organization has decided, you cannot wait.','Break it into steps, run a session to address concerns, build the transition plan together.','Delay implementation until the resistance fades on its own.','Let each person implement it in their own way and time to protect morale.'],followup:'What was the main reason behind your top choice?',fOpts:['Speed of implementation matters — delays compound resistance','Co-ownership of the plan reduces resistance and improves long-term adoption','Forcing change without readiness causes more harm than a short delay','Flexibility in implementation respects individual working styles','Resistance is a signal the initiative itself may need to be challenged upward']}
+];
+const lScenarios=[
+    {title:'Scenario 1 · Teams in Silos',text:'A critical milestone was missed because two teams operated with completely different assumptions about who owned a key decision.',opts:['Identify who was mainly responsible and hold them formally accountable.','Bring both teams together, diagnose the root misalignment, redesign the coordination model going forward.','Accept the delay, update the timeline, monitor more closely without structural change.','Bring in external consultants to review and redesign the cross-team operating model.'],followup:'What was the main reason behind your top choice?',fOpts:['Accountability must be clear — without it, the behavior repeats','System redesign prevents recurrence — accountability alone does not fix the root cause','Accepting the delay is honest — restructuring in a crisis often causes more damage','External objectivity reduces internal politics and speeds up the right solution','The missed milestone is a symptom — the strategy itself needs to be reviewed first']},
+    {title:'Scenario 2 · Cost Reduction',text:'You must cut costs by 15% this quarter: (A) targeted headcount cuts in lower-priority areas, or (B) proportional cuts across all teams.',opts:['Targeted cuts in lower-priority areas to protect highest-value capabilities.','Proportional cuts across all teams to protect morale and culture.','Delay by 60 days to gather more data before committing.','Present both options to the leadership team and make the decision together.'],followup:'What was the main reason behind your top choice?',fOpts:['Protecting strategic capability is always more important than equal treatment','Morale and perceived fairness are critical for surviving a cost cut as an organization','Decisions of this magnitude need more data — speed is the enemy of good decisions here','Shared leadership accountability on hard decisions builds better long-term trust','Neither option alone is right — the right answer is a creative third path']},
+    {title:'Scenario 3 · Unrealistic Stakeholder Pressure',text:'A key external stakeholder is pushing you to commit to a project outcome your internal data shows is not achievable in the current timeline.',opts:['Agree to protect the relationship and negotiate scope privately later.','Present your data, explain what is achievable, and offer an alternative that addresses their actual goal.','Escalate to your own manager — agreeing could set a bad precedent.','Commit publicly and push the team hard to try to deliver.'],followup:'What was the main reason behind your top choice?',fOpts:['Relationship preservation with key stakeholders is always the top priority','Honest, evidence-based communication builds more trust long-term than overpromising','This decision is above my level — escalating is the responsible choice','Teams rise to challenging commitments — the pressure can unlock hidden capacity','The right approach is to negotiate hard now rather than agree or escalate']}
+];
+
+function buildSectionC(levelName,scenarios){
+    let t=`SECTION C - Behavioral Scenarios (${levelName})\n[V3 CHANGE: Each scenario now includes a "Why?" follow-up question to capture decision-making rationale]\n\nInstructions: For each situation, rank the 4 options from 1 (most effective) to 4 (least effective). Use each rank exactly once. Then answer the follow-up question about WHY you ranked it that way — this is the most important part.\n\n`;
+    scenarios.forEach((sc,i)=>{
+        t+=`Scenario ${i+1}: ${sc.title}\n${sc.text}\n\nRANKING [Add as MS Forms Ranking question]:\n`;
+        sc.opts.forEach((o,j)=>{t+=`  ${String.fromCharCode(65+j)}. ${o}\n`});
+        t+=`\nFOLLOW-UP [Add as separate single-choice question - required]:\n${sc.followup}\n`;
+        sc.fOpts.forEach((fo,k)=>{t+=`  ${k+1}. ${fo}\n`});
+        t+=`\n[MS Forms admin: Add (1) Ranking question for A-D, then (2) immediately after, a Choice question for the follow-up. Both marked required.]\n\n`;
+    });
+    return t;
+}
+
+function copyJuniorC(){copyText(buildSectionC('Junior / Executive',jScenarios))}
+function copyManagerC(){copyText(buildSectionC('Manager / Team Lead',mScenarios))}
+function copyLeaderC(){copyText(buildSectionC('Leader / VP+',lScenarios))}
+
+function buildSectionD(levelName,q1label,q1,q1anchor,q2label,q2,q2anchor,hrNote1,hrNote2){
+    return `SECTION D - Personal Reflection (${levelName})
+[V3 CHANGE: Time-anchor prompts added to force behavioral evidence — not aspirational statements]
+2 open-ended questions - Minimum 30 words each
+
+INSTRUCTIONS (include in MS Forms):
+Answer both questions in your own words. Write at least 30 words.
+You must describe a specific real event from the last 12 months — not a general statement about how you work.
+
+D1. ${q1label}
+${q1}
+
+Time Anchor Instruction to include in MS Forms subtitle:
+"${q1anchor}"
+
+[MS Forms: Long answer text field - Required]
+
+--- HR Coding Guide for D1 (internal) ---
+${hrNote1}
+
+D2. ${q2label}
+${q2}
+
+Time Anchor Instruction to include in MS Forms subtitle:
+"${q2anchor}"
+
+[MS Forms: Long answer text field - Required]
+
+--- HR Coding Guide for D2 (internal) ---
+${hrNote2}`;
+}
+
+function copyJuniorD(){
+    copyText(buildSectionD('Junior / Executive',
+        'Achievement & Impact',
+        'Tell us about one specific piece of work from the last 12 months that you are genuinely proud of. What exactly did YOU do, and what changed because of it?',
+        'Before writing: Identify the specific event first. Approximately when did it happen? Use that real memory to anchor your answer — not a general pattern of behavior.',
+        'Growth Edge',
+        'Name one skill or behavior you know you need to improve. Then describe one specific thing you have actually done in the last 3 months to work on it — not what you plan to do.',
+        'Key: We are asking what you have already done — not what you intend to do. If you have not done anything specific yet, be honest about that.',
+        'Code for: Specificity (real event vs vague), competency demonstrated, internal attribution ("I did X") vs external ("it worked out"), quality of result evidence.',
+        'Code for: Self-awareness accuracy, growth mindset evidence, action vs intention, honesty of gap description, learning agility signal.'
+    ));
+}
+function copyManagerD(){
+    copyText(buildSectionD('Manager / Team Lead',
+        'Leadership Impact',
+        'Think of a specific moment in the last 12 months when something you did as a manager made a real, positive difference for a direct report or your team. What exactly did you do — and what changed for them as a result?',
+        'Before writing: Picture the specific person and situation. Was it a conversation, a decision, a piece of feedback, removing a blocker? Start there — describe what you did and what changed for them.',
+        'Leadership Growth Edge',
+        'Name one specific area where your management style needs to improve — something you have received feedback on, noticed yourself, or know is holding you or your team back. What have you actually done in the last 3 months to work on it?',
+        'Key: Honest self-assessment of a real gap — not a polished answer. The more specific and candid, the more useful for your development.',
+        'Code for: People leadership specificity, coaching vs directing behavior, attribution (about the other person vs about self), empathy signal, accountability for outcome.',
+        'Code for: Managerial self-awareness, gap accuracy (does it match external data?), candor vs social desirability, action taken vs intent, development orientation.'
+    ));
+}
+function copyLeaderD(){
+    copyText(buildSectionD('Leader / VP+',
+        'Organizational Decision',
+        'Describe one significant decision or initiative you led in the last 12 months that had impact beyond your immediate team. What exactly did you decide or do — and what was the measurable or observable outcome for the organization?',
+        'Before writing: Identify the specific decision. What were the options you considered? What did you choose? What happened? Be concrete — avoid general statements about vision or strategy.',
+        'Leadership Adaptation',
+        'Describe one specific way your leadership approach has changed in the last 12 months. What situation or feedback drove the change — and what have you actually done differently as a result?',
+        'Key: We are asking about a real, observable change in what you do — not a change in your thinking or beliefs. "I now do X instead of Y" is the kind of answer that is most useful here.',
+        'Code for: Decision scope (team vs org level), quality of options considered, ownership vs delegation, measurability of outcome, attribution style.',
+        'Code for: Adaptive leadership evidence, specificity of behavioral change, internal vs external trigger, learning agility at leadership level, candor about what changed.'
+    ));
+}
+
+function copyDemographics(){
+    copyText(`DEMOGRAPHICS (Common for all levels - Fill first)
+
+Q1. Full Name [Text input - Required]
+Q2. Employee ID [Text input - Required - PRIMARY LINK KEY for performance data merge]
+Q3. Job Level [Dropdown - Required - Used for MS Forms branching]
+  Options: Junior / Executive | Manager / Team Lead | Leader / VP+
+Q4. Average Weekly Work Hours [Dropdown]
+  Options: Less than 40 | 40-45 | 46-50 | 51-55 | More than 55
+Q5. Number of Direct Reports [Dropdown]
+  Options: 0 (Individual Contributor) | 1-3 | 4-7 | 8-12 | More than 12
+Q6. Cross-Team Project Involvement [Dropdown]
+  Options: Rarely (<20% of my time) | Sometimes (20-40%) | Often (40-60%) | Very often (>60%)
+
+--- SEQUENCE IN MS FORMS ---
+Order: Demographics → Section E (Performance Calibration) → Section A → Section B → Section C → Section D`);
+}
+</script>
+</body>
+</html>

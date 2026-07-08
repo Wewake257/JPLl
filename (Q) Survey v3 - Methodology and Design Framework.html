@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey v3 — Methodology & Design Framework | JioCX HR Analytics</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#eef2f9;color:#1e293b;line-height:1.7}
+
+/* ── COVER ── */
+.cover{background:linear-gradient(145deg,#071e30 0%,#0b2a44 45%,#1a4b7a 100%);color:#fff;padding:70px 60px 60px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-60px;right:-60px;width:380px;height:380px;border-radius:50%;background:rgba(26,86,219,0.12);pointer-events:none}
+.cover::after{content:'';position:absolute;bottom:-80px;left:-40px;width:280px;height:280px;border-radius:50%;background:rgba(26,122,74,0.10);pointer-events:none}
+.cover .doc-tag{display:inline-block;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);padding:5px 18px;border-radius:30px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}
+.cover h1{font-size:38px;font-weight:800;letter-spacing:-.02em;line-height:1.2;max-width:780px}
+.cover .subtitle{font-size:18px;opacity:.75;margin-top:10px;font-weight:300;max-width:680px}
+.cover .meta-row{display:flex;flex-wrap:wrap;gap:32px;margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12)}
+.cover .meta-row .mi{display:flex;flex-direction:column;gap:3px}
+.cover .meta-row .mi .ml{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55}
+.cover .meta-row .mi .mv{font-size:14px;font-weight:600}
+.cover .version-badge{position:absolute;top:40px;right:60px;background:rgba(26,86,219,0.3);border:2px solid rgba(26,86,219,0.6);padding:8px 22px;border-radius:40px;font-size:13px;font-weight:700;letter-spacing:.05em}
+
+/* ── TOOLBAR ── */
+.toolbar{background:#fff;border-bottom:1px solid #dde6f0;padding:14px 60px;display:flex;gap:12px;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.toolbar .tb-label{font-size:12px;font-weight:700;color:#0b2a44;margin-right:8px}
+.tb-btn{background:#0b2a44;color:#fff;border:none;padding:7px 20px;border-radius:30px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:5px}
+.tb-btn:hover{background:#1a4a6a;transform:scale(1.02)}
+.tb-btn.green{background:#1a7a4a}.tb-btn.green:hover{background:#0f5f3a}
+.tb-btn.blue{background:#1a56db}.tb-btn.blue:hover{background:#0f3ea0}
+
+/* ── BODY ── */
+.body-wrap{max-width:1120px;margin:0 auto;padding:50px 40px 80px}
+
+/* ── SECTION HEADINGS ── */
+.sec{margin:52px 0 28px}
+.sec h2{font-size:26px;font-weight:800;color:#0b2a44;border-bottom:3px solid #dbeafe;padding-bottom:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sec h2 .h2-badge{font-size:11px;font-weight:700;background:#dbeafe;color:#1a56db;padding:3px 14px;border-radius:30px;letter-spacing:.04em;text-transform:uppercase}
+.sec h2 .h2-badge.green{background:#e6f9ed;color:#1a7a4a}
+.sec h2 .h2-badge.gold{background:#fff3dc;color:#b87800}
+.sec h2 .h2-badge.purple{background:#ede0f7;color:#6a0dad}
+.sec h3{font-size:18px;font-weight:700;color:#0b2a44;margin:30px 0 12px;display:flex;align-items:center;gap:10px}
+.sec h3 .num{background:#0b2a44;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sec h3 .num.blue{background:#1a56db}
+.sec h3 .num.green{background:#1a7a4a}
+.sec h3 .num.gold{background:#d4a030}
+.sec h3 .num.purple{background:#6a0dad}
+.sec p{font-size:15px;color:#2d3f52;margin-bottom:14px;line-height:1.75}
+.sec ul{margin:8px 0 16px 18px}
+.sec ul li{font-size:14.5px;color:#2d3f52;padding:4px 0;line-height:1.65}
+.sec ul li strong{color:#0b2a44}
+
+/* ── WHAT / WHY / HOW CARDS ── */
+.wwh-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:20px 0 28px}
+.wwh-card{border-radius:14px;padding:22px 22px 20px;border:1px solid}
+.wwh-card.what{background:#f0f6fe;border-color:#c7daf5}
+.wwh-card.why{background:#e6f9ed;border-color:#a7e3bc}
+.wwh-card.how{background:#fdf0ff;border-color:#d4b0e8}
+.wwh-card .wlabel{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.wwh-card.what .wlabel{color:#1a56db}
+.wwh-card.why .wlabel{color:#1a7a4a}
+.wwh-card.how .wlabel{color:#6a0dad}
+.wwh-card .wcontent{font-size:13.5px;color:#1e293b;line-height:1.65}
+.wwh-card .wcontent strong{color:#0b2a44}
+
+/* ── COMPARISON TABLE ── */
+.cmp-table{width:100%;border-collapse:collapse;margin:16px 0 28px;font-size:13.5px;border-radius:12px;overflow:hidden;border:1px solid #dde6f0}
+.cmp-table th{background:#0b2a44;color:#fff;padding:10px 16px;text-align:left;font-size:12px;letter-spacing:.04em;font-weight:700}
+.cmp-table td{padding:10px 16px;border-bottom:1px solid #e9eff6;vertical-align:top;line-height:1.6}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table .v2{background:#fde8ea;color:#7a1e1e}
+.cmp-table .v3{background:#e6f9ed;color:#1a4a2a}
+.cmp-table .neutral{background:#fafcff}
+.cmp-table .bold-col{font-weight:700;color:#0b2a44;background:#f7faff}
+
+/* ── FRAMEWORK CARD ── */
+.framework-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0 28px}
+.fw-card{background:#fafcff;border:1px solid #dde6f0;border-radius:14px;padding:20px 22px;border-top:4px solid #1a56db}
+.fw-card.green{border-top-color:#1a7a4a}
+.fw-card.gold{border-top-color:#d4a030}
+.fw-card.purple{border-top-color:#6a0dad}
+.fw-card.red{border-top-color:#c81e1e}
+.fw-card .fw-title{font-size:14px;font-weight:700;color:#0b2a44;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.fw-card .fw-body{font-size:13px;color:#4a5b6e;line-height:1.65}
+.fw-card .fw-cite{font-size:11px;color:#8a9bae;margin-top:8px;font-style:italic}
+
+/* ── SECTION STRUCTURE TABLE ── */
+.struct-table{width:100%;border-collapse:collapse;margin:16px 0 28px;font-size:13.5px}
+.struct-table th{background:#0b2a44;color:#fff;padding:10px 16px;text-align:left;font-size:12px;letter-spacing:.04em;font-weight:700}
+.struct-table td{padding:11px 16px;border-bottom:1px solid #eef4fa;vertical-align:top;line-height:1.6;background:#fafcff}
+.struct-table tr:nth-child(even) td{background:#f2f6fb}
+.struct-table .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.struct-table .tag.common{background:#dbeafe;color:#1a56db}
+.struct-table .tag.adapted{background:#e6f9ed;color:#1a7a4a}
+.struct-table .tag.new{background:#ede0f7;color:#6a0dad}
+.struct-table .tag.hr{background:#fde8ea;color:#c81e1e}
+
+/* ── BIAS EXPLAINER ── */
+.bias-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 28px}
+.bias-card{border-radius:12px;padding:18px 20px;border:1px solid}
+.bias-card.problem{background:#fff5f5;border-color:#f0c0c0}
+.bias-card.solution{background:#f0fbf4;border-color:#a7e3bc}
+.bias-card .bc-title{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.bias-card.problem .bc-title{color:#c81e1e}
+.bias-card.solution .bc-title{color:#1a7a4a}
+.bias-card .bc-body{font-size:13px;color:#1e293b;line-height:1.65}
+.bias-card .bc-body strong{color:#0b2a44}
+.bias-card .bc-formula{background:#fff;border:1px dashed #ccc;border-radius:8px;padding:10px 14px;font-size:12.5px;margin-top:10px;font-style:italic;color:#2d3f52}
+
+/* ── SCORING DIAGRAM ── */
+.score-row{display:flex;gap:0;margin:16px 0 24px;border-radius:12px;overflow:hidden;border:1px solid #dde6f0}
+.score-item{flex:1;padding:16px 14px;text-align:center;border-right:1px solid #dde6f0}
+.score-item:last-child{border-right:none}
+.score-item .si-score{font-size:26px;font-weight:800;margin-bottom:6px}
+.score-item .si-label{font-size:11px;font-weight:700;margin-bottom:5px}
+.score-item .si-desc{font-size:11px;color:#4a5b6e;line-height:1.5}
+.score-item.s-neg{background:#fff5f5}.score-item.s-neg .si-score{color:#c81e1e}
+.score-item.s-zero{background:#f8f9fb}.score-item.s-zero .si-score{color:#64748b}
+.score-item.s-p1{background:#f0fbf4}.score-item.s-p1 .si-score{color:#1a7a4a}
+.score-item.s-p2{background:#f0f6fe}.score-item.s-p2 .si-score{color:#1a56db}
+
+/* ── THEORY OF CHANGE ── */
+.toc-flow{display:flex;align-items:center;gap:0;margin:20px 0 32px;overflow-x:auto}
+.toc-step{flex:1;min-width:130px;background:#fafcff;border:1px solid #dde6f0;border-radius:10px;padding:16px 14px;text-align:center}
+.toc-arrow{font-size:22px;color:#1a56db;padding:0 8px;flex-shrink:0;font-weight:300}
+.toc-step .ts-icon{font-size:24px;margin-bottom:8px}
+.toc-step .ts-title{font-size:12px;font-weight:700;color:#0b2a44;margin-bottom:5px}
+.toc-step .ts-body{font-size:11px;color:#4a5b6e;line-height:1.5}
+
+/* ── VALIDITY TABLE ── */
+.validity-bar{margin:8px 0 4px;display:flex;align-items:center;gap:10px}
+.validity-bar .vb-label{font-size:12px;font-weight:600;color:#1e293b;min-width:160px}
+.validity-bar .vb-track{flex:1;background:#eef4fa;border-radius:30px;height:10px;overflow:hidden}
+.validity-bar .vb-fill{height:100%;border-radius:30px;background:#1a56db}
+.validity-bar .vb-val{font-size:12px;font-weight:700;color:#1a56db;min-width:40px;text-align:right}
+
+/* ── CALLOUT BOXES ── */
+.callout{border-radius:10px;padding:16px 20px;margin:18px 0;font-size:14px;line-height:1.65;border-left:5px solid}
+.callout.note{background:#f0f6fe;border-color:#1a56db;color:#1e3a5f}
+.callout.warn{background:#fff8e7;border-color:#d4a030;color:#7a5a20}
+.callout.insight{background:#f0fbf4;border-color:#1a7a4a;color:#1e3a2a}
+.callout.critical{background:#fff5f5;border-color:#c81e1e;color:#5a1e1e}
+.callout strong{font-weight:700}
+
+/* ── COMPETENCY TABLE ── */
+.comp-full-table{width:100%;border-collapse:collapse;margin:14px 0 28px;font-size:13px}
+.comp-full-table th{background:#0b2a44;color:#fff;padding:9px 14px;font-size:11px;text-align:left;letter-spacing:.04em;font-weight:700}
+.comp-full-table td{padding:10px 14px;border-bottom:1px solid #eef4fa;vertical-align:top;background:#fafcff;line-height:1.6}
+.comp-full-table tr:hover td{background:#f0f6fe}
+.comp-full-table .ctag{display:inline-block;background:#ede7f6;color:#5e2e8e;padding:1px 10px;border-radius:20px;font-size:10px;font-weight:700}
+
+/* ── ANALYSIS PIPELINE ── */
+.pipeline{margin:20px 0 30px}
+.pipe-step{display:flex;gap:18px;margin-bottom:14px;align-items:flex-start}
+.pipe-num{background:#0b2a44;color:#fff;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px}
+.pipe-num.blue{background:#1a56db}
+.pipe-num.green{background:#1a7a4a}
+.pipe-num.purple{background:#6a0dad}
+.pipe-num.gold{background:#d4a030}
+.pipe-content{flex:1}
+.pipe-content .pc-title{font-size:15px;font-weight:700;color:#0b2a44;margin-bottom:5px}
+.pipe-content .pc-body{font-size:13.5px;color:#2d3f52;line-height:1.65}
+.pipe-content .pc-output{display:inline-block;background:#e6f9ed;color:#1a4a2a;padding:3px 12px;border-radius:20px;font-size:11.5px;font-weight:600;margin-top:7px}
+
+/* ── FOOTER ── */
+.doc-footer{background:#0b2a44;color:rgba(255,255,255,.7);padding:28px 60px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:50px}
+.doc-footer strong{color:#fff}
+
+/* ── PAGE DIVIDER ── */
+.divider{border:none;border-top:3px solid #dbeafe;margin:50px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+    .cover{padding:40px 24px}
+    .body-wrap{padding:30px 18px 60px}
+    .wwh-grid,.framework-grid,.bias-grid,.comp-full-table,.struct-table{grid-template-columns:1fr}
+    .toolbar{padding:10px 18px;flex-wrap:wrap}
+    .toc-flow{flex-direction:column}
+    .toc-arrow{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     COVER
+══════════════════════════════════════════ -->
+<div class="cover">
+    <div class="version-badge">Version 3.0</div>
+    <div class="doc-tag">📄 Internal HR Document · Confidential</div>
+    <h1>Survey Methodology & Design Framework</h1>
+    <div class="subtitle">JioCX Workplace Competency Survey 2026 · Version 3 · Bias-Reduced Success Profile Study</div>
+    <div class="meta-row">
+        <div class="mi"><span class="ml">Organization</span><span class="mv">JioCX · Jio Platforms Limited</span></div>
+        <div class="mi"><span class="ml">Document Type</span><span class="mv">Survey Methodology — What, Why & How</span></div>
+        <div class="mi"><span class="ml">Study Goal</span><span class="mv">Build Success Profile: What Makes Top Performers Top Performers</span></div>
+        <div class="mi"><span class="ml">Survey Version</span><span class="mv">v3 (Bias-Reduced) · Supersedes v2 (June 2026)</span></div>
+        <div class="mi"><span class="ml">Author</span><span class="mv">HR Analytics · People &amp; Culture</span></div>
+        <div class="mi"><span class="ml">Est. Completion Time</span><span class="mv">15–18 Minutes per Respondent</span></div>
+    </div>
+</div>
+
+<!-- ══════ STICKY TOOLBAR ══════ -->
+<div class="toolbar">
+    <span class="tb-label">Quick Jump →</span>
+    <button class="tb-btn" onclick="document.getElementById('objective').scrollIntoView({behavior:'smooth'})">🎯 Objective</button>
+    <button class="tb-btn blue" onclick="document.getElementById('structure').scrollIntoView({behavior:'smooth'})">📐 Structure</button>
+    <button class="tb-btn green" onclick="document.getElementById('biasdesign').scrollIntoView({behavior:'smooth'})">🔧 Bias Design</button>
+    <button class="tb-btn" onclick="document.getElementById('competencies').scrollIntoView({behavior:'smooth'})">📊 Competencies</button>
+    <button class="tb-btn blue" onclick="document.getElementById('sectionsdeep').scrollIntoView({behavior:'smooth'})">🔍 Section Deep-Dive</button>
+    <button class="tb-btn green" onclick="document.getElementById('analysis').scrollIntoView({behavior:'smooth'})">🧮 Analysis Guide</button>
+    <button class="tb-btn" style="margin-left:auto;" onclick="window.print()">🖨️ Print / Save PDF</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BODY
+══════════════════════════════════════════ -->
+<div class="body-wrap">
+
+<!-- ── 1. STUDY OBJECTIVE ── -->
+<div class="sec" id="objective">
+    <h2>1. Study Objective <span class="h2-badge">What &amp; Why</span></h2>
+
+    <p>The JioCX Competency Survey v3 is a <strong>criterion-referenced competency mapping study</strong>. Its primary purpose is not to measure how employees feel about themselves — it is to identify, with empirical rigor, <strong>which specific behaviors, values, and mental models separate top performers from average performers</strong> at each seniority level.</p>
+
+    <p>The output of this study is a <strong>JioCX Success Profile</strong> — a validated, evidence-based description of what high performance actually looks like from the inside, not just from the output metrics.</p>
+
+    <div class="wwh-grid">
+        <div class="wwh-card what">
+            <div class="wlabel">🔵 WHAT</div>
+            <div class="wcontent">A structured, multi-method survey measuring <strong>10 core competencies</strong> across three seniority levels (Junior, Manager, Leader), using behavioral frequency items, competency ranking, behavioral scenario analysis, and time-anchored open-ended reflection.</div>
+        </div>
+        <div class="wwh-card why">
+            <div class="wlabel">🟢 WHY</div>
+            <div class="wcontent">JioCX's existing performance ratings (from <em>(G) Employee Rating Analysis.xlsx</em>) tell us <strong>who</strong> is performing well — but not <strong>why</strong>. To build a predictive success profile, we need to understand the competencies, values, and behavioral patterns that are present in top performers and absent or weaker in average performers.</div>
+        </div>
+        <div class="wwh-card how">
+            <div class="wlabel">🟣 HOW</div>
+            <div class="wcontent">By combining <strong>self-reported behavioral frequency data</strong> (Section A), <strong>implicit value ranking</strong> (Section B), <strong>behavioral scenario reasoning</strong> (Section C), and <strong>qualitative behavioral evidence</strong> (Section D) — then linking all responses to external performance ratings via Employee ID for validation.</div>
+        </div>
+    </div>
+
+    <div class="callout note">
+        <strong>Central Research Question:</strong> Which competency behaviors, decision-making values, and self-awareness patterns are statistically and qualitatively more present in employees who are rated as top performers by their managers — compared to employees rated as average or below average performers?
+    </div>
+
+    <h3><span class="num">→</span> Theory of Change</h3>
+    <p>The survey is designed to operate through the following logical chain:</p>
+    <div class="toc-flow">
+        <div class="toc-step"><div class="ts-icon">📊</div><div class="ts-title">Survey Data Collected</div><div class="ts-body">Behavioral frequency, rankings, scenarios, open text</div></div>
+        <div class="toc-arrow">→</div>
+        <div class="toc-step"><div class="ts-icon">🔗</div><div class="ts-title">Linked to Performance</div><div class="ts-body">Employee ID joins survey to (G) rating data + manager nomination</div></div>
+        <div class="toc-arrow">→</div>
+        <div class="toc-step"><div class="ts-icon">📐</div><div class="ts-title">Top vs Average Compared</div><div class="ts-body">Score gaps by competency identify differentiating behaviors</div></div>
+        <div class="toc-arrow">→</div>
+        <div class="toc-step"><div class="ts-icon">🏆</div><div class="ts-title">Success Profile Built</div><div class="ts-body">Validated competency signature of high performance at each level</div></div>
+        <div class="toc-arrow">→</div>
+        <div class="toc-step"><div class="ts-icon">⚙️</div><div class="ts-title">Applied in HR</div><div class="ts-body">Used in hiring, L&D targeting, succession, and performance calibration</div></div>
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 2. SURVEY STRUCTURE ── -->
+<div class="sec" id="structure">
+    <h2>2. Survey Structure <span class="h2-badge">What Each Section Does</span></h2>
+
+    <p>The survey is organized into <strong>six sections</strong>. Two sections are common across all levels. Four sections are <strong>seniority-adapted</strong> — the content and language changes for Junior, Manager, and Leader, but the structure and scoring remain identical. This allows direct cross-level comparison in the success profile while ensuring each respondent answers questions that feel relevant to their actual day-to-day reality.</p>
+
+    <table class="struct-table">
+        <thead>
+            <tr>
+                <th>Section</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Items</th>
+                <th>Level-Adapted?</th>
+                <th>Primary Purpose in Success Profiling</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Demo</strong></td>
+                <td>Demographics</td>
+                <td>Structured fields</td>
+                <td>6 fields</td>
+                <td><span class="tag common">Common</span></td>
+                <td>Identifies respondent, enables branching by job level, links to external data via Employee ID</td>
+            </tr>
+            <tr>
+                <td><strong>E</strong></td>
+                <td>Performance Calibration</td>
+                <td>Dropdown + HR field</td>
+                <td>2 visible + 1 HR-only</td>
+                <td><span class="tag common">Common</span></td>
+                <td><strong>Creates the criterion variable</strong> — relative self-rating + manager nomination code. Without this, no success profiling is possible.</td>
+            </tr>
+            <tr>
+                <td><strong>A</strong></td>
+                <td>Behavioral Frequency Profile</td>
+                <td>4-point frequency scale</td>
+                <td>10 items + 2 ACs</td>
+                <td><span class="tag adapted">Level-Adapted</span></td>
+                <td>Measures frequency of 10 core competency behaviors. The primary quantitative source for success profile differentiators.</td>
+            </tr>
+            <tr>
+                <td><strong>B</strong></td>
+                <td>Theory of Success</td>
+                <td>Ranking + Checkbox</td>
+                <td>10 rankings + Top 3 pick</td>
+                <td><span class="tag common">Common</span></td>
+                <td>Reveals each respondent's <em>implicit mental model</em> of what drives success — what top performers believe matters vs. what average performers believe matters.</td>
+            </tr>
+            <tr>
+                <td><strong>C</strong></td>
+                <td>Behavioral Scenarios + Reasoning</td>
+                <td>Ranking + Follow-up choice</td>
+                <td>3 scenarios × (4 options + 5 reason choices)</td>
+                <td><span class="tag adapted">Level-Adapted</span></td>
+                <td>Assesses behavioral decision-making under realistic pressures. The follow-up "Why?" captures the <em>value system</em> driving each choice — the deepest layer of a success profile.</td>
+            </tr>
+            <tr>
+                <td><strong>D</strong></td>
+                <td>Personal Reflection (Open-Ended)</td>
+                <td>Open text · Time-anchored</td>
+                <td>2 questions (30-word min)</td>
+                <td><span class="tag adapted">Level-Adapted</span></td>
+                <td>Produces qualitative behavioral evidence. Coded for attribution style, specificity, competency demonstrated. Richest data source for profile narrative construction.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout insight">
+        <strong>Sequence logic:</strong> The order of sections is deliberate. Demographics → Performance Calibration → Behavioral Frequency → Competency Ranking → Scenarios → Open Reflection. This sequence moves from structured/easy (low cognitive load) to complex/reflective (high cognitive load), reducing fatigue effects on the most important sections.
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 3. THEORETICAL FOUNDATION ── -->
+<div class="sec" id="theory">
+    <h2>3. Theoretical Foundation <span class="h2-badge gold">Research Basis</span></h2>
+
+    <p>The survey design is grounded in <strong>five established frameworks</strong> from organizational psychology, psychometrics, and competency research. Each framework informed specific design decisions in the survey.</p>
+
+    <div class="framework-grid">
+        <div class="fw-card">
+            <div class="fw-title">📐 1. Spencer & Spencer — Iceberg Model of Competence (1993)</div>
+            <div class="fw-body">Competencies exist at two levels: visible (skills, knowledge, behavior — above the waterline) and hidden (motives, traits, self-concept — below the waterline). Surface competencies are easier to train; deep competencies are the true differentiators of exceptional performance. Survey Sections C and D are specifically designed to probe below the waterline — scenarios reveal decision-making values, and qualitative coding reveals motives and attribution style.</div>
+            <div class="fw-cite">Spencer &amp; Spencer (1993). Competence at Work: Models for Superior Performance. John Wiley &amp; Sons.</div>
+        </div>
+        <div class="fw-card green">
+            <div class="fw-title">📊 2. Lombardo &amp; Eichinger — Lominger Competency Framework (2000)</div>
+            <div class="fw-body">The 10 competencies in this survey (Execution Excellence, Strategic Thinking, Learning Agility, Collaboration &amp; Influence, Problem Solving, Drive &amp; Initiative, People Leadership, Communication, Resilience, Stakeholder Orientation) are validated against Lominger's 67-competency model, specifically the sub-set identified as most predictive of leadership progression and performance at operational, managerial, and executive levels.</div>
+            <div class="fw-cite">Lombardo &amp; Eichinger (2000). High Potentials as High Learners. Human Resource Management.</div>
+        </div>
+        <div class="fw-card gold">
+            <div class="fw-title">🧠 3. Dunning-Kruger Effect &amp; Self-Enhancement Bias</div>
+            <div class="fw-body">Low and average performers systematically overestimate their competence on self-report scales (Kruger &amp; Dunning, 1999). This is the primary reason the v2 "self-description" scale was replaced with a behavioral frequency scale in v3. Frequency scales require memory retrieval (behavioral evidence), which significantly reduces inflation at the lower end of performance distribution — producing more valid discrimination between top and average performers.</div>
+            <div class="fw-cite">Kruger &amp; Dunning (1999). Unskilled and Unaware of It. Journal of Personality and Social Psychology.</div>
+        </div>
+        <div class="fw-card purple">
+            <div class="fw-title">🔬 4. Criterion-Referenced Assessment Design</div>
+            <div class="fw-body">A criterion-referenced study compares assessment scores to an external criterion — in this case, performance ratings from (G) Employee Rating Analysis.xlsx and manager nomination codes. Only competencies that show a statistically or practically significant score difference between top performers (T) and average performers (A) are included in the final success profile. This prevents "everything sounds important" conclusions that have no predictive validity.</div>
+            <div class="fw-cite">Anastasi &amp; Urbina (1997). Psychological Testing (7th ed.). Pearson. | McClelland (1973). Testing for Competence. American Psychologist.</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-title">🎭 5. Behavioral Event Interview (BEI) Method — Transferred to Survey Format</div>
+            <div class="fw-body">Section D of this survey is designed to replicate the structure of a Behavioral Event Interview in written form. BEI asks for specific past situations, the respondent's specific actions, and the specific outcomes (STAR: Situation, Task, Action, Result). The time-anchor prompt in Section D ("describe a specific real event from the last 12 months") is the survey equivalent of the BEI's "tell me about a specific time when..." instruction — forcing behavioral evidence over generic self-description.</div>
+            <div class="fw-cite">McClelland (1978). Guide to Behavioral Event Interviewing. McBer &amp; Company. | Boyatzis (1982). The Competent Manager. John Wiley &amp; Sons.</div>
+        </div>
+        <div class="fw-card green">
+            <div class="fw-title">📈 6. Social Desirability &amp; Frequency Scale Research</div>
+            <div class="fw-body">Research consistently shows that behavioral frequency scales ("How often do you do X?") produce lower social desirability responding than self-description scales ("Does X sound like you?") because they require specific episodic memory retrieval, not abstract self-concept evaluation. Tourangeau &amp; Yan (2007) found frequency anchors reduce social desirability bias by 30–40% compared to Likert agreement scales in workplace self-report contexts.</div>
+            <div class="fw-cite">Tourangeau &amp; Yan (2007). Sensitive Questions in Surveys. Psychological Bulletin. | Podsakoff et al. (2003). Common Method Biases. Journal of Applied Psychology.</div>
+        </div>
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 4. BIAS DESIGN ── -->
+<div class="sec" id="biasdesign">
+    <h2>4. Bias Reduction Design <span class="h2-badge green">5 Fixes — What, Why, How</span></h2>
+
+    <p>Every survey is subject to biases that distort responses away from the truth. In a success profiling study, bias is especially damaging because it erases the very differences we are trying to measure. The five bias fixes in v3 are not cosmetic changes — they are structural design decisions, each targeting a specific, documented bias type.</p>
+
+    <!-- FIX 1 -->
+    <h3><span class="num blue">1</span> Fix 1 — Self-Report Bias (Most Critical)</h3>
+    <div class="bias-grid">
+        <div class="bias-card problem">
+            <div class="bc-title">🔴 The Problem in v2</div>
+            <div class="bc-body">
+                <strong>Scale used:</strong> "Not at all like me / Somewhat like me / Mostly like me / Completely like me"<br><br>
+                <strong>The bias mechanism:</strong> Self-description scales activate a respondent's <em>self-concept</em> — their mental image of who they are. Because most professionals identify as hardworking and competent, they answer based on their identity rather than their behavior.
+                <div class="bc-formula">Result: Both top performers AND average performers answer "Mostly like me" or "Completely like me" to most items. The data shows no meaningful spread between groups. The success profile cannot be built.</div>
+            </div>
+        </div>
+        <div class="bias-card solution">
+            <div class="bc-title">🟢 The Fix in v3</div>
+            <div class="bc-body">
+                <strong>Scale changed to:</strong> "Never / Almost Never | Sometimes | Often | Almost Always"<br><br>
+                <strong>Why it works:</strong> Frequency questions force <em>episodic memory retrieval</em>. To answer "Almost Always," the respondent must mentally recall specific recent instances of the behavior. If they genuinely don't have those memories because the behavior doesn't happen often, they feel the cognitive dissonance of claiming "Almost Always" — and self-correct to a more honest answer.
+                <div class="bc-formula">Effect: Meaningful score spread between top and average performers appears, especially in items measuring Execution Excellence, Drive &amp; Initiative, and Stakeholder Orientation.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIX 2 -->
+    <h3><span class="num blue">2</span> Fix 2 — No Criterion Variable</h3>
+    <div class="bias-grid">
+        <div class="bias-card problem">
+            <div class="bc-title">🔴 The Problem in v2</div>
+            <div class="bc-body">
+                v2 had no internal performance anchor. Every respondent looked at the same scale with no reference point. Without knowing who is a top performer before analysis, the data is a flat, undifferentiated pool — you cannot identify which competency patterns belong to high performers.
+                <div class="bc-formula">Without a criterion variable, the study answers "what do employees say about themselves?" — not "what do top performers do differently?"</div>
+            </div>
+        </div>
+        <div class="bias-card solution">
+            <div class="bc-title">🟢 The Fix in v3</div>
+            <div class="bc-body">
+                <strong>Section E added:</strong> E1 = Relative self-rating (1–5 vs. peers). E2 = Tenure in role (control variable). E3 = Manager nomination code T/A/D/N (HR fills separately, matched by Employee ID).<br><br>
+                These two fields (E1 + E3) provide <em>two independent criterion variables</em>. If both agree (self-rated "top 20%" AND manager-nominated "T"), confidence in the classification is high. If they disagree, it surfaces interesting cases worth investigating.
+                <div class="bc-formula">With criterion variables, the study answers the right question: "Which competency behaviors differentiate T from A employees?"</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIX 3 -->
+    <h3><span class="num blue">3</span> Fix 3 — Manager Nomination (Second Criterion Source)</h3>
+    <div class="bias-grid">
+        <div class="bias-card problem">
+            <div class="bc-title">🔴 The Problem</div>
+            <div class="bc-body">Self-rating alone (E1) is still subject to self-enhancement bias. Someone who performs below average may still rate themselves in the "top 20%" category. Relying on self-rating as the sole criterion would mean top performers and average performers partly self-select into the same group.
+            </div>
+        </div>
+        <div class="bias-card solution">
+            <div class="bc-title">🟢 The Fix</div>
+            <div class="bc-body">
+                E3 is filled by HR or the manager — <strong>not the respondent</strong>. It is never shown in the form. It is maintained in a separate HR tracking spreadsheet and matched to survey data by Employee ID after collection.<br><br>
+                <strong>Nomination codes:</strong> T = Top | A = Average | D = Development | N = New (exclude)<br><br>
+                Manager nomination is a form of <em>360-degree evidence</em> — it grounds the criterion variable in an external, non-self-reported judgment.
+            </div>
+        </div>
+    </div>
+
+    <!-- FIX 4 -->
+    <h3><span class="num blue">4</span> Fix 4 — Random Scenario Ranking (Section C)</h3>
+    <div class="bias-grid">
+        <div class="bias-card problem">
+            <div class="bc-title">🔴 The Problem in v2</div>
+            <div class="bc-body">
+                In v2, respondents ranked scenario options 1–4 but provided no reasoning. Two problems arose: (1) respondents may have guessed the "right" answer (social desirability) without revealing their true values, and (2) two respondents could choose the same #1 option for completely different reasons — masking important differences in their decision-making logic.
+            </div>
+        </div>
+        <div class="bias-card solution">
+            <div class="bc-title">🟢 The Fix in v3</div>
+            <div class="bc-body">
+                After each scenario ranking, a follow-up question asks: <strong>"Why did you rank Option #1 as most effective?"</strong> with 5 structured reason choices (e.g., "Task completion priority" vs. "Relationship preservation" vs. "Process correctness").<br><br>
+                This is adapted from <em>Motivational Reasoning Research</em> (Kunda, 1990) — the same behavior can stem from completely different motivations, and the motivation is more predictive of future performance than the behavior itself.
+                <div class="bc-formula">Effect: Section C now produces TWO data layers — what they chose AND why they chose it. The "why" layer is the most theoretically rich part of the entire survey.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIX 5 -->
+    <h3><span class="num blue">5</span> Fix 5 — Reference Point Mismatch (Section D)</h3>
+    <div class="bias-grid">
+        <div class="bias-card problem">
+            <div class="bc-title">🔴 The Problem in v2</div>
+            <div class="bc-body">
+                v2 asked open-ended questions without time anchors. Without a specific time reference, respondents write <em>aspirational narratives</em> — describing how they <em>generally</em> work or who they <em>want</em> to be. Aspirational writing is indistinguishable between top and average performers because both groups can construct an ideal narrative. The qualitative data produced no meaningful signal.
+            </div>
+        </div>
+        <div class="bias-card solution">
+            <div class="bc-title">🟢 The Fix in v3</div>
+            <div class="bc-body">
+                Each Section D question now includes an explicit time anchor: <strong>"from the last 12 months"</strong> and an instruction: <strong>"describe what you have actually done — not what you plan to do."</strong><br><br>
+                This is the written equivalent of the Behavioral Event Interview (BEI) technique. Time-constrained questions force <em>episodic memory</em> — real, specific events — rather than semantic memory (general beliefs about oneself). Real events can be coded for competency evidence, attribution style, and behavioral specificity — producing analytically rich data.
+            </div>
+        </div>
+    </div>
+
+    <!-- VALIDITY COMPARISON -->
+    <h3><span class="num green">→</span> Estimated Validity by Section</h3>
+    <p style="font-size:13.5px;color:#4a5b6e;margin-bottom:16px;">Estimates based on published research on survey method validity for predicting performance ratings (criterion validity). Scale: 0 = no predictive validity, 1.0 = perfect prediction.</p>
+
+    <div class="validity-bar"><div class="vb-label">Section A (v2 — Self-Description)</div><div class="vb-track"><div class="vb-fill" style="width:22%;background:#e08a8a"></div></div><div class="vb-val" style="color:#c81e1e">r ≈ .22</div></div>
+    <div class="validity-bar"><div class="vb-label">Section A (v3 — Behavioral Frequency)</div><div class="vb-track"><div class="vb-fill" style="width:38%"></div></div><div class="vb-val">r ≈ .38</div></div>
+    <div class="validity-bar"><div class="vb-label">Section B (Competency Ranking)</div><div class="vb-track"><div class="vb-fill" style="width:30%"></div></div><div class="vb-val">r ≈ .30</div></div>
+    <div class="validity-bar"><div class="vb-label">Section C (Scenario Ranking Only)</div><div class="vb-track"><div class="vb-fill" style="width:42%"></div></div><div class="vb-val">r ≈ .42</div></div>
+    <div class="validity-bar"><div class="vb-label">Section C (Scenario + Why Reasoning)</div><div class="vb-track"><div class="vb-fill" style="width:52%;background:#1a7a4a"></div></div><div class="vb-val" style="color:#1a7a4a">r ≈ .52</div></div>
+    <div class="validity-bar"><div class="vb-label">Section D (Coded BEI — Time-Anchored)</div><div class="vb-track"><div class="vb-fill" style="width:48%;background:#1a7a4a"></div></div><div class="vb-val" style="color:#1a7a4a">r ≈ .48</div></div>
+    <div class="validity-bar"><div class="vb-label">All Sections Combined + External Ratings</div><div class="vb-track"><div class="vb-fill" style="width:65%;background:#6a0dad"></div></div><div class="vb-val" style="color:#6a0dad">r ≈ .62</div></div>
+
+    <div class="callout note" style="margin-top:18px;">
+        <strong>Note on validity estimates:</strong> These are approximate ranges based on published meta-analyses (Schmidt &amp; Hunter, 1998; Levashina et al., 2014). Actual validity in your specific context may differ. The combined approach (all sections + external ratings) consistently outperforms any single method — which is why multi-method design is a core principle of this survey.
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 5. THE 10 COMPETENCIES ── -->
+<div class="sec" id="competencies">
+    <h2>5. The 10 Competency Framework <span class="h2-badge purple">What Each Measures</span></h2>
+
+    <p>The survey measures 10 competencies, each selected based on three criteria: (1) empirical linkage to individual performance outcomes in operational and leadership roles, (2) relevance to the JioCX business context and culture, and (3) measurability via behavioral frequency and scenario-based assessment.</p>
+
+    <table class="comp-full-table">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Competency</th>
+                <th>What It Measures</th>
+                <th>Why It Is in the Survey</th>
+                <th>Iceberg Layer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="ctag">EE</span></td>
+                <td><strong>Execution Excellence</strong></td>
+                <td>Consistency of output delivery — on time, at quality, without needing oversight. Not just working hard but working reliably.</td>
+                <td>The most universally cited differentiator between top and average performers across all seniority levels in operational environments. Low EE means other competencies cannot be demonstrated consistently.</td>
+                <td>Visible (skill + behavior)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">ST</span></td>
+                <td><strong>Strategic Thinking</strong></td>
+                <td>The ability to connect individual tasks to organizational goals — thinking beyond the immediate to the systemic. Not reserved for leaders.</td>
+                <td>Top performers at every level — even Junior — have been found to frame their work in strategic terms. This competency predicts promotion readiness and cross-functional effectiveness.</td>
+                <td>Partially visible (behavior + self-concept)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">LA</span></td>
+                <td><strong>Learning Agility</strong></td>
+                <td>Speed and willingness to update behavior in response to feedback and new information. The ability to learn from experience, not just from training.</td>
+                <td>Identified by Lombardo &amp; Eichinger as the single strongest predictor of long-term leadership potential. Particularly critical in fast-changing environments like JioCX.</td>
+                <td>Mixed (visible behavior + hidden motive)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">CI</span></td>
+                <td><strong>Collaboration &amp; Influence</strong></td>
+                <td>Getting things done with and through people across formal boundaries — without relying on positional authority. Network effectiveness.</td>
+                <td>In a matrix organization like JioCX, most critical work crosses team boundaries. Employees with high CI deliver faster because they can mobilize resources and alignment others cannot.</td>
+                <td>Visible behavior + hidden social motive</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">PS</span></td>
+                <td><strong>Problem Solving</strong></td>
+                <td>Diagnosing root causes before acting. Evaluating multiple options before deciding. Structured thinking under pressure.</td>
+                <td>Distinguishes reactive employees (fix symptoms, repeat problems) from proactive employees (fix causes, prevent recurrence). Strongly linked to quality of decisions and reduction of operational error.</td>
+                <td>Visible (skill + behavior)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">DI</span></td>
+                <td><strong>Drive &amp; Initiative</strong></td>
+                <td>Self-directed action and high personal standards — going beyond what is formally required without needing external motivation.</td>
+                <td>McClelland's Achievement Motivation research (1961) identifies intrinsic Drive as one of the three core motives (Achievement, Affiliation, Power) most predictive of sustained high performance. It is below the waterline — invisible until tested.</td>
+                <td>Hidden (motive)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">PL</span></td>
+                <td><strong>People Leadership</strong></td>
+                <td>Enabling others to perform and grow — through specific feedback, coaching, and support. Not just managing tasks but developing people.</td>
+                <td>Included at all levels because even Junior employees lead informally (peers, collaborators). At manager level, People Leadership is the primary multiplier of team output — a manager with high PL produces outsized team performance.</td>
+                <td>Partially visible (behavior + self-concept)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">CM</span></td>
+                <td><strong>Communication</strong></td>
+                <td>Precision and adaptability of communication — whether the message lands correctly with the target audience, first time.</td>
+                <td>Communication breakdowns account for a disproportionate share of execution failures in organizations. High-performing employees communicate in ways that reduce need for clarification, rework, and misalignment.</td>
+                <td>Visible skill</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">RE</span></td>
+                <td><strong>Resilience</strong></td>
+                <td>Maintenance of performance quality and composure under stress, pressure, and setbacks. Not emotional toughness — output consistency under adversity.</td>
+                <td>Top performers at JioCX are disproportionately called upon during high-pressure situations. Resilience predicts who maintains performance when conditions are difficult — the most revealing test of true competence level.</td>
+                <td>Mixed (visible behavior + hidden trait)</td>
+            </tr>
+            <tr>
+                <td><span class="ctag">CO</span></td>
+                <td><strong>Stakeholder Orientation</strong></td>
+                <td>Understanding and delivering against the <em>real</em> need behind a stated request — not just fulfilling the literal ask. Customer and internal client focus.</td>
+                <td>In a customer experience organization, stakeholder orientation is a threshold competency — it is non-negotiable. Included because research shows top performers anticipate needs (proactive orientation) while average performers respond to needs (reactive orientation).</td>
+                <td>Visible behavior + hidden empathy trait</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr class="divider">
+
+<!-- ── 6. SECTION DEEP DIVE ── -->
+<div class="sec" id="sectionsdeep">
+    <h2>6. Section-by-Section Design Rationale <span class="h2-badge">Deep Dive</span></h2>
+
+    <!-- SECTION E -->
+    <h3><span class="num purple">E</span> Section E — Performance Calibration (New in v3)</h3>
+    <div class="wwh-grid">
+        <div class="wwh-card what"><div class="wlabel">🔵 WHAT</div><div class="wcontent">Two visible questions (relative self-rating vs. peers; tenure in role) and one HR-only manager nomination field. Placed immediately after demographics and before Section A.</div></div>
+        <div class="wwh-card why"><div class="wlabel">🟢 WHY</div><div class="wcontent">Without a performance anchor, all respondents look identical in the dataset. Section E creates the <strong>criterion variable</strong> — the benchmark against which all other data is compared. This is what makes the difference between a descriptive survey and a criterion-referenced success profiling study.</div></div>
+        <div class="wwh-card how"><div class="wlabel">🟣 HOW</div><div class="wcontent"><strong>E1</strong> (relative self-rating) is answered by the respondent — 5 options from "bottom 20%" to "top 20%." <strong>E3</strong> (Manager Nomination T/A/D/N) is filled by HR in a separate tracking spreadsheet and joined to survey data by Employee ID after collection. The respondent never sees E3.</div></div>
+    </div>
+    <div class="callout warn">
+        <strong>Placement matters:</strong> Section E must be placed AFTER demographics (for Employee ID) but BEFORE Section A. If placed after Section A, respondents' self-assessments in A would be influenced by how they just rated themselves in A — creating circular contamination.
+    </div>
+
+    <!-- SECTION A -->
+    <h3><span class="num blue">A</span> Section A — Behavioral Frequency Profile</h3>
+    <div class="wwh-grid">
+        <div class="wwh-card what"><div class="wlabel">🔵 WHAT</div><div class="wcontent">10 behavioral frequency items (1 per competency) + 2 attention check items. Each item uses a 4-point behavioral frequency scale: Never/Almost Never (−1) | Sometimes (0) | Often (+1) | Almost Always (+2). Total score range: −10 to +20.</div></div>
+        <div class="wwh-card why"><div class="wlabel">🟢 WHY</div><div class="wcontent">Provides the primary <strong>quantitative measure</strong> of competency behavior frequency. One item per competency keeps survey length manageable without sacrificing coverage. The 4-point scale removes the "neutral" option, forcing a directional response. The frequency frame reduces self-enhancement bias significantly vs. agreement or self-description scales.</div></div>
+        <div class="wwh-card how"><div class="wlabel">🟣 HOW</div><div class="wcontent">Items are written as specific, observable behaviors (not attitudes or beliefs). Each item is seniority-adapted — the same competency is measured at a different behavioral level for Junior, Manager, and Leader, reflecting the actual manifestation of that competency at each role level. Two attention check items (AC1 = must select "Often", AC2 = must select "Never") filter data quality.</div></div>
+    </div>
+
+    <!-- SCORING DIAGRAM -->
+    <div class="score-row">
+        <div class="score-item s-neg"><div class="si-score">−1</div><div class="si-label">Never / Almost Never</div><div class="si-desc">Behavior is absent. High-priority development area. Flag for L&D focus.</div></div>
+        <div class="score-item s-zero"><div class="si-score">0</div><div class="si-label">Sometimes</div><div class="si-desc">Behavior exists but is inconsistent. Not yet a reliable competency. Moderate development need.</div></div>
+        <div class="score-item s-p1"><div class="si-score">+1</div><div class="si-label">Often</div><div class="si-desc">Behavior is reliable and present in most situations. Meets competency expectations.</div></div>
+        <div class="score-item s-p2"><div class="si-score">+2</div><div class="si-label">Almost Always</div><div class="si-desc">Behavior is a consistent, habitual strength. Exceeds expectations. Key differentiator signal.</div></div>
+    </div>
+
+    <!-- SECTION B -->
+    <h3><span class="num">B</span> Section B — Theory of Success (Ranking)</h3>
+    <div class="wwh-grid">
+        <div class="wwh-card what"><div class="wlabel">🔵 WHAT</div><div class="wcontent">Respondents rank all 10 competencies from 1 (most important for success) to 10 (least important). Then separately select exactly 3 as their top current personal priorities. Same questions for all seniority levels.</div></div>
+        <div class="wwh-card why"><div class="wlabel">🟢 WHY</div><div class="wcontent">Section B reveals <strong>implicit beliefs about success</strong> — what each employee thinks matters most for performing well at JioCX. Research shows top performers' mental models of success (which competencies they prioritize) are systematically different from average performers' models, even when both cannot articulate why. This section makes that invisible difference visible.</div></div>
+        <div class="wwh-card how"><div class="wlabel">🟣 HOW</div><div class="wcontent">In MS Forms: Add one dropdown question per competency (Rank 1–10). Then add a separate checkbox question for "Top 3" (limit max selections to 3). In analysis: Compare rank distributions between T and A groups using Kendall's rank correlation or median ranking comparison to identify systematic priority differences.</div></div>
+    </div>
+
+    <!-- SECTION C -->
+    <h3><span class="num green">C</span> Section C — Behavioral Scenarios + Reasoning</h3>
+    <div class="wwh-grid">
+        <div class="wwh-card what"><div class="wlabel">🔵 WHAT</div><div class="wcontent">3 seniority-specific scenarios per level. Each scenario presents a realistic workplace dilemma with 4 response options. Respondents rank options 1 (most effective) to 4. A follow-up question then asks WHY they ranked their #1 choice first — 5 structured reason options.</div></div>
+        <div class="wwh-card why"><div class="wlabel">🟢 WHY</div><div class="wcontent">Behavioral scenarios are among the strongest predictors of job performance (validity r ≈ .42–.52). They are harder to game than direct competency questions because respondents must reason through a realistic context. The "Why?" follow-up is the most novel element in v3 — it captures the <strong>decision-making value system</strong> (what people optimize for when they make choices), which sits below the waterline of the competency iceberg.</div></div>
+        <div class="wwh-card how"><div class="wlabel">🟣 HOW</div><div class="wcontent">In MS Forms: Add each scenario as a Ranking question (4 options, ranks 1–4). Immediately follow with a Choice question (single select, 5 options) for the "Why?" In analysis: Cross-tabulate "Why?" choices by performance group. Top performers will show systematic preference for certain reasoning categories (e.g., "system redesign prevents recurrence" over "accountability must be clear") that reveal their underlying value system.</div></div>
+    </div>
+
+    <!-- SECTION D -->
+    <h3><span class="num gold">D</span> Section D — Time-Anchored Open-Ended Reflection</h3>
+    <div class="wwh-grid">
+        <div class="wwh-card what"><div class="wlabel">🔵 WHAT</div><div class="wcontent">2 open-ended questions per seniority level. Minimum 30 words. Questions are anchored to real events from "the last 12 months." Respondents are instructed to describe what they actually did — not what they generally do or plan to do.</div></div>
+        <div class="wwh-card why"><div class="wlabel">🟢 WHY</div><div class="wcontent">Open-ended qualitative data captures what structured scales cannot — the specificity of action, the attribution of causality ("I did X" vs. "it worked out"), the complexity of reasoning, and the emotional register of the event. Research on BEI coding shows that the behavioral specificity and internal attribution style of responses are the strongest qualitative indicators of high performance motivation (Achievement Motive).</div></div>
+        <div class="wwh-card how"><div class="wlabel">🟣 HOW</div><div class="wcontent">In MS Forms: Long answer text field, required. In analysis: Code each response for (1) behavioral specificity (generic vs. specific event), (2) attribution style (internal "I did X" vs. external "the team did X"), (3) competency demonstrated, (4) presence of a measurable outcome. Top performers will show higher specificity and internal attribution than average performers — even when describing similar situations.</div></div>
+    </div>
+
+    <div class="callout insight">
+        <strong>Section D HR Coding Guide:</strong> When reading Section D responses, score each answer on a 3-point scale per dimension:<br>
+        <strong>Specificity:</strong> 0 = Vague/general | 1 = Some detail | 2 = Specific event, specific action, specific outcome<br>
+        <strong>Attribution:</strong> 0 = External ("it happened") | 1 = Mixed | 2 = Internal + accountable ("I decided, I did, I changed")<br>
+        <strong>Competency Signal:</strong> Tag the primary competency demonstrated. Calculate average specificity and attribution scores by performance group. Significant differences here are strong success profile inputs.
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 7. ANALYSIS PIPELINE ── -->
+<div class="sec" id="analysis">
+    <h2>7. Success Profile Analysis Pipeline <span class="h2-badge green">How to Turn Data into Insight</span></h2>
+
+    <p>Once survey responses are collected, the following six-step pipeline converts raw data into a validated JioCX Success Profile. Each step has a specific purpose and produces a specific output.</p>
+
+    <div class="pipeline">
+        <div class="pipe-step">
+            <div class="pipe-num">1</div>
+            <div class="pipe-content">
+                <div class="pc-title">Data Merge — Link Survey to Performance</div>
+                <div class="pc-body">Join survey responses to <em>(G) Employee Rating Analysis.xlsx</em> using Employee ID as the primary key. Also join Manager Nomination codes (E3) from the HR tracking spreadsheet. Remove respondents who failed both attention checks (AC1 ≠ Often OR AC2 ≠ Never). Remove respondents with Nomination code "N" (new employees, less than 6 months).</div>
+                <div class="pc-output">Output: Clean merged dataset with performance tier per respondent</div>
+            </div>
+        </div>
+        <div class="pipe-step">
+            <div class="pipe-num blue">2</div>
+            <div class="pipe-content">
+                <div class="pc-title">Segment by Performance Tier</div>
+                <div class="pc-body">Create three groups: Top Performers (T — manager-nominated + E1 self-rated "top 20%" or "above average"), Average Performers (A — manager-nominated A), Development (D — manager-nominated D). Primary comparison is T vs A. Development group used separately to identify floor-level patterns.</div>
+                <div class="pc-output">Output: Three performance-tier groups ready for comparison</div>
+            </div>
+        </div>
+        <div class="pipe-step">
+            <div class="pipe-num green">3</div>
+            <div class="pipe-content">
+                <div class="pc-title">Section A — Identify Competency Differentiators</div>
+                <div class="pc-body">Calculate mean Section A score per competency for T group and A group. Compute the gap (T mean − A mean) for each of the 10 competencies. <strong>Threshold:</strong> A gap ≥ 0.5 on the −1 to +2 scale is a practical differentiator. A gap ≥ 0.7 is a strong differentiator. These competencies go into the success profile. Also run a t-test or Mann-Whitney U test for statistical significance (p &lt; .05).</div>
+                <div class="pc-output">Output: Ranked list of competencies that differentiate Top from Average performers</div>
+            </div>
+        </div>
+        <div class="pipe-step">
+            <div class="pipe-num purple">4</div>
+            <div class="pipe-content">
+                <div class="pc-title">Section B — Map the Mental Model of Success</div>
+                <div class="pc-body">For each competency, compare median rank given by T group vs A group. Competencies where T group ranks significantly higher than A group reveal what top performers <em>believe</em> drives success — their theory of performance. Also compare Top 3 checkbox selections: which competencies appear in Top 3 most often for T vs A? The intersection of "high Section A score" + "high Section B rank" = Core Competency for the success profile.</div>
+                <div class="pc-output">Output: Mental model map — what top performers believe matters vs. what average performers believe matters</div>
+            </div>
+        </div>
+        <div class="pipe-step">
+            <div class="pipe-num gold">5</div>
+            <div class="pipe-content">
+                <div class="pc-title">Section C — Extract the Value System</div>
+                <div class="pc-body">Cross-tabulate "Why?" follow-up responses by performance tier. For each scenario, identify which reasoning category was most frequently selected by T group vs A group. Calculate the "reasoning signature" of top performers — the pattern of values (e.g., "system over accountability," "transparency over relationship") that characterizes their decision-making. This is the deepest and most differentiating layer of the success profile.</div>
+                <div class="pc-output">Output: Value system profile — what top performers optimize for in their decision-making</div>
+            </div>
+        </div>
+        <div class="pipe-step">
+            <div class="pipe-num">6</div>
+            <div class="pipe-content">
+                <div class="pc-title">Section D — Code and Compare Qualitative Responses</div>
+                <div class="pc-body">Read all Section D responses. For each response, score Specificity (0–2) and Attribution Style (0–2). Tag the primary competency demonstrated. Calculate average scores by performance tier. Extract 3–5 verbatim quotes from Top Performers per competency — these become the narrative evidence in the success profile document. Compare language patterns: top performers use more action verbs, more specific numbers, more internal attribution.</div>
+                <div class="pc-output">Output: Narrative success profile evidence + qualitative differentiators</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="callout critical">
+        <strong>Common mistake to avoid:</strong> Do not report average scores across the full sample. A survey average tells you "this is what JioCX employees say about themselves" — which has no decision value. Always compare T vs A groups. The gap is the finding. The average is just noise.
+    </div>
+
+    <h3><span class="num green">→</span> What the Final Success Profile Looks Like</h3>
+    <p>The output of this analysis pipeline is a document that answers, for each seniority level:</p>
+    <ul>
+        <li><strong>Top 3–5 differentiating competencies</strong> — the behaviors where top performers consistently score higher than average performers (from Section A)</li>
+        <li><strong>Mental model of success</strong> — what top performers believe matters most, which may differ from what the organization currently emphasizes (from Section B)</li>
+        <li><strong>Value system signature</strong> — what top performers optimize for in high-stakes decisions (from Section C "Why?" data)</li>
+        <li><strong>Behavioral narrative</strong> — verbatim examples of what top performer behavior looks, sounds, and reads like in real situations (from Section D)</li>
+        <li><strong>Iceberg profile</strong> — visible competency strengths vs. hidden motives and values that drive them</li>
+    </ul>
+
+    <div class="callout insight">
+        <strong>Applied uses of the success profile:</strong> (1) Hiring: Use competency differentiators to redesign interview scorecard. (2) L&D: Focus development investment on the differentiating competencies, not generic soft skills. (3) Succession Planning: Use the profile to identify high-potential employees who show the competency pattern of the level above. (4) Performance Calibration: Use the value system data to help managers have more specific conversations about what "good performance" actually looks like behaviorally.
+    </div>
+</div>
+
+<hr class="divider">
+
+<!-- ── 8. V2 vs V3 COMPARISON ── -->
+<div class="sec">
+    <h2>8. v2 vs v3 — Full Comparison <span class="h2-badge gold">What Changed and Why</span></h2>
+
+    <table class="cmp-table">
+        <thead>
+            <tr>
+                <th style="width:20%">Design Element</th>
+                <th style="width:30%">Survey v2 (June 2026)</th>
+                <th style="width:30%">Survey v3 (July 2026)</th>
+                <th style="width:20%">Impact of Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="bold-col">Section A Scale</td>
+                <td class="v2">Self-Description: "Not at all like me → Completely like me"</td>
+                <td class="v3">Behavioral Frequency: "Never → Almost Always"</td>
+                <td class="neutral">Reduces self-enhancement bias. Produces more spread between top and average performers. Higher validity (r .22 → .38).</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Criterion Variable</td>
+                <td class="v2">None. No internal performance anchor. All respondents look the same.</td>
+                <td class="v3">Section E: Relative self-rating (E1) + Manager Nomination (E3)</td>
+                <td class="neutral">Enables success profiling comparison. Without this, the study cannot answer the research question.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Manager Nomination</td>
+                <td class="v2">Not present</td>
+                <td class="v3">E3 field — HR fills separately, matched by Employee ID. Never shown to respondent.</td>
+                <td class="neutral">Adds external, non-self-reported performance criterion. Reduces reliance on self-rating alone.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Section C Reasoning</td>
+                <td class="v2">Scenario ranking only. No follow-up. Why unknown.</td>
+                <td class="v3">Scenario ranking + "Why did you rank #1 first?" follow-up (5 structured options)</td>
+                <td class="neutral">Captures decision-making value system — the deepest differentiator. Validity improves from r .42 to r .52.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Section D Questions</td>
+                <td class="v2">Open-ended without time anchor. Produces aspirational narratives, not behavioral evidence.</td>
+                <td class="v3">Time-anchored: "from the last 12 months" + "what you have actually done — not planned." Forces episodic memory.</td>
+                <td class="neutral">Responses become analytically codeable. Specificity and attribution style are measurable and differentiating.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Section B</td>
+                <td class="v2">Competency ranking + Top 3 (unchanged)</td>
+                <td class="v3">Competency ranking + Top 3 (unchanged)</td>
+                <td class="neutral">No change needed. Method is sound.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">No. of Sections</td>
+                <td class="v2">5 sections (Demo + A + B + C + D)</td>
+                <td class="v3">6 sections (Demo + E + A + B + C + D)</td>
+                <td class="neutral">Section E adds ~2 minutes but is the most critical addition for success profiling validity.</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Est. Completion Time</td>
+                <td class="v2">12–15 minutes</td>
+                <td class="v3">15–18 minutes</td>
+                <td class="neutral">Acceptable trade-off. Section E adds 2 minutes; scenario follow-ups add 1 minute. No increase in Section D (still 2 questions).</td>
+            </tr>
+            <tr>
+                <td class="bold-col">Success Profile Validity</td>
+                <td class="v2">Low. No criterion variable. Self-description bias. No reasoning data.</td>
+                <td class="v3">Moderate-High. Multiple methods. External criterion. Behavioral frequency. Reasoning data. BEI-style D.</td>
+                <td class="neutral">Combined validity estimate improves from r ≈ .30 to r ≈ .62 when linked to external performance ratings.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr class="divider">
+
+<!-- ── 9. LIMITATIONS ── -->
+<div class="sec">
+    <h2>9. Known Limitations &amp; Mitigations <span class="h2-badge gold">Honest Assessment</span></h2>
+
+    <p>No survey is perfect. The following limitations remain in v3, along with the mitigations in place and what would be needed to fully address them.</p>
+
+    <div class="framework-grid">
+        <div class="fw-card red">
+            <div class="fw-title">⚠️ Remaining Self-Report Bias (Reduced, Not Eliminated)</div>
+            <div class="fw-body">Even frequency scales are subject to some self-enhancement. A respondent can still claim "Almost Always" for behaviors they perform less often. Mitigation: Attention check items filter the most obvious cases. Section D coding provides a cross-validation check — if D responses show low specificity but A scores are all +2, flag as possible inflated response.</div>
+            <div class="fw-cite">Would require: 360-degree ratings from managers/peers for full elimination.</div>
+        </div>
+        <div class="fw-card red">
+            <div class="fw-title">⚠️ Common Method Variance</div>
+            <div class="fw-body">When the same person provides both predictor (competency self-rating) and criterion (E1 self-rating) data, the correlation between them is artificially inflated by shared method. Mitigation: E3 (manager nomination) provides a cross-source criterion. In analysis, use E3 as primary criterion, E1 as secondary validation only.</div>
+            <div class="fw-cite">Podsakoff et al. (2003). Would require: External rating data as sole criterion for full resolution.</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-title">📋 Single-Item Competency Measurement</div>
+            <div class="fw-body">Each competency has only one item in Section A, which reduces internal reliability. A single item cannot capture the full behavioral range of a competency. Mitigation: Section C scenarios and Section D provide additional, method-independent competency evidence. Treat Section A as a screening signal, not a definitive measure.</div>
+            <div class="fw-cite">Would require: 3–4 items per competency for full reliability (Cronbach's α ≥ .70).</div>
+        </div>
+        <div class="fw-card">
+            <div class="fw-title">🔢 Sample Size Requirements</div>
+            <div class="fw-body">To detect a medium effect size (d = .5) between T and A groups with 80% power, a minimum of 64 respondents per group per level is needed. If JioCX has fewer than ~200 survey respondents per level, some statistical tests will be underpowered. Mitigation: Use practical significance (effect size) rather than relying solely on p-values. Focus qualitative Section D analysis as the primary source when n is small.</div>
+            <div class="fw-cite">Cohen (1988). Statistical Power Analysis for the Behavioral Sciences.</div>
+        </div>
+    </div>
+</div>
+
+</div><!-- end body-wrap -->
+
+<!-- ══════ FOOTER ══════ -->
+<div class="doc-footer">
+    <div><strong>JioCX HR Analytics · People &amp; Culture</strong> · Survey v3 Methodology Document · July 2026</div>
+    <div>Internal Document · Confidential · Do Not Distribute Outside HR Analytics Team</div>
+    <div>References: Spencer &amp; Spencer (1993) · Lominger (2000) · Kruger &amp; Dunning (1999) · McClelland (1961, 1978) · Schmidt &amp; Hunter (1998)</div>
+</div>
+
+<script>
+// Print optimization
+window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('.toc-flow').forEach(el => el.style.flexWrap = 'nowrap');
+});
+</script>
+</body>
+</html>
